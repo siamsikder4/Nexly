@@ -11,24 +11,26 @@ import {
   updateDoc, 
   deleteDoc, 
   serverTimestamp, 
-  onSnapshot,
-  query,
-  where,
+  onSnapshot, 
+  query, 
+  where, 
   orderBy 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// আপনার Firebase Console এর Web App Credentials এখানে দিন
+// আপনার প্রজেক্টের আসল কনফিগারেশন
 const firebaseConfig = {
-  apiKey: "AIzaSy_YOUR_API_KEY_HERE",
-  authDomain: "your-project-id.firebaseapp.com",
-  projectId: "your-project-id",
-  storageBucket: "your-project-id.appspot.com",
-  messagingSenderId: "1234567890",
-  appId: "1:1234567890:web:abcdef123456"
+  apiKey: "AIzaSyBjxk1DR009Is4w20gjqdNOXRNE1GKotdQ",
+  authDomain: "nexly-5ecf5.firebaseapp.com",
+  projectId: "nexly-5ecf5",
+  storageBucket: "nexly-5ecf5.firebasestorage.app",
+  messagingSenderId: "549446516653",
+  appId: "1:549446516653:web:263db598b6b125d9d6ab24",
+  measurementId: "G-7E6PCLC11T"
 };
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+
 export { 
   collection, 
   addDoc, 
@@ -39,8 +41,8 @@ export {
   updateDoc, 
   deleteDoc, 
   serverTimestamp, 
-  onSnapshot,
-  query,
-  where,
+  onSnapshot, 
+  query, 
+  where, 
   orderBy 
 };
