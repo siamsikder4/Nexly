@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Settings - Nexly Merchant</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -64,14 +64,8 @@
           <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-purple-50 text-[#7c3aed] font-semibold">
             <i data-lucide="settings" class="w-4 h-4 text-[#7c3aed]"></i> Settings
           </a>
-          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
-            <i data-lucide="flag" class="w-4 h-4 text-gray-500"></i> Languages
-          </a>
-          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+          <a href="bot-buttons.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
             <i data-lucide="menu-square" class="w-4 h-4 text-gray-500"></i> Bot buttons
-          </a>
-          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
-            <i data-lucide="send" class="w-4 h-4 text-gray-500"></i> Broadcast
           </a>
         </div>
       </div>
@@ -79,14 +73,11 @@
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Money</p>
         <div class="space-y-0.5">
-          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+          <a href="payment-methods.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
             <i data-lucide="wallet" class="w-4 h-4 text-gray-500"></i> Payment methods
           </a>
           <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
             <i data-lucide="arrow-left-right" class="w-4 h-4 text-gray-500"></i> Transactions
-          </a>
-          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
-            <i data-lucide="ticket" class="w-4 h-4 text-gray-500"></i> Deposit codes
           </a>
         </div>
       </div>
@@ -95,7 +86,6 @@
 
   <!-- ২. মেইন কন্টেন্ট এরিয়া -->
   <div class="flex-1 flex flex-col min-w-0">
-    <!-- টপ ন্যাভবার -->
     <header class="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
       <div class="flex items-center gap-3">
         <button onclick="toggleSidebar()" class="p-1.5 text-gray-600 rounded-lg hover:bg-gray-100 md:hidden">
@@ -110,18 +100,23 @@
       </div>
     </header>
 
-    <!-- বডি কনটেন্ট -->
     <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-4xl w-full mx-auto space-y-5">
-      <!-- ব্রেডক্রাম্ব ও হেডার -->
       <div>
         <div class="text-xs text-gray-400 flex items-center gap-1.5 mb-1">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Settings</span>
         </div>
-        <h1 class="text-xl font-bold text-gray-900">Settings</h1>
-        <p class="text-xs text-gray-500">Store, bot, help, alerts, and public groups.</p>
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-xl font-bold text-gray-900">Settings</h1>
+            <p class="text-xs text-gray-500">Store, bot, help, alerts, and public groups.</p>
+          </div>
+          <button onclick="saveAllSettingsToFirebase()" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold shadow hover:bg-purple-700 transition">
+            Save All Settings
+          </button>
+        </div>
       </div>
 
-      <!-- ৫টি সাব-ট্যাব ন্যাভিগেশন (স্ক্রিনশটের হুবহু) -->
+      <!-- ৫টি সাব-ট্যাব ন্যাভিগেশন -->
       <div class="border-b border-gray-200 flex gap-6 text-xs font-medium overflow-x-auto">
         <button onclick="switchTab('store')" id="tab-btn-store" class="pb-2.5 flex items-center gap-1.5 text-gray-500 hover:text-gray-800">
           <i data-lucide="store" class="w-3.5 h-3.5"></i> Store
@@ -153,10 +148,6 @@
             <label class="block font-medium text-gray-700 mb-1">Store name *</label>
             <input id="store-name" value="Nexly" class="w-full max-w-md border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
           </div>
-          <div class="flex items-center gap-4 text-gray-500">
-            <span>Slug: <strong class="text-gray-800">nexly</strong></span>
-            <span>Status: <strong class="text-gray-800">DRAFT</strong></span>
-          </div>
 
           <div class="pt-4 border-t space-y-3">
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Availability</p>
@@ -165,37 +156,20 @@
                 <p class="font-semibold text-gray-800">Maintenance mode</p>
                 <p class="text-gray-400 text-[11px]">Pause customer shopping while you work.</p>
               </div>
-              <input type="checkbox" class="w-4 h-4 accent-purple-600">
+              <input id="store-maintenance" type="checkbox" class="w-4 h-4 accent-purple-600">
             </div>
 
             <div>
               <label class="block font-medium text-gray-700 mb-1">Maintenance message</label>
-              <!-- রিচ টেক্সট টুলবার -->
-              <div class="border border-gray-200 rounded-xl overflow-hidden max-w-xl">
-                <div class="bg-gray-50 px-3 py-1.5 border-b flex gap-2 text-gray-500">
-                  <button class="font-bold">B</button><button class="italic">I</button><button class="underline">U</button><button class="line-through">S</button>
-                  <span class="text-gray-300">|</span>
-                  <i data-lucide="link" class="w-3.5 h-3.5 mt-0.5"></i>
-                  <i data-lucide="smile" class="w-3.5 h-3.5 mt-0.5"></i>
-                </div>
-                <textarea rows="3" class="w-full p-2.5 outline-none text-xs" placeholder="We are currently undergoing maintenance. Please check back soon!"></textarea>
-              </div>
-            </div>
-
-            <div>
-              <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Telegram Preview</p>
-              <div class="bg-[#182533] text-white p-3 rounded-xl max-w-sm text-xs shadow-xs">
-                Message body will appear here
-              </div>
+              <textarea id="store-maint-msg" rows="3" class="w-full max-w-xl border border-gray-200 rounded-xl p-2.5 outline-none text-xs" placeholder="We are currently undergoing maintenance. Please check back soon!"></textarea>
             </div>
 
             <div>
               <label class="block font-medium text-gray-700 mb-1">Operator Telegram user ID</label>
-              <input placeholder="8271633124" class="w-full max-w-md border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+              <input id="store-operator-id" placeholder="e.g. 8271633124" class="w-full max-w-md border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
             </div>
           </div>
         </div>
-        <button onclick="saveSettings('Store')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl font-semibold hover:bg-purple-700 transition">Save Store Settings</button>
       </div>
 
       <!-- ================= TAB 2: BOT ================= -->
@@ -205,96 +179,52 @@
           <p class="text-gray-500">Connect the bot and what customers see when they start.</p>
         </div>
 
-        <!-- Connection Card -->
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Connection</p>
           <div class="flex justify-between items-center max-w-md">
-            <span>Connected as <strong class="text-purple-600">@nexly_bot</strong></span>
-            <span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">Connected</span>
+            <span>Status: <strong id="bot-status-text" class="text-purple-600">Ready to Connect</strong></span>
+            <span id="bot-status-badge" class="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">Not Tested</span>
           </div>
 
-          <div class="space-y-2 max-w-md">
-            <label class="block font-medium text-gray-700">Bot username *</label>
-            <input value="@nexly_bot" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-            <label class="block font-medium text-gray-700">Bot token *</label>
-            <input type="password" value="7382910394:AAHk_EXAMPLE_KEY" class="w-full border border-gray-200 rounded-xl p-2.5 font-mono outline-none focus:border-purple-600">
+          <div class="space-y-3 max-w-md">
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Bot username *</label>
+              <input id="bot-username" placeholder="@YourStoreBot" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+            </div>
+            <div>
+              <label class="block font-medium text-gray-700 mb-1">Bot token (From @BotFather) *</label>
+              <input id="bot-token" type="password" placeholder="123456789:ABCdefGHIjklMNOpqrSTUvwxYZ" class="w-full border border-gray-200 rounded-xl p-2.5 font-mono outline-none focus:border-purple-600">
+            </div>
             <div class="flex gap-2 pt-1">
-              <button onclick="alert('Bot Connected!')" class="bg-[#7c3aed] text-white px-3 py-1.5 rounded-xl font-semibold hover:bg-purple-700">Verify & connect</button>
-              <button onclick="alert('Bot Disconnected')" class="border border-gray-200 text-gray-600 px-3 py-1.5 rounded-xl font-semibold hover:bg-gray-50">Disconnect</button>
+              <button onclick="testBotConnection()" class="bg-[#7c3aed] text-white px-3.5 py-1.5 rounded-xl font-semibold hover:bg-purple-700 transition">Verify Token</button>
             </div>
           </div>
         </div>
 
-        <!-- Customer-facing Presence -->
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Customer-facing presence</p>
           <div>
             <label class="block font-medium text-gray-700 mb-1">Description ("What can this bot do?")</label>
-            <p class="text-[10px] text-gray-400 mb-1">Plain text only — Telegram does not format HTML in the bot profile description.</p>
-            <textarea id="bot-desc-input" oninput="updatePreview('bot-desc-input', 'desc-preview')" rows="3" class="w-full max-w-xl border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600" placeholder="Automated digital products & services store on Telegram."></textarea>
-            <div class="mt-2">
-              <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Telegram Preview</p>
-              <div id="desc-preview" class="bg-[#182533] text-white p-3 rounded-xl max-w-sm text-xs shadow-xs">
-                Message body will appear here
-              </div>
-            </div>
+            <textarea id="bot-desc-input" rows="3" class="w-full max-w-xl border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600" placeholder="Automated digital products & services store on Telegram."></textarea>
           </div>
 
           <div class="pt-4 border-t">
-            <label class="block font-medium text-gray-700 mb-1">Start message</label>
-            <!-- টুলবার -->
-            <div class="border border-gray-200 rounded-xl overflow-hidden max-w-xl mb-2">
-              <div class="bg-gray-50 px-3 py-1.5 border-b flex gap-2 text-gray-500">
-                <button class="font-bold">B</button><button class="italic">I</button><button class="underline">U</button><button class="line-through">S</button>
-                <span class="text-gray-300">|</span>
-                <i data-lucide="link" class="w-3.5 h-3.5 mt-0.5"></i>
-                <i data-lucide="smile" class="w-3.5 h-3.5 mt-0.5"></i>
-              </div>
-              <textarea id="start-msg-input" oninput="updatePreview('start-msg-input', 'start-preview')" rows="4" class="w-full p-2.5 outline-none text-xs" placeholder="Welcome to our store! Tap the buttons below to browse our instant delivery products."></textarea>
-            </div>
-            <div>
-              <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Telegram Preview</p>
-              <div id="start-preview" class="bg-[#182533] text-white p-3 rounded-xl max-w-sm text-xs shadow-xs">
-                Message body will appear here
-              </div>
-            </div>
+            <label class="block font-medium text-gray-700 mb-1">Start welcome message</label>
+            <textarea id="start-msg-input" rows="4" class="w-full max-w-xl border border-gray-200 rounded-xl p-2.5 outline-none text-xs" placeholder="Welcome to our store! Tap the products button below to get started."></textarea>
           </div>
         </div>
 
-        <!-- Customer Access -->
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
           <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Customer access</p>
           <div class="space-y-3 max-w-lg">
             <div class="flex items-center justify-between">
               <div>
                 <p class="font-semibold text-gray-800">Require Mandatory Join</p>
-                <p class="text-gray-400 text-[11px]">Customers must join the selected group/channel before using the bot.</p>
+                <p class="text-gray-400 text-[11px]">Customers must join the channel before buying.</p>
               </div>
-              <input type="checkbox" class="w-4 h-4 accent-purple-600">
+              <input id="bot-require-join" type="checkbox" class="w-4 h-4 accent-purple-600">
             </div>
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="font-semibold text-gray-800">Require Public Group</p>
-                <p class="text-purple-600 text-[11px] cursor-pointer">Open Public Group settings</p>
-              </div>
-              <input type="checkbox" class="w-4 h-4 accent-purple-600">
-            </div>
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="font-semibold text-gray-800">Require Public Channel</p>
-                <p class="text-purple-600 text-[11px] cursor-pointer">Open Public Channel settings</p>
-              </div>
-              <input type="checkbox" class="w-4 h-4 accent-purple-600">
-            </div>
-            <button onclick="alert('Bot Admin rights verified on channel!')" class="border border-gray-200 px-3 py-1.5 rounded-xl font-semibold hover:bg-gray-50">Verify bot admin</button>
           </div>
-        </div>
-
-        <!-- Update Cycle -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3">
-          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Update cycle</p>
-          <p class="text-gray-500">Ask existing customers to send /start again before they continue.</p>
-          <button onclick="alert('Update cycle started! All bot users will be prompted on next action.')" class="bg-[#7c3aed] text-white px-3.5 py-2 rounded-xl font-semibold hover:bg-purple-700">Start update cycle</button>
         </div>
       </div>
 
@@ -306,199 +236,67 @@
         </div>
 
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
-          <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Contact Buttons</p>
-          
           <div class="space-y-3 max-w-md">
-            <div class="flex items-center justify-between">
-              <span class="font-semibold text-gray-800">Show Support button</span>
-              <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
+            <div>
+              <label class="block text-gray-600 mb-1">Support Telegram Username</label>
+              <input id="support-username" placeholder="@SupportUser" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
             </div>
             <div>
-              <label class="block text-gray-600 mb-1">Support username</label>
-              <input value="Zvshshhvc" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-            </div>
-
-            <div class="flex items-center justify-between pt-2">
-              <span class="font-semibold text-gray-800">Show Admin button</span>
-              <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
-            </div>
-            <div>
-              <label class="block text-gray-600 mb-1">Admin username</label>
-              <input value="zZvshshhvc" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+              <label class="block text-gray-600 mb-1">Admin Telegram Username</label>
+              <input id="admin-username" placeholder="@AdminUser" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
             </div>
           </div>
 
-          <div class="pt-4 border-t space-y-3">
-            <div class="flex gap-4 border-b pb-2 font-semibold">
-              <button class="text-purple-600 border-b-2 border-purple-600 pb-1">Help</button>
-              <button class="text-gray-400 hover:text-gray-600">Policy</button>
-            </div>
-            <label class="block font-medium text-gray-700">Help message (HTML)</label>
-            <div class="border border-gray-200 rounded-xl overflow-hidden max-w-xl">
-              <div class="bg-gray-50 px-3 py-1.5 border-b flex gap-2 text-gray-500">
-                <button class="font-bold">B</button><button class="italic">I</button><button class="underline">U</button>
-                <span class="text-gray-300">|</span>
-                <i data-lucide="link" class="w-3.5 h-3.5 mt-0.5"></i>
-                <i data-lucide="smile" class="w-3.5 h-3.5 mt-0.5"></i>
-              </div>
-              <textarea id="help-msg-input" oninput="updatePreview('help-msg-input', 'help-preview')" rows="6" class="w-full p-2.5 font-mono outline-none text-xs"><b>Welcome to Our Shop Support!</b>
-
-Need assistance? Here is everything you need to know:
-• How to Place an Order: Tap Products from main menu.
-• Accepted Payment Methods: bKash / Nagad / Binance Pay (USDT).
-• Delivery: Typically 1-5 minutes instant auto delivery.</textarea>
-            </div>
-
-            <div>
-              <p class="text-[10px] font-bold text-gray-400 uppercase mb-1">Telegram Preview</p>
-              <div id="help-preview" class="bg-[#182533] text-white p-3.5 rounded-xl max-w-sm text-[11px] leading-relaxed shadow-xs whitespace-pre-wrap">
-Welcome to Our Shop Support! Need assistance? Orders typically process automatically within 1-5 minutes.
-              </div>
-            </div>
+          <div class="pt-4 border-t space-y-2">
+            <label class="block font-medium text-gray-700">Help message</label>
+            <textarea id="help-msg-input" rows="6" class="w-full max-w-xl border border-gray-200 rounded-xl p-2.5 font-mono outline-none text-xs">Welcome to Support! Tap Products to make an order. Orders typically process automatically within 1-5 minutes.</textarea>
           </div>
         </div>
-        <button onclick="saveSettings('Help & policy')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl font-semibold hover:bg-purple-700">Save Help & Policy</button>
       </div>
 
       <!-- ================= TAB 4: ALERTS ================= -->
       <div id="tab-alerts" class="hidden space-y-6 text-xs">
-        <div>
-          <h2 class="text-sm font-bold text-gray-900">Alerts</h2>
-          <p class="text-gray-500">When the platform alerts you about this store.</p>
-        </div>
-
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4 max-w-lg">
-          <!-- PAYMENTS -->
-          <div>
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">Payments</p>
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="font-semibold text-gray-800">Deposit credited</p>
-                <p class="text-gray-400 text-[11px]">After a successful customer deposit.</p>
-              </div>
-              <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
-            </div>
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-gray-800">Deposit credited alert</span>
+            <input id="alert-deposit" type="checkbox" checked class="w-4 h-4 accent-purple-600">
           </div>
-
-          <!-- INVENTORY -->
-          <div class="pt-4 border-t space-y-3">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Inventory</p>
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="font-semibold text-gray-800">Low stock</p>
-                <p class="text-gray-400 text-[11px]">When available stock becomes low.</p>
-              </div>
-              <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
-            </div>
-            <div class="pl-4">
-              <label class="block text-gray-500 mb-1">Low-stock at (products threshold)</label>
-              <input type="number" value="3" class="w-24 border border-gray-200 rounded-xl p-2 text-center outline-none">
-            </div>
-            <div class="flex items-center justify-between">
-              <div>
-                <p class="font-semibold text-gray-800">Out of stock</p>
-                <p class="text-gray-400 text-[11px]">When a product reaches zero stock.</p>
-              </div>
-              <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
-            </div>
-          </div>
-
-          <!-- FULFILLMENT -->
-          <div class="pt-4 border-t space-y-3">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Fulfillment</p>
-            <div class="flex items-center justify-between">
-              <span class="font-semibold text-gray-800">Delivery failed</span>
-              <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="font-semibold text-gray-800">Refund failed</span>
-              <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="font-semibold text-gray-800">ETA overdue</span>
-              <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="font-semibold text-gray-800">Unit stuck</span>
-              <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
-            </div>
-            <div class="pl-4">
-              <label class="block text-gray-500 mb-1">Stuck after (hours)</label>
-              <input type="number" value="24" class="w-24 border border-gray-200 rounded-xl p-2 text-center outline-none">
-            </div>
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-gray-800">Low stock alert</span>
+            <input id="alert-lowstock" type="checkbox" checked class="w-4 h-4 accent-purple-600">
           </div>
         </div>
-        <button onclick="saveSettings('Alert triggers')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl font-semibold hover:bg-purple-700">Save Alert Preferences</button>
       </div>
 
       <!-- ================= TAB 5: GROUPS & CHANNELS ================= -->
       <div id="tab-groups" class="hidden space-y-6 text-xs">
-        <div>
-          <h2 class="text-sm font-bold text-gray-900">Groups & channels</h2>
-          <p class="text-gray-500">Public Telegram group and channel for store activity.</p>
-        </div>
-
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4 max-w-lg">
-          <!-- PUBLIC GROUP -->
           <div>
-            <div class="flex justify-between items-center mb-2">
-              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Public Group</p>
-              <span class="text-gray-400">Not set</span>
-            </div>
-            <div class="space-y-3">
-              <div>
-                <label class="block font-medium text-gray-700 mb-1">Destination Group chat ID</label>
-                <input placeholder="-100123456789" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-              </div>
-              <div>
-                <label class="block font-medium text-gray-700 mb-1">Group invite link</label>
-                <input placeholder="https://t.me/+AbCdEfGhIj" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-              </div>
-              <div class="flex items-center justify-between">
-                <div>
-                  <p class="font-semibold text-gray-800">Enable Public Group notifications</p>
-                  <p class="text-gray-400 text-[11px]">Post selected activity to this group.</p>
-                </div>
-                <input type="checkbox" class="w-4 h-4 accent-purple-600">
-              </div>
-            </div>
+            <label class="block font-medium text-gray-700 mb-1">Public Channel ID (or @username)</label>
+            <input id="channel-id" placeholder="@MyStoreChannel" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
           </div>
-
-          <!-- PUBLIC CHANNEL -->
-          <div class="pt-4 border-t">
-            <div class="flex justify-between items-center mb-2">
-              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Public Channel</p>
-              <span class="text-gray-400">Not set</span>
-            </div>
-            <div class="space-y-3">
-              <div>
-                <label class="block font-medium text-gray-700 mb-1">Channel chat ID</label>
-                <input placeholder="-100987654321" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-              </div>
-              <div>
-                <label class="block font-medium text-gray-700 mb-1">Channel @username or link</label>
-                <input placeholder="@MyStoreChannel" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-              </div>
-            </div>
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Group ID for Order Logs</label>
+            <input id="group-id" placeholder="-100123456789" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
           </div>
         </div>
-        <button onclick="saveSettings('Groups & Channels')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl font-semibold hover:bg-purple-700">Save Group Settings</button>
       </div>
 
     </main>
   </div>
 
-  <script>
+  <!-- ৪. FIREBASE ইন্টিগ্রেশন স্ক্রিপ্ট -->
+  <script type="module">
+    import { db, doc, setDoc, getDoc } from "./firebase-config.js";
+
     lucide.createIcons();
 
-    // মোবাইল সাইডবার টগল
-    function toggleSidebar() {
+    window.toggleSidebar = function() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('sidebarOverlay').classList.toggle('hidden');
-    }
+    };
 
-    // ৫টি সাব-ট্যাব সুইচিং
-    function switchTab(tabName) {
+    window.switchTab = function(tabName) {
       const tabs = ['store', 'bot', 'help', 'alerts', 'groups'];
       tabs.forEach(t => {
         const content = document.getElementById(`tab-${t}`);
@@ -509,7 +307,6 @@ Welcome to Our Shop Support! Need assistance? Orders typically process automatic
           btn.classList.add('text-gray-500');
         }
       });
-
       const activeContent = document.getElementById(`tab-${tabName}`);
       const activeBtn = document.getElementById(`tab-btn-${tabName}`);
       if(activeContent) activeContent.classList.remove('hidden');
@@ -517,22 +314,94 @@ Welcome to Our Shop Support! Need assistance? Orders typically process automatic
         activeBtn.classList.add('tab-active');
         activeBtn.classList.remove('text-gray-500');
       }
-    }
+    };
 
-    // লাইভ প্রিভিউ আপডেট
-    function updatePreview(inputId, previewId) {
-      const val = document.getElementById(inputId).value;
-      const preview = document.getElementById(previewId);
-      if(val.trim() === '') {
-        preview.innerText = 'Message body will appear here';
-      } else {
-        preview.innerText = val;
+    // ফায়ারবেস থেকে আগের সব সেটিংস লোড করা
+    async function loadSettingsFromFirebase() {
+      try {
+        const docRef = doc(db, "settings", "general");
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data.storeName) document.getElementById('store-name').value = data.storeName;
+          if (data.maintenance !== undefined) document.getElementById('store-maintenance').checked = data.maintenance;
+          if (data.maintMsg) document.getElementById('store-maint-msg').value = data.maintMsg;
+          if (data.operatorId) document.getElementById('store-operator-id').value = data.operatorId;
+
+          if (data.botUsername) document.getElementById('bot-username').value = data.botUsername;
+          if (data.botToken) document.getElementById('bot-token').value = data.botToken;
+          if (data.botDescription) document.getElementById('bot-desc-input').value = data.botDescription;
+          if (data.startMsg) document.getElementById('start-msg-input').value = data.startMsg;
+          if (data.requireJoin !== undefined) document.getElementById('bot-require-join').checked = data.requireJoin;
+
+          if (data.supportUsername) document.getElementById('support-username').value = data.supportUsername;
+          if (data.adminUsername) document.getElementById('admin-username').value = data.adminUsername;
+          if (data.helpMsg) document.getElementById('help-msg-input').value = data.helpMsg;
+
+          if (data.channelId) document.getElementById('channel-id').value = data.channelId;
+          if (data.groupId) document.getElementById('group-id').value = data.groupId;
+        }
+      } catch (err) {
+        console.error("Settings load error:", err);
       }
     }
+    loadSettingsFromFirebase();
 
-    function saveSettings(name) {
-      alert(`${name} সফলভাবে সংরক্ষণ করা হয়েছে!`);
-    }
+    // বট টোকেন সরাসরি ভেরিফাই করা (Telegram API কল)
+    window.testBotConnection = async function() {
+      const token = document.getElementById('bot-token').value.trim();
+      if (!token) return alert("অনুগ্রহ করে বট টোকেন দিন!");
+
+      try {
+        const res = await fetch(`https://api.telegram.org/bot${token}/getMe`);
+        const json = await res.json();
+        if (json.ok) {
+          document.getElementById('bot-status-text').innerText = `@${json.result.username} (Connected)`;
+          document.getElementById('bot-status-badge').innerText = "Verified OK";
+          document.getElementById('bot-status-badge').className = "text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full";
+          document.getElementById('bot-username').value = `@${json.result.username}`;
+          alert(`সফল হয়েছে! বটের নাম: ${json.result.first_name} (@${json.result.username})`);
+        } else {
+          alert("ভুল টোকেন! BotFather থেকে সঠিক টোকেন কপি করুন।");
+        }
+      } catch (err) {
+        alert("টোকেন যাচাই করতে সমস্যা হয়েছে: " + err.message);
+      }
+    };
+
+    // সমস্ত সেটিংস Firebase-এ সেভ করা
+    window.saveAllSettingsToFirebase = async function() {
+      try {
+        const payload = {
+          storeName: document.getElementById('store-name').value.trim(),
+          maintenance: document.getElementById('store-maintenance').checked,
+          maintMsg: document.getElementById('store-maint-msg').value.trim(),
+          operatorId: document.getElementById('store-operator-id').value.trim(),
+
+          botUsername: document.getElementById('bot-username').value.trim(),
+          botToken: document.getElementById('bot-token').value.trim(),
+          botDescription: document.getElementById('bot-desc-input').value.trim(),
+          startMsg: document.getElementById('start-msg-input').value.trim(),
+          requireJoin: document.getElementById('bot-require-join').checked,
+
+          supportUsername: document.getElementById('support-username').value.trim(),
+          adminUsername: document.getElementById('admin-username').value.trim(),
+          helpMsg: document.getElementById('help-msg-input').value.trim(),
+
+          alertDeposit: document.getElementById('alert-deposit').checked,
+          alertLowStock: document.getElementById('alert-lowstock').checked,
+
+          channelId: document.getElementById('channel-id').value.trim(),
+          groupId: document.getElementById('group-id').value.trim(),
+          updatedAt: new Date()
+        };
+
+        await setDoc(doc(db, "settings", "general"), payload);
+        alert("সব সেটিংস সফলভাবে Firebase ডাটাবেসে সেভ হয়েছে! বট এখন এই কনফিগ অনুযায়ী কাজ করবে।");
+      } catch (err) {
+        alert("সেভ করতে সমস্যা হয়েছে: " + err.message);
+      }
+    };
   </script>
 </body>
 </html>
