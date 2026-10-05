@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bot Store Admin</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script type="module">
+    // Firebase CDN
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // আপনার Firebase Config এখানে বসান
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // প্রোডাক্ট যোগ করার ফাংশন
+    window.addProduct = async function() {
+      const name = document.getElementById('pName').value;
+      const price = Number(document.getElementById('pPrice').value);
+      const stock = document.getElementById('pStock').value.split('\n').filter(Boolean);
+
+      if(!name || !price) return alert("নাম ও দাম দিন!");
+
+      try {
+        await addDoc(collection(db, "products"), {
+          name,
+          price,
+          stock, // ডিজিটাল কোড/অ্যাকাউন্টের অ্যারে
+          createdAt: new Date()
+        });
+        alert("প্রোডাক্ট এবং ডিজিটাল স্টক সেভ হয়েছে!");
+        location.reload();
+      } catch(e) {
+        alert("ত্রুটি: " + e.message);
+      }
+    };
+
+    // অর্ডার লোড করার ফাংশন
+    async function loadOrders() {
+      const ordersList = document.getElementById('ordersList');
+      const snap = await getDocs(collection(db, "orders"));
+      ordersList.innerHTML = "";
+      snap.forEach(docSnap => {
+        const o = docSnap.data();
+        ordersList.innerHTML += `
+          <tr class="border-b">
+            <td class="p-3">${o.telegramUserId}</td>
+            <td class="p-3">${o.productName}</td>
+            <td class="p-3">${o.trxId}</td>
+            <td class="p-3 font-bold ${o.status === 'completed' ? 'text-green-600' : 'text-amber-500'}">${o.status}</td>
+            <td class="p-3">
+              ${o.status === 'pending' ? `<button onclick="approveOrder('${docSnap.id}', '${o.productId}', '${o.telegramUserId}')" class="bg-purple-600 text-white px-3 py-1 rounded text-xs">Approve & Deliver</button>` : 'ডেলিভার্ড'}
+            </td>
+          </tr>
+        `;
+      });
+    }
+    window.loadOrders = loadOrders;
+    loadOrders();
+  </script>
+</head>
+<body class="bg-gray-100 flex min-h-screen font-sans">
+
+  <!-- সাইডবার -->
+  <aside class="w-64 bg-[#f8f7fc] border-r p-4 hidden md:block">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-9 h-9 bg-purple-600 text-white rounded-lg flex items-center justify-center font-bold">TG</div>
+      <span class="font-bold text-gray-800">GG Builder Store</span>
+    </div>
+    <nav class="space-y-2 text-sm font-medium text-gray-600">
+      <a href="#" class="block p-2 bg-purple-600 text-white rounded-lg">📦 Catalog & Stock</a>
+      <a href="#orders" class="block p-2 hover:bg-gray-200 rounded-lg">📋 Orders</a>
+      <a href="#payments" class="block p-2 hover:bg-gray-200 rounded-lg">💳 Payment methods</a>
+    </nav>
+  </aside>
+
+  <!-- কনটেন্ট -->
+  <main class="flex-1 p-6 space-y-6">
+    <!-- প্রোডাক্ট ও স্টক ফর্ম -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border max-w-xl">
+      <h2 class="text-lg font-bold mb-4">ডিজিটাল প্রোডাক্ট ও স্টক যোগ করুন</h2>
+      <div class="space-y-3">
+        <input id="pName" placeholder="প্রোডাক্ট নাম (যেমন: Netflix 1 Month)" class="w-full border p-2 rounded text-sm outline-none">
+        <input id="pPrice" type="number" placeholder="দাম (৳)" class="w-full border p-2 rounded text-sm outline-none">
+        <textarea id="pStock" rows="4" placeholder="ডিজিটাল কোড বা অ্যাকাউন্ট (প্রতি লাইনে একটি)" class="w-full border p-2 rounded text-sm font-mono outline-none"></textarea>
+        <button onclick="addProduct()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded text-sm font-semibold">প্রোডাক্ট অ্যাড করুন</button>
+      </div>
+    </div>
+
+    <!-- অর্ডার টেবিল -->
+    <div id="orders" class="bg-white p-5 rounded-xl shadow-sm border">
+      <h2 class="text-lg font-bold mb-4">অর্ডার সমূহ (TrxID ভেরিফিকেশন)</h2>
+      <table class="w-full text-left text-sm">
+        <thead class="bg-gray-50 border-b">
+          <tr>
+            <th class="p-3">User ID</th>
+            <th class="p-3">Product</th>
+            <th class="p-3">TrxID</th>
+            <th class="p-3">Status</th>
+            <th class="p-3">Action</th>
+          </tr>
+        </thead>
+        <tbody id="ordersList">
+          <!-- লোড হবে -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+</body>
+</html>
