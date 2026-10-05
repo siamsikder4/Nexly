@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bot Buttons - Nexly Merchant</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #faf9fd; -webkit-tap-highlight-color: transparent; }
+    .tab-active { border-bottom: 2px solid #7c3aed; color: #7c3aed !important; font-weight: 600; }
+    .btn-green { background-color: #1e4635; color: #4ade80; border: 1px solid #166534; }
+    .btn-blue { background-color: #1e3a5f; color: #60a5fa; border: 1px solid #1e40af; }
+    .btn-red { background-color: #4c1d24; color: #f87171; border: 1px solid #991b1b; }
+    .btn-default { background-color: #27303f; color: #e2e8f0; border: 1px solid #334155; }
+  </style>
+</head>
+<body class="text-[#1c1b22] flex flex-col min-h-screen">
+
+  <!-- মোবাইল ড্রয়ার ওভারলে -->
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
+
+  <!-- সাইডবার -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static shrink-0">
+    <div class="flex items-center gap-3 px-2 py-2 mb-4">
+      <div class="w-9 h-9 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center font-bold shadow-sm">
+        <i data-lucide="box" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h2 class="font-bold text-gray-900 text-sm">GG Builder</h2>
+        <p class="text-[11px] text-gray-500">Merchant store</p>
+      </div>
+    </div>
+    <nav class="space-y-1 text-xs font-medium flex-1">
+      <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+        <i data-lucide="layout-grid" class="w-4 h-4 text-gray-400"></i> Home
+      </a>
+      <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+        <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i> Settings
+      </a>
+      <a href="bot-buttons.html" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-purple-50 text-[#7c3aed] font-semibold">
+        <i data-lucide="menu-square" class="w-4 h-4 text-[#7c3aed]"></i> Bot buttons
+      </a>
+      <a href="payment-methods.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+        <i data-lucide="wallet" class="w-4 h-4 text-gray-400"></i> Payment methods
+      </a>
+    </nav>
+  </aside>
+
+  <!-- মূল কনটেন্ট ফ্রেম -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- টপবার -->
+    <header class="h-12 bg-white border-b border-gray-100 flex items-center justify-between px-3 sm:px-6 sticky top-0 z-20">
+      <div class="flex items-center gap-2">
+        <button onclick="toggleSidebar()" class="p-1 text-gray-600 rounded-lg hover:bg-gray-100 md:hidden">
+          <i data-lucide="menu" class="w-4 h-4"></i>
+        </button>
+        <span class="font-semibold text-gray-800 text-xs sm:text-sm">Nexly</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="p-1 text-gray-400 hover:bg-gray-50 rounded-full"><i data-lucide="bell" class="w-3.5 h-3.5"></i></button>
+        <button class="p-1 text-gray-400 hover:bg-gray-50 rounded-full"><i data-lucide="moon" class="w-3.5 h-3.5"></i></button>
+        <div class="w-6 h-6 rounded-full bg-purple-100 text-[#7c3aed] text-[10px] font-bold flex items-center justify-center">NE</div>
+      </div>
+    </header>
+
+    <!-- বডি ফ্রেম -->
+    <main class="flex-1 p-3 sm:p-6 max-w-5xl w-full mx-auto space-y-4">
+      
+      <!-- ================= 1. LIST & KEYBOARD BUILDER VIEW ================= -->
+      <div id="view-keyboard-builder" class="space-y-4">
+        <!-- হেডার ও সেভ বাটন -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div class="text-[11px] text-gray-400 flex items-center gap-1 mb-0.5">
+              <span>Dashboard</span> <span>/</span> <span class="text-gray-700">Bot buttons</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-base sm:text-lg font-bold text-gray-900 leading-tight">Bot buttons</h1>
+              <span class="text-[10px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded font-medium">Revision 5</span>
+              <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium" id="active-badge">Active 6/6</span>
+            </div>
+            <p class="text-[11px] text-gray-500 mt-0.5">Arrange the Telegram keyboard, then open a button to edit color and visibility. Labels are managed by the platform.</p>
+          </div>
+          <button onclick="saveAllChanges()" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700 transition self-start sm:self-auto shadow-xs">
+            Save changes
+          </button>
+        </div>
+
+        <!-- ৪টি সাব-ট্যাব (Main menu, Wallet, Payment, Profile) -->
+        <div class="border-b border-gray-200 flex gap-6 text-xs font-medium overflow-x-auto">
+          <button onclick="switchTab('main')" id="tab-btn-main" class="pb-2.5 tab-active">Main menu</button>
+          <button onclick="switchTab('wallet')" id="tab-btn-wallet" class="pb-2.5 text-gray-500 hover:text-gray-800">Wallet</button>
+          <button onclick="switchTab('payment')" id="tab-btn-payment" class="pb-2.5 text-gray-500 hover:text-gray-800">Payment</button>
+          <button onclick="switchTab('profile')" id="tab-btn-profile" class="pb-2.5 text-gray-500 hover:text-gray-800">Profile</button>
+        </div>
+
+        <!-- Menu style switcher -->
+        <div class="flex items-center justify-between text-xs py-1">
+          <div>
+            <span class="font-semibold text-gray-800">Menu style</span>
+            <p class="text-[10px] text-gray-400">Inline = under the message. Fixed = Telegram reply keyboard.</p>
+          </div>
+          <div class="flex p-0.5 bg-gray-100 rounded-lg text-[11px]">
+            <button onclick="setStyle('inline')" id="style-inline" class="px-2.5 py-1 rounded-md bg-white font-semibold shadow-2xs">Inline</button>
+            <button onclick="setStyle('fixed')" id="style-fixed" class="px-2.5 py-1 rounded-md text-gray-500">Fixed keyboard</button>
+          </div>
+        </div>
+
+        <!-- কন্টেন্ট এরিয়া: বামে কিবোর্ড এডিটর + ডানে লাইভ প্রিভিউ -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          
+          <!-- বাম পাশ: কিবোর্ড সেল গ্রিড -->
+          <div class="lg:col-span-8 bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
+            <div class="flex justify-between items-center text-[11px] mb-3">
+              <div>
+                <span class="font-bold text-gray-800">Keyboard</span>
+                <p class="text-[10px] text-gray-400">Drag with arrows. Eye opens full edit. Power toggles visibility.</p>
+              </div>
+              <span class="text-gray-400">Max / row 3</span>
+            </div>
+
+            <!-- গ্রিড সেলস কনটেইনার -->
+            <div id="keyboard-grid-container" class="space-y-2">
+              <!-- জাভাস্ক্রিপ্ট দিয়ে বাটন লোড হবে -->
+            </div>
+          </div>
+
+          <!-- ডান পাশ: Telegram Live Preview (স্ক্রিনশটের হুবহু ডার্ক প্রিভিউ) -->
+          <div class="lg:col-span-4 bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs self-start sticky top-16">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">LIVE PREVIEW</p>
+            <p class="text-[11px] text-gray-500 mb-3">Selected button is highlighted.</p>
+
+            <!-- টেলিগ্রাম চ্যাট উইন্ডো -->
+            <div class="bg-[#182533] border border-[#2b3a4a] rounded-2xl p-3 shadow-inner">
+              <div class="text-[10px] text-gray-400 pb-2 border-b border-[#2b3a4a] mb-2 font-mono flex justify-between">
+                <span>Bot buttons</span>
+                <span id="preview-style-indicator" class="text-purple-400">inline</span>
+              </div>
+              
+              <!-- বাটন গ্রিড প্রিভিউ -->
+              <div id="live-preview-grid" class="space-y-1 text-xs font-medium">
+                <!-- ডায়নামিক বাটন প্রিভিউ লোড হবে -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ================= 2. FULL BUTTON EDIT VIEW (স্ক্রিনশট ২৩) ================= -->
+      <div id="view-button-edit" class="hidden space-y-4">
+        <div>
+          <button onclick="backToBuilder()" class="text-xs text-purple-600 font-medium hover:underline flex items-center gap-1 mb-2">
+            ‹ Back to Bot buttons
+          </button>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 id="edit-btn-title" class="text-base sm:text-lg font-bold text-gray-900 leading-tight">My orders</h1>
+                <span class="text-[10px] bg-sky-50 text-sky-700 px-2 py-0.5 rounded font-medium">Active in bot</span>
+                <span class="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded font-medium">Row 1 • Order 1</span>
+              </div>
+              <p class="text-[11px] text-gray-500 mt-0.5">Edit labels and visibility while watching the live keyboard • <span id="edit-btn-subtitle">My orders</span></p>
+            </div>
+            <button onclick="saveSingleButtonEdit()" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700 transition self-start sm:self-auto shadow-xs">
+              Save changes
+            </button>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <!-- বাম পাশ: প্রেজেন্টেশন ও সেটিংস -->
+          <div class="lg:col-span-7 bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-4 text-xs">
+            <div>
+              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">PRESENTATION</p>
+              <p class="text-[11px] text-gray-500">Changes update the preview instantly. Save when you are ready to publish.</p>
+              
+              <!-- ব্যাজ সমূহ -->
+              <div class="flex gap-2 mt-3">
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-2 text-center flex-1">
+                  <span class="text-[9px] text-gray-400 uppercase block font-bold">Action</span>
+                  <span class="font-bold text-gray-800" id="badge-action">My orders</span>
+                </div>
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-2 text-center flex-1">
+                  <span class="text-[9px] text-gray-400 uppercase block font-bold">System policy</span>
+                  <span class="font-bold text-purple-700">REQUIRED</span>
+                </div>
+                <div class="bg-gray-50 border border-gray-100 rounded-xl p-2 text-center flex-1">
+                  <span class="text-[9px] text-gray-400 uppercase block font-bold">Action readiness</span>
+                  <span class="font-bold text-emerald-600">Ready</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- লেবেল ইনপুট -->
+            <div class="space-y-3 pt-2">
+              <div>
+                <label class="block font-medium text-gray-700 mb-1">English label</label>
+                <input id="edit-label-en" oninput="updateEditPreview()" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+              </div>
+              <div>
+                <label class="block font-medium text-gray-700 mb-1">Secondary / Arabic / বাংলা label</label>
+                <input id="edit-label-sec" placeholder="ঐচ্ছিক লেবেল" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+              </div>
+              <div>
+                <label class="block font-medium text-gray-700 mb-1">Button color</label>
+                <select id="edit-color" onchange="updateEditPreview()" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+                  <option value="green">🟢 Green – success</option>
+                  <option value="blue">🔵 Blue – primary</option>
+                  <option value="red">🔴 Red – danger</option>
+                  <option value="default">⚪ Default – secondary</option>
+                </select>
+                <p class="text-[10px] text-gray-400 mt-1">Telegram styles only (default / blue / green / red). Free hex colors are not supported.</p>
+              </div>
+              <div>
+                <label class="block font-medium text-gray-700 mb-1">Custom emoji ID</label>
+                <input id="edit-emoji" value="5426907155221455893" class="w-full border border-gray-200 rounded-xl p-2.5 font-mono outline-none focus:border-purple-600">
+                <div class="bg-amber-50 border border-amber-100 text-amber-800 p-2.5 rounded-xl text-[10px] mt-2">
+                  Unsupported custom emoji IDs are saved, but the bot may fall back to text-only labels.
+                </div>
+              </div>
+              <div class="flex items-center gap-2 pt-2">
+                <input type="checkbox" id="edit-inactive" onchange="updateEditPreview()" class="w-4 h-4 accent-purple-600">
+                <label for="edit-inactive" class="font-medium text-gray-700 cursor-pointer">Inactive in bot</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- ডান পাশ: লাইভ প্রিভিউ -->
+          <div class="lg:col-span-5 bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs self-start sticky top-16">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">LIVE PREVIEW</p>
+            <div class="bg-[#182533] border border-[#2b3a4a] rounded-2xl p-3 shadow-inner">
+              <div class="text-[10px] text-gray-400 pb-2 border-b border-[#2b3a4a] mb-2 font-mono flex justify-between">
+                <span>Bot buttons</span>
+                <span class="text-purple-400">live</span>
+              </div>
+              <div id="edit-preview-box" class="space-y-1 text-xs">
+                <!-- প্রিভিউ আপডেট হবে -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // মোবাইল সাইডবার টগল
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('sidebarOverlay').classList.toggle('hidden');
+    }
+
+    // ৪টি ট্যাবের কিবোর্ড বাটন ডাটাবেস
+    const buttonData = {
+      main: [
+        { id: 'm1', label: 'Products', row: 1, color: 'green', active: true },
+        { id: 'm2', label: 'Profile', row: 2, color: 'blue', active: true },
+        { id: 'm3', label: 'Wallet', row: 2, color: 'blue', active: true },
+        { id: 'm4', label: 'Help', row: 3, color: 'blue', active: true },
+        { id: 'm5', label: 'Referrals', row: 3, color: 'blue', active: true },
+        { id: 'm6', label: 'Bot Policy', row: 4, color: 'red', active: true },
+      ],
+      wallet: [
+        { id: 'w1', label: 'Top up', row: 1, color: 'green', active: true },
+        { id: 'w2', label: 'Deposit code', row: 2, color: 'blue', active: true }
+      ],
+      payment: [
+        { id: 'p1', label: 'Binance Pay', row: 1, color: 'green', active: true },
+        { id: 'p2', label: 'Polygon (USDT)', row: 2, color: 'blue', active: true },
+        { id: 'p3', label: 'BEP20 (USDT)', row: 2, color: 'blue', active: true },
+        { id: 'p4', label: 'TRC20 (USDT)', row: 3, color: 'blue', active: true },
+        { id: 'p5', label: 'Pay with Crypto', row: 3, color: 'blue', active: true },
+        { id: 'p6', label: 'Telegram Stars', row: 4, color: 'default', active: true }
+      ],
+      profile: [
+        { id: 'pr1', label: 'My orders', row: 1, color: 'green', active: true },
+        { id: 'pr2', label: 'My deposits', row: 1, color: 'green', active: true },
+        { id: 'pr3', label: 'Languages', row: 2, color: 'blue', active: true },
+        { id: 'pr4', label: 'Notifications', row: 2, color: 'blue', active: true },
+        { id: 'pr5', label: 'API', row: 3, color: 'red', active: false }
+      ]
+    };
+
+    let currentTab = 'main';
+    let currentEditingBtn = null;
+    let menuStyle = 'inline';
+
+    // ট্যাব সুইচিং
+    function switchTab(tab) {
+      currentTab = tab;
+      ['main', 'wallet', 'payment', 'profile'].forEach(t => {
+        const btn = document.getElementById(`tab-btn-${t}`);
+        if(t === tab) {
+          btn.className = 'pb-2.5 tab-active';
+        } else {
+          btn.className = 'pb-2.5 text-gray-500 hover:text-gray-800';
+        }
+      });
+      renderKeyboardBuilder();
+    }
+
+    // স্টাইল সুইচিং (Inline / Fixed)
+    function setStyle(st) {
+      menuStyle = st;
+      document.getElementById('style-inline').className = st === 'inline' ? 'px-2.5 py-1 rounded-md bg-white font-semibold shadow-2xs' : 'px-2.5 py-1 rounded-md text-gray-500';
+      document.getElementById('style-fixed').className = st === 'fixed' ? 'px-2.5 py-1 rounded-md bg-white font-semibold shadow-2xs' : 'px-2.5 py-1 rounded-md text-gray-500';
+      document.getElementById('preview-style-indicator').innerText = st;
+      renderKeyboardBuilder();
+    }
+
+    // কিবোর্ড গ্রিড ও লাইভ প্রিভিউ রেন্ডারিং
+    function renderKeyboardBuilder() {
+      const list = buttonData[currentTab];
+      const gridContainer = document.getElementById('keyboard-grid-container');
+      const liveGrid = document.getElementById('live-preview-grid');
+
+      gridContainer.innerHTML = '';
+      liveGrid.innerHTML = '';
+
+      // রো অনুযায়ী গ্রুপ করা
+      const rows = {};
+      list.forEach(btn => {
+        if (!rows[btn.row]) rows[btn.row] = [];
+        rows[btn.row].push(btn);
+      });
+
+      // বিল্ডার সেল রেন্ডার
+      Object.keys(rows).forEach(rowNum => {
+        const rowBtns = rows[rowNum];
+        let rowHtml = `<div class="flex items-center gap-2 mb-2">
+          <span class="text-[10px] font-bold text-gray-400 w-3">${rowNum}</span>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1">`;
+
+        rowBtns.forEach(b => {
+          rowHtml += `
+            <div class="border ${b.active ? 'border-purple-200 bg-purple-50/40' : 'border-gray-200 bg-gray-50 opacity-60'} rounded-xl p-2.5 space-y-2">
+              <div class="flex justify-between items-center">
+                <span class="font-bold text-xs text-gray-800 truncate">${b.label}</span>
+                <span class="w-2 h-2 rounded-full ${b.color === 'green' ? 'bg-emerald-500' : b.color === 'blue' ? 'bg-sky-500' : b.color === 'red' ? 'bg-red-500' : 'bg-gray-400'}"></span>
+              </div>
+              <div class="flex items-center justify-between text-gray-400 text-[10px] pt-1 border-t border-purple-100">
+                <div class="flex gap-1">
+                  <button onclick="togglePower('${b.id}')" class="p-1 hover:text-purple-600 ${b.active ? 'text-purple-600' : 'text-gray-400'}"><i data-lucide="power" class="w-3 h-3"></i></button>
+                  <button onclick="openButtonEdit('${b.id}')" class="p-1 hover:text-purple-600"><i data-lucide="eye" class="w-3 h-3"></i></button>
+                </div>
+                <div class="flex gap-1 text-[9px]">
+                  <button onclick="moveBtn('${b.id}', 'left')" class="hover:text-gray-800">‹</button>
+                  <button onclick="moveBtn('${b.id}', 'right')" class="hover:text-gray-800">›</button>
+                  <button onclick="moveBtn('${b.id}', 'up')" class="hover:text-gray-800">^</button>
+                  <button onclick="moveBtn('${b.id}', 'down')" class="hover:text-gray-800">v</button>
+                  <span class="text-gray-300">|</span>
+                  <button class="hover:text-gray-800">Break</button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        // খালি সেল ফিল করা
+        for(let i = rowBtns.length; i < 3; i++) {
+          rowHtml += `<div class="border border-dashed border-gray-200 rounded-xl p-2.5 hidden sm:block bg-gray-50/20"></div>`;
+        }
+
+        rowHtml += `</div></div>`;
+        gridContainer.innerHTML += rowHtml;
+
+        // টেলিগ্রাম লাইভ প্রিভিউ রো রেন্ডার
+        let previewRowHtml = `<div class="flex gap-1 w-full">`;
+        rowBtns.forEach(b => {
+          if(b.active) {
+            const colorClass = b.color === 'green' ? 'btn-green' : b.color === 'blue' ? 'btn-blue' : b.color === 'red' ? 'btn-red' : 'btn-default';
+            previewRowHtml += `
+              <button onclick="openButtonEdit('${b.id}')" class="flex-1 py-1.5 px-2 rounded-lg text-center font-medium truncate ${colorClass} hover:opacity-90 transition">
+                ${b.label}
+              </button>
+            `;
+          }
+        });
+        previewRowHtml += `</div>`;
+        liveGrid.innerHTML += previewRowHtml;
+      });
+
+      // একটিভ কাউন্টার আপডেট
+      const activeCount = list.filter(b => b.active).length;
+      document.getElementById('active-badge').innerText = `Active ${activeCount}/${list.length}`;
+      lucide.createIcons();
+    }
+
+    // পাওয়ার টগল
+    function togglePower(id) {
+      const btn = buttonData[currentTab].find(b => b.id === id);
+      if(btn) {
+        btn.active = !btn.active;
+        renderKeyboardBuilder();
+      }
+    }
+
+    // পজিশন মুভ লজিক
+    function moveBtn(id, dir) {
+      const btn = buttonData[currentTab].find(b => b.id === id);
+      if(!btn) return;
+      if(dir === 'up') btn.row = Math.max(1, btn.row - 1);
+      if(dir === 'down') btn.row = btn.row + 1;
+      renderKeyboardBuilder();
+    }
+
+    // স্ক্রিনশট ২৩: বাটন এডিটর ওপেন করা
+    function openButtonEdit(id) {
+      const btn = buttonData[currentTab].find(b => b.id === id);
+      if(!btn) return;
+      currentEditingBtn = btn;
+
+      document.getElementById('edit-btn-title').innerText = btn.label;
+      document.getElementById('edit-btn-subtitle').innerText = btn.label;
+      document.getElementById('badge-action').innerText = btn.label;
+      document.getElementById('edit-label-en').value = btn.label;
+      document.getElementById('edit-color').value = btn.color;
+      document.getElementById('edit-inactive').checked = !btn.active;
+
+      document.getElementById('view-keyboard-builder').classList.add('hidden');
+      document.getElementById('view-button-edit').classList.remove('hidden');
+
+      updateEditPreview();
+      window.scrollTo(0, 0);
+    }
+
+    function backToBuilder() {
+      document.getElementById('view-button-edit').classList.add('hidden');
+      document.getElementById('view-keyboard-builder').classList.remove('hidden');
+      renderKeyboardBuilder();
+    }
+
+    // এডিটর ভিউতে লাইভ প্রিভিউ দেখানো
+    function updateEditPreview() {
+      if(!currentEditingBtn) return;
+      const label = document.getElementById('edit-label-en').value || currentEditingBtn.label;
+      const color = document.getElementById('edit-color').value;
+      const inactive = document.getElementById('edit-inactive').checked;
+
+      const previewBox = document.getElementById('edit-preview-box');
+      const colorClass = color === 'green' ? 'btn-green' : color === 'blue' ? 'btn-blue' : color === 'red' ? 'btn-red' : 'btn-default';
+
+      previewBox.innerHTML = `
+        <div class="p-2 border rounded-xl text-center font-semibold ${inactive ? 'opacity-30' : ''} ${colorClass}">
+          ${label} ${inactive ? '(Inactive)' : ''}
+        </div>
+      `;
+    }
+
+    // সিঙ্গেল বাটন সেভ
+    function saveSingleButtonEdit() {
+      if(!currentEditingBtn) return;
+      currentEditingBtn.label = document.getElementById('edit-label-en').value;
+      currentEditingBtn.color = document.getElementById('edit-color').value;
+      currentEditingBtn.active = !document.getElementById('edit-inactive').checked;
+
+      alert(`'${currentEditingBtn.label}' বাটনটি সফলভাবে আপডেট করা হয়েছে!`);
+      backToBuilder();
+    }
+
+    function saveAllChanges() {
+      alert('টেলিগ্রাম বটের সমস্ত বাটন লেআউট এবং কিবোর্ড সফলভাবে সেভ হয়েছে!');
+    }
+
+    // প্রাথমিক রেন্ডার
+    renderKeyboardBuilder();
+  </script>
+</body>
+</html>
