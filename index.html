@@ -17,10 +17,10 @@
 </head>
 <body class="text-[#1c1b22] flex min-h-screen">
 
-  <!-- মোবাইল সাইডবার ওভারলে -->
+  <!-- মোবাইল ড্রয়ার ওভারলে -->
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
 
-  <!-- ১. ফুল সাইডবার (স্ক্রিনশট ১ ও ৩ এর হুবহু মেনু) -->
+  <!-- ১. সাইডবার নেভিগেশন (সব পেজের লিঙ্ক সহ) -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:w-64 shrink-0">
     <div class="flex items-center gap-3 px-2 py-2 mb-4">
       <div class="w-10 h-10 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center shadow-md">
@@ -34,6 +34,7 @@
 
     <!-- সাইডবার আইটেমস -->
     <div class="flex-1 overflow-y-auto space-y-4 text-xs font-medium pr-1">
+      
       <!-- OVERVIEW -->
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Overview</p>
@@ -69,9 +70,9 @@
           <button onclick="navigate('languages')" id="btn-languages" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="flag" class="w-4 h-4 text-gray-500"></i> Languages
           </button>
-          <button onclick="navigate('botbuttons')" id="btn-botbuttons" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+          <a href="bot-buttons.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="menu-square" class="w-4 h-4 text-gray-500"></i> Bot buttons
-          </button>
+          </a>
           <button onclick="navigate('broadcast')" id="btn-broadcast" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="send" class="w-4 h-4 text-gray-500"></i> Broadcast
           </button>
@@ -103,12 +104,13 @@
           </button>
         </div>
       </div>
+
     </div>
   </aside>
 
   <!-- ২. মূল কন্টেন্ট এরিয়া -->
   <div class="flex-1 flex flex-col min-w-0">
-    <!-- টপ ন্যাভবার -->
+    <!-- মোবাইল ও ডেস্কটপ টপবার -->
     <header class="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
       <div class="flex items-center gap-3">
         <button onclick="toggleSidebar()" class="p-1.5 text-gray-600 rounded-lg hover:bg-gray-100 md:hidden">
@@ -123,7 +125,7 @@
       </div>
     </header>
 
-    <!-- মূল পেজ কনটেন্ট -->
+    <!-- বডি পেজ কনটেন্ট -->
     <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-5xl w-full mx-auto">
       
       <!-- ================= 1. HOME (Store pulse) ================= -->
@@ -134,7 +136,7 @@
 
         <div>
           <h2 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">Store pulse</h2>
-          <!-- ৮টি পালস কার্ড গ্রিড -->
+          <!-- ৮টি পালস কার্ড -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div class="bg-white border-l-4 border-l-amber-500 border border-gray-200/70 rounded-2xl p-3.5 shadow-2xs">
               <span class="text-[10px] font-bold text-gray-500 uppercase block">Needs Attention</span>
@@ -216,6 +218,12 @@
             <button onclick="navigate('orders')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
               <i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-purple-600"></i> Orders
             </button>
+            <a href="bot-buttons.html" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600 text-gray-700">
+              <i data-lucide="menu-square" class="w-3.5 h-3.5 text-purple-600"></i> Bot buttons
+            </a>
+            <a href="payment-methods.html" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600 text-gray-700">
+              <i data-lucide="wallet" class="w-3.5 h-3.5 text-purple-600"></i> Payment methods
+            </a>
             <button onclick="navigate('broadcast')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
               <i data-lucide="send" class="w-3.5 h-3.5 text-purple-600"></i> Broadcast
             </button>
@@ -434,34 +442,7 @@
         </div>
       </section>
 
-      <!-- ================= 8. BOT BUTTONS ================= -->
-      <section id="view-botbuttons" class="hidden space-y-6">
-        <div class="text-xs text-gray-400 flex items-center gap-1.5">
-          <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Bot buttons</span>
-        </div>
-        <h1 class="text-xl font-bold text-gray-900">Bot Menu & Inline Buttons</h1>
-        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4 text-xs">
-          <p class="text-gray-500">ইউজার /start চাপলে টেলিগ্রাম কীবোর্ডে যে বাটনগুলো দেখতে পাবে:</p>
-          <div class="space-y-2">
-            <div class="flex gap-2">
-              <input value="🛍️ সব প্রোডাক্ট দেখুন" class="flex-1 border rounded-xl p-2.5">
-              <button class="px-3 border rounded-xl text-red-500">Remove</button>
-            </div>
-            <div class="flex gap-2">
-              <input value="💳 ওয়ালেট ব্যালেন্স" class="flex-1 border rounded-xl p-2.5">
-              <button class="px-3 border rounded-xl text-red-500">Remove</button>
-            </div>
-            <div class="flex gap-2">
-              <input value="☎️ কাস্টমার সাপোর্ট" class="flex-1 border rounded-xl p-2.5">
-              <button class="px-3 border rounded-xl text-red-500">Remove</button>
-            </div>
-          </div>
-          <button onclick="alert('নতুন বাটন ফিল্ড যোগ হয়েছে')" class="border border-purple-600 text-purple-600 px-3 py-1.5 rounded-xl font-semibold">+ Add Button</button>
-          <button onclick="saveFormNotification('Bot buttons')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl font-semibold ml-2">Save Layout</button>
-        </div>
-      </section>
-
-      <!-- ================= 9. BROADCAST ================= -->
+      <!-- ================= 8. BROADCAST ================= -->
       <section id="view-broadcast" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Broadcast</span>
@@ -476,7 +457,7 @@
         </div>
       </section>
 
-      <!-- ================= 10. TRANSACTIONS ================= -->
+      <!-- ================= 9. TRANSACTIONS ================= -->
       <section id="view-transactions" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Money</span> <span>/</span> <span class="text-gray-700 font-medium">Transactions</span>
@@ -506,7 +487,7 @@
         </div>
       </section>
 
-      <!-- ================= 11. DEPOSIT CODES ================= -->
+      <!-- ================= 10. DEPOSIT CODES ================= -->
       <section id="view-depositcodes" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Money</span> <span>/</span> <span class="text-gray-700 font-medium">Deposit codes</span>
@@ -526,7 +507,7 @@
         </div>
       </section>
 
-      <!-- ================= 12. LEARN ================= -->
+      <!-- ================= 11. LEARN ================= -->
       <section id="view-learn" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Learn</span> <span>/</span> <span class="text-gray-700 font-medium">Documentation</span>
@@ -536,14 +517,15 @@
           <p class="font-bold text-gray-900 text-sm">টেলিগ্রাম স্টোর ব্যবহারের নির্দেশিকা:</p>
           <p>১. <strong>Catalog:</strong> প্রোডাক্ট অ্যাড করুন এবং প্রতি লাইনে ডিজিটাল ডেলিভারি কি/কোড দিয়ে দিন।</p>
           <p>২. <strong>Settings:</strong> সাইডবারের Settings পেজে গিয়ে BotFather টোকেন দিয়ে কানেক্ট করুন।</p>
-          <p>৩. <strong>Payment Methods:</strong> বিকাশ ও নগদ নম্বর যুক্ত করুন যাতে ইউজার পেমেন্ট পাঠানোর ঠিকানা পায়।</p>
+          <p>৩. <strong>Bot buttons:</strong> Bot buttons পেজ থেকে কাস্টমারদের জন্য মেনু বাটন সাজিয়ে নিন।</p>
+          <p>৪. <strong>Payment Methods:</strong> পেমেন্ট মেথডস পেজে গিয়ে ক্রিপ্টো ও লোকাল পেমেন্ট গেটওয়ে কনফিগার করুন।</p>
         </div>
       </section>
 
     </main>
   </div>
 
-  <!-- প্রোডাক্ট তৈরি করার মোডাল -->
+  <!-- প্রোডাক্ট তৈরি করার পপআপ মোডাল -->
   <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl text-xs">
       <div class="flex justify-between items-center border-b pb-2">
@@ -572,21 +554,24 @@
     </div>
   </div>
 
+  <!-- ৪. ইন্টার‍্যাকশন স্ক্রিপ্ট -->
   <script>
     lucide.createIcons();
 
+    // মোবাইল সাইডবার টগল
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('sidebarOverlay').classList.toggle('hidden');
     }
 
+    // অল মেনু ভিউ নেভিগেশন কন্ট্রোলার
     function navigate(viewName) {
       const views = [
         'home', 'customers', 'catalog', 'inventory', 'orders', 'analytics',
-        'languages', 'botbuttons', 'broadcast', 
-        'transactions', 'depositcodes', 'learn'
+        'languages', 'broadcast', 'transactions', 'depositcodes', 'learn'
       ];
 
+      // সব সেকশন হাইড করা
       views.forEach(v => {
         const sec = document.getElementById(`view-${v}`);
         const btn = document.getElementById(`btn-${v}`);
@@ -594,20 +579,24 @@
         if(btn) btn.classList.remove('nav-active');
       });
 
+      // সিলেক্টেড সেকশন অ্যাক্টিভ করা
       const targetSec = document.getElementById(`view-${viewName}`);
       const targetBtn = document.getElementById(`btn-${viewName}`);
       if(targetSec) targetSec.classList.remove('hidden');
       if(targetBtn) targetBtn.classList.add('nav-active');
 
+      // মোবাইলে ক্লিক করার পর সাইডবার বন্ধ করা
       if(window.innerWidth < 768) {
         const sb = document.getElementById('sidebar');
         if(!sb.classList.contains('-translate-x-full')) toggleSidebar();
       }
     }
 
+    // মোডাল হ্যান্ডলার
     function openProductModal() { document.getElementById('productModal').classList.remove('hidden'); }
     function closeProductModal() { document.getElementById('productModal').classList.add('hidden'); }
 
+    // প্রোডাক্ট যোগ করা
     let productCount = 1;
     function saveNewProduct() {
       const name = document.getElementById('m-name').value;
@@ -646,6 +635,7 @@
       document.getElementById('dash-prod-count').innerText = productCount;
     }
 
+    // অর্ডার অ্যাপ্রুভ অ্যাকশন
     function approveOrderAction() {
       document.getElementById('ord-status').innerText = 'Delivered';
       document.getElementById('ord-status').className = 'px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded font-bold text-[10px]';
@@ -656,6 +646,7 @@
       alert('অর্ডার সফলভাবে অ্যাপ্রুভ হয়েছে এবং ইউজারের কাছে কোড পৌঁছে গেছে!');
     }
 
+    // ব্রডকাস্ট মেসেজ পাঠানো
     function sendBroadcastAction() {
       const msg = document.getElementById('bc-msg').value;
       if(!msg) return alert('অনুগ্রহ করে মেসেজ লিখুন');
@@ -663,6 +654,7 @@
       document.getElementById('bc-msg').value = '';
     }
 
+    // ডিপোজিট কোড তৈরি করা
     function generateDepositCode() {
       const code = 'GIFT-' + Math.random().toString(36).substring(2, 7).toUpperCase();
       document.getElementById('codes-container').innerHTML += `
