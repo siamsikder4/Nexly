@@ -4,170 +4,236 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Bot Buttons - Nexly Merchant</title>
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #faf9fd; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
     .tab-active { border-bottom: 2px solid #7c3aed; color: #7c3aed !important; font-weight: 600; }
-    .tg-btn-green { background: #1b4332; color: #52b788; border: 1px solid #2d6a4f; }
-    .tg-btn-blue { background: #1a365d; color: #63b3ed; border: 1px solid #2b6cb0; }
-    .tg-btn-red { background: #4a151b; color: #feb2b2; border: 1px solid #9b2c2c; }
-    .tg-btn-yellow { background: #42350a; color: #fde047; border: 1px solid #a16207; }
-    .tg-btn-purple { background: #3b1d5c; color: #d8b4fe; border: 1px solid #7e22ce; }
-    .tg-btn-default { background: #232d3f; color: #e2e8f0; border: 1px solid #334155; }
-    .tg-selected { outline: 2px solid #7c3aed; outline-offset: 1px; }
+    
+    /* Telegram Dark Theme Colors */
+    .tg-btn-green { background: #16382b; color: #4ade80; border: 1px solid #166534; }
+    .tg-btn-blue { background: #172b4d; color: #60a5fa; border: 1px solid #1d4ed8; }
+    .tg-btn-red { background: #3b171e; color: #f87171; border: 1px solid #991b1b; }
+    .tg-btn-yellow { background: #382d10; color: #facc15; border: 1px solid #854d0e; }
+    .tg-btn-purple { background: #2e1a47; color: #c084fc; border: 1px solid #6b21a8; }
+    .tg-btn-default { background: #1e293b; color: #cbd5e1; border: 1px solid #334155; }
+    
+    .tg-selected { ring: 2px solid #a855f7; ring-offset: 2px; ring-offset-color: #0f172a; }
   </style>
 </head>
-<body class="text-[#1c1b22] flex min-h-screen">
+<body class="text-[#0f172a] flex min-h-screen">
 
-  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
+  <!-- মোবাইল সাইডবার ড্রয়ার ওভারলে -->
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-30 hidden md:hidden"></div>
 
-  <!-- সাইডবার -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:w-64 shrink-0">
+  <!-- সাইডবার মেনু -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-slate-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:w-64 shrink-0">
     <div class="flex items-center gap-3 px-2 py-2 mb-4">
-      <div class="w-10 h-10 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center shadow-md">
+      <div class="w-10 h-10 bg-gradient-to-tr from-[#7c3aed] to-[#9333ea] text-white rounded-xl flex items-center justify-center shadow-md shadow-purple-500/20">
         <i data-lucide="box" class="w-5 h-5"></i>
       </div>
       <div>
-        <h2 class="font-bold text-gray-900 text-sm leading-tight">GG Builder</h2>
-        <p class="text-[11px] text-gray-500 font-medium">Merchant store</p>
+        <h2 class="font-bold text-slate-900 text-sm leading-tight">GG Builder</h2>
+        <p class="text-[11px] text-slate-400 font-medium">Merchant desk</p>
       </div>
     </div>
+
     <div class="flex-1 overflow-y-auto space-y-4 text-xs font-medium pr-1">
       <div>
-        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Overview</p>
+        <p class="text-[10px] font-bold text-slate-400 tracking-wider px-3 mb-1 uppercase">Overview</p>
         <div class="space-y-0.5">
-          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50"><i data-lucide="layout-grid" class="w-4 h-4 text-gray-500"></i> Home</a>
-          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50"><i data-lucide="layers" class="w-4 h-4 text-gray-500"></i> Catalog</a>
-          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50"><i data-lucide="clipboard-list" class="w-4 h-4 text-gray-500"></i> Orders</a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-50"><i data-lucide="layout-grid" class="w-4 h-4 text-slate-400"></i> Home</a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-50"><i data-lucide="users" class="w-4 h-4 text-slate-400"></i> Customers</a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-50"><i data-lucide="layers" class="w-4 h-4 text-slate-400"></i> Catalog</a>
+          <a href="analytics.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-50"><i data-lucide="trending-up" class="w-4 h-4 text-slate-400"></i> Analytics</a>
         </div>
       </div>
       <div>
-        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Channel</p>
+        <p class="text-[10px] font-bold text-slate-400 tracking-wider px-3 mb-1 uppercase">Channel</p>
         <div class="space-y-0.5">
-          <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50"><i data-lucide="settings" class="w-4 h-4 text-gray-500"></i> Settings</a>
+          <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-50"><i data-lucide="settings" class="w-4 h-4 text-slate-400"></i> Settings</a>
           <a href="bot-buttons.html" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-purple-50 text-[#7c3aed] font-semibold"><i data-lucide="menu-square" class="w-4 h-4 text-[#7c3aed]"></i> Bot buttons</a>
+          <a href="broadcast.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:bg-slate-50"><i data-lucide="send" class="w-4 h-4 text-slate-400"></i> Broadcast</a>
         </div>
       </div>
     </div>
   </aside>
 
-  <!-- মেইন এরিয়া -->
+  <!-- মেইন কন্টেন্ট এরিয়া -->
   <div class="flex-1 flex flex-col min-w-0">
-    <header class="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
+    <header class="h-14 bg-white border-b border-slate-100 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
       <div class="flex items-center gap-3">
-        <button onclick="toggleSidebar()" class="p-1.5 text-gray-600 rounded-lg hover:bg-gray-100 md:hidden">
+        <button onclick="toggleSidebar()" class="p-1.5 text-slate-600 rounded-lg hover:bg-slate-100 md:hidden">
           <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
-        <span class="font-semibold text-gray-800 text-sm">Nexly</span>
+        <span class="font-semibold text-slate-800 text-sm">Nexly Console</span>
       </div>
       <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 text-xs font-bold flex items-center justify-center">NE</div>
     </header>
 
-    <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-5xl w-full mx-auto space-y-4">
+    <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-5xl w-full mx-auto space-y-5">
       
-      <!-- ১. বাটন লিস্ট ও কিবোর্ড বিল্ডার ভিউ -->
+      <!-- ১. কিবোর্ড বিল্ডার ভিউ -->
       <div id="view-keyboard-builder" class="space-y-4">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <div class="text-[11px] text-gray-400 flex items-center gap-1 mb-0.5">
-              <span>Dashboard</span> <span>/</span> <span class="text-gray-700">Bot buttons</span>
+            <div class="text-[11px] text-slate-400 flex items-center gap-1.5 mb-0.5">
+              <span>Channel</span> <span>/</span> <span class="text-slate-700 font-medium">Bot buttons</span>
             </div>
             <div class="flex items-center gap-2">
-              <h1 class="text-lg font-bold text-gray-900 leading-tight">Bot buttons</h1>
-              <span class="text-[10px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded font-medium">Stylish Mode</span>
-              <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium" id="active-badge">Active 6/6</span>
+              <h1 class="text-lg font-bold text-slate-900 tracking-tight">Telegram Keyboard Studio</h1>
+              <span class="text-[10px] bg-purple-50 text-purple-700 px-2.5 py-0.5 rounded-full font-semibold border border-purple-100">Live Sync</span>
+              <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2.5 py-0.5 rounded-full font-semibold border border-emerald-100" id="active-badge">Active 6</span>
             </div>
-            <p class="text-xs text-gray-500 mt-0.5">বাটন এডিট করুন, কাস্টম টেক্সট ও কালার সেট করুন। বটে স্বয়ংক্রিয়ভাবে আপডেট হবে।</p>
+            <p class="text-xs text-slate-500 mt-1">কিবোর্ড রো ও বাটন সাজান। বটে তাৎক্ষণিকভাবে এই ডিজাইন ও রেসপন্স কার্যকর হবে।</p>
           </div>
-          <button onclick="saveButtonsToFirebase()" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700 transition self-start sm:self-auto shadow-xs">
-            Save changes
-          </button>
+          
+          <div class="flex items-center gap-2 self-start sm:self-auto">
+            <button onclick="addNewCustomButton()" class="bg-white border border-slate-200 text-slate-700 px-3.5 py-2 rounded-xl text-xs font-semibold hover:border-purple-600 hover:text-purple-600 transition shadow-2xs flex items-center gap-1.5">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add Button
+            </button>
+            <button onclick="saveButtonsToFirebase()" class="bg-gradient-to-r from-[#7c3aed] to-[#6d28d9] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:opacity-95 transition shadow-sm shadow-purple-500/20 flex items-center gap-1.5">
+              <i data-lucide="save" class="w-3.5 h-3.5"></i> Save changes
+            </button>
+          </div>
         </div>
 
         <!-- ৪টি সাব-ট্যাব -->
-        <div class="border-b border-gray-200 flex gap-6 text-xs font-medium overflow-x-auto">
-          <button onclick="switchTab('main')" id="tab-btn-main" class="pb-2.5 tab-active">Main menu</button>
-          <button onclick="switchTab('wallet')" id="tab-btn-wallet" class="pb-2.5 text-gray-500 hover:text-gray-800">Wallet</button>
-          <button onclick="switchTab('payment')" id="tab-btn-payment" class="pb-2.5 text-gray-500 hover:text-gray-800">Payment</button>
-          <button onclick="switchTab('profile')" id="tab-btn-profile" class="pb-2.5 text-gray-500 hover:text-gray-800">Profile</button>
+        <div class="border-b border-slate-200/80 flex gap-6 text-xs font-medium overflow-x-auto">
+          <button onclick="switchTab('main')" id="tab-btn-main" class="pb-2.5 tab-active flex items-center gap-1.5"><i data-lucide="layout-grid" class="w-3.5 h-3.5"></i> Main menu</button>
+          <button onclick="switchTab('wallet')" id="tab-btn-wallet" class="pb-2.5 text-slate-500 hover:text-slate-800 flex items-center gap-1.5"><i data-lucide="wallet" class="w-3.5 h-3.5"></i> Wallet</button>
+          <button onclick="switchTab('payment')" id="tab-btn-payment" class="pb-2.5 text-slate-500 hover:text-slate-800 flex items-center gap-1.5"><i data-lucide="credit-card" class="w-3.5 h-3.5"></i> Payment</button>
+          <button onclick="switchTab('profile')" id="tab-btn-profile" class="pb-2.5 text-slate-500 hover:text-slate-800 flex items-center gap-1.5"><i data-lucide="user" class="w-3.5 h-3.5"></i> Profile</button>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          <div class="lg:col-span-8 bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
-            <div class="flex justify-between items-center text-[11px] mb-3">
-              <span class="font-bold text-gray-800">Keyboard Arrangement</span>
-              <span class="text-gray-400">Max / row 3</span>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <!-- বাম পাশ: কিবোর্ড সেল গ্রিড -->
+          <div class="lg:col-span-8 bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-3">
+            <div class="flex justify-between items-center text-xs pb-2 border-b border-slate-100">
+              <div>
+                <span class="font-bold text-slate-800">Visual Keyboard Grid</span>
+                <p class="text-[10px] text-slate-400">আইকন চাপ দিয়ে রো পরিবর্তন বা এডিট মোডে যান</p>
+              </div>
+              <span class="text-[10px] font-semibold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md">Max 3 / Row</span>
             </div>
-            <div id="keyboard-grid-container" class="space-y-2"></div>
+            
+            <div id="keyboard-grid-container" class="space-y-2.5 pt-1">
+              <!-- বাটন কার্ড লোড হবে -->
+            </div>
           </div>
 
-          <!-- টেলিগ্রাম লাইভ প্রিভিউ -->
-          <div class="lg:col-span-4 bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs self-start sticky top-16">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">LIVE TELEGRAM PREVIEW</p>
-            <div class="bg-[#182533] border border-[#2b3a4a] rounded-2xl p-3.5 shadow-inner">
-              <div class="text-[10px] text-gray-400 pb-2 border-b border-[#2b3a4a] mb-2 font-mono flex justify-between">
-                <span>Welcome to the Store.</span>
-                <span class="text-purple-400">Live</span>
+          <!-- ডান পাশ: লাইভ প্রিভিউ -->
+          <div class="lg:col-span-4 bg-white border border-slate-200/80 rounded-2xl p-4 shadow-2xs self-start sticky top-16 space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">TELEGRAM PREVIEW</span>
+              <span class="text-[10px] bg-emerald-50 text-emerald-600 font-bold px-2 py-0.5 rounded-full">Interactive</span>
+            </div>
+
+            <!-- ফোন উইন্ডো -->
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-3.5 shadow-xl space-y-3">
+              <div class="flex items-center justify-between pb-2 border-b border-slate-800 text-[10px] text-slate-400 font-mono">
+                <span>bot @nexly_bot</span>
+                <span class="text-purple-400">online</span>
               </div>
-              <div id="live-preview-grid" class="space-y-1.5 text-xs font-medium"></div>
+              
+              <div class="bg-[#1e293b]/60 rounded-xl p-2.5 text-[11px] text-slate-300 leading-relaxed border border-slate-800">
+                Welcome to our Store! Select an option from the keyboard below:
+              </div>
+
+              <!-- ইনলাইন কিবোর্ড প্রিভিউ -->
+              <div id="live-preview-grid" class="space-y-1.5 text-xs font-medium pt-1">
+                <!-- ডায়নামিক বাটন লোড হবে -->
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- ২. বাটন এডিটর স্ক্রিন (টেক্সট, কালার ও রেসপন্স মেসেজ এডিটর) -->
+      <!-- ২. বাটন এডিটর স্ক্রিন -->
       <div id="view-button-edit" class="hidden space-y-4">
         <div>
           <button onclick="backToBuilder()" class="text-xs text-purple-600 font-medium hover:underline flex items-center gap-1 mb-2">
-            ‹ Back to Bot buttons
+            ‹ Back to studio
           </button>
           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h1 id="edit-btn-title" class="text-base sm:text-lg font-bold text-gray-900 leading-tight">Edit Button</h1>
-              <p class="text-xs text-gray-500 mt-0.5">বাটনের নাম, কালার ও বটে কী মেসেজ শো করবে তা সেট করুন।</p>
+              <h1 id="edit-btn-title" class="text-base sm:text-lg font-bold text-slate-900 leading-tight">Edit Button</h1>
+              <p class="text-xs text-slate-500 mt-0.5">বাটনের টেক্সট, থিম কালার ও টেলিগ্রাম রেসপন্স নির্ধারণ করুন।</p>
             </div>
-            <button onclick="saveSingleButtonEdit()" class="bg-[#7c3aed] text-white px-4 py-1.5 rounded-xl text-xs font-semibold hover:bg-purple-700 transition shadow-xs">
-              Apply to Keyboard
-            </button>
+            <div class="flex items-center gap-2">
+              <button onclick="deleteCurrentButton()" class="text-rose-600 border border-rose-200 hover:bg-rose-50 px-3 py-1.5 rounded-xl text-xs font-semibold transition">
+                Delete
+              </button>
+              <button onclick="saveSingleButtonEdit()" class="bg-[#7c3aed] text-white px-4 py-1.5 rounded-xl text-xs font-semibold hover:bg-purple-700 transition shadow-xs">
+                Apply changes
+              </button>
+            </div>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
-          <div class="lg:col-span-7 bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4 text-xs">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+          <!-- বাম পাশ: ইনপুট প্যানেল -->
+          <div class="lg:col-span-7 bg-white border border-slate-200/80 rounded-2xl p-5 shadow-2xs space-y-4 text-xs">
             <div>
-              <label class="block font-semibold text-gray-800 mb-1">Button Text / Label (নাম ও ইমোজি)</label>
-              <input id="edit-label-en" oninput="updateLiveEditPreview()" placeholder="e.g. 🛍️ Products" class="w-full border border-gray-200 rounded-xl p-2.5 text-gray-800 outline-none focus:border-purple-600 font-medium">
+              <label class="block font-semibold text-slate-700 mb-1">Button Label (ইমোজি সহ নাম)</label>
+              <input id="edit-label-en" oninput="updateLiveEditPreview()" placeholder="যেমন: 🛍️ Products" class="w-full border border-slate-200 rounded-xl p-2.5 text-slate-800 outline-none focus:border-purple-600 font-medium bg-slate-50/50">
             </div>
 
             <div>
-              <label class="block font-semibold text-gray-800 mb-1">Button Color Style (স্টাইলিশ কালার ব্যাজ)</label>
-              <select id="edit-color" onchange="updateLiveEditPreview()" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600 bg-white font-medium">
-                <option value="green">🟢 Emerald Green (Success / Active)</option>
-                <option value="blue">🔵 Sky Blue (Primary / Info)</option>
-                <option value="red">🔴 Crimson Red (Danger / Warning)</option>
-                <option value="yellow">🟡 Bright Gold (Premium / Wallet)</option>
-                <option value="purple">🟣 Royal Purple (Special / VIP)</option>
-                <option value="default">⚪ Dark Slate (Standard Classic)</option>
-              </select>
+              <label class="block font-semibold text-slate-700 mb-1.5">Color Palette (থিম নির্বাচন)</label>
+              <div class="grid grid-cols-3 gap-2">
+                <button type="button" onclick="selectColorTheme('green')" id="color-opt-green" class="p-2 border rounded-xl flex items-center gap-2 font-medium bg-slate-50 hover:bg-slate-100">
+                  <span class="w-3 h-3 rounded-full bg-emerald-500"></span> Green
+                </button>
+                <button type="button" onclick="selectColorTheme('blue')" id="color-opt-blue" class="p-2 border rounded-xl flex items-center gap-2 font-medium bg-slate-50 hover:bg-slate-100">
+                  <span class="w-3 h-3 rounded-full bg-sky-500"></span> Blue
+                </button>
+                <button type="button" onclick="selectColorTheme('red')" id="color-opt-red" class="p-2 border rounded-xl flex items-center gap-2 font-medium bg-slate-50 hover:bg-slate-100">
+                  <span class="w-3 h-3 rounded-full bg-rose-500"></span> Red
+                </button>
+                <button type="button" onclick="selectColorTheme('yellow')" id="color-opt-yellow" class="p-2 border rounded-xl flex items-center gap-2 font-medium bg-slate-50 hover:bg-slate-100">
+                  <span class="w-3 h-3 rounded-full bg-amber-400"></span> Gold
+                </button>
+                <button type="button" onclick="selectColorTheme('purple')" id="color-opt-purple" class="p-2 border rounded-xl flex items-center gap-2 font-medium bg-slate-50 hover:bg-slate-100">
+                  <span class="w-3 h-3 rounded-full bg-purple-500"></span> Purple
+                </button>
+                <button type="button" onclick="selectColorTheme('default')" id="color-opt-default" class="p-2 border rounded-xl flex items-center gap-2 font-medium bg-slate-50 hover:bg-slate-100">
+                  <span class="w-3 h-3 rounded-full bg-slate-400"></span> Slate
+                </button>
+              </div>
+              <input type="hidden" id="edit-color" value="blue">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-1">
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Keyboard Row</label>
+                <input id="edit-row-input" type="number" min="1" max="10" oninput="updateLiveEditPreview()" class="w-full border border-slate-200 rounded-xl p-2 outline-none focus:border-purple-600 bg-slate-50/50">
+              </div>
+              <div>
+                <label class="block font-semibold text-slate-700 mb-1">Internal Action ID</label>
+                <input id="edit-action-input" placeholder="act_custom" class="w-full border border-slate-200 rounded-xl p-2 outline-none focus:border-purple-600 bg-slate-50/50 font-mono text-[11px]">
+              </div>
             </div>
 
             <div>
-              <label class="block font-semibold text-gray-800 mb-1">Custom Bot Reply Message (বাটনে চাপলে বটে কী আসবে)</label>
-              <textarea id="edit-response-msg" rows="3" placeholder="এই বাটনে ইউজার ক্লিক করলে টেলিগ্রাম বটে যে উত্তর পাঠানো হবে..." class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600"></textarea>
+              <label class="block font-semibold text-slate-700 mb-1">Custom Bot Reply Message (ক্লিক করলে যে টেক্সট যাবে)</label>
+              <textarea id="edit-response-msg" rows="3" placeholder="ইউজার এই বাটনে ক্লিক করলে বটে যে মেসেজ পাঠানো হবে..." class="w-full border border-slate-200 rounded-xl p-2.5 outline-none focus:border-purple-600 text-xs bg-slate-50/50"></textarea>
             </div>
 
-            <div class="flex items-center gap-2 pt-1">
+            <div class="flex items-center gap-2 pt-1 border-t border-slate-100">
               <input type="checkbox" id="edit-active" onchange="updateLiveEditPreview()" class="w-4 h-4 accent-purple-600 rounded">
-              <label for="edit-active" class="font-medium text-gray-700 cursor-pointer">Active in Bot Keyboard</label>
+              <label for="edit-active" class="font-medium text-slate-700 cursor-pointer">Active on Telegram</label>
             </div>
           </div>
 
-          <!-- এডিটর প্রিভিউ -->
-          <div class="lg:col-span-5 bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs self-start sticky top-16">
-            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">LIVE BUTTON PREVIEW</p>
-            <div class="bg-[#182533] border border-[#2b3a4a] rounded-2xl p-3.5 shadow-inner">
+          <!-- ডান পাশ: লাইভ প্রিভিউ -->
+          <div class="lg:col-span-5 bg-white border border-slate-200/80 rounded-2xl p-4 shadow-2xs self-start sticky top-16 space-y-3">
+            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">REAL-TIME LOOK</span>
+            <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl p-4 shadow-inner">
               <div id="edit-preview-grid" class="space-y-1.5 text-xs font-medium"></div>
             </div>
           </div>
@@ -177,6 +243,7 @@
     </main>
   </div>
 
+  <!-- ৩. ফায়ারবেস স্ক্রিপ্ট -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -200,36 +267,28 @@
       document.getElementById('sidebarOverlay').classList.toggle('hidden');
     };
 
-    // কালার ব্যাজ যুক্ত করার হেল্পার
-    function getColorBadge(color) {
-      if(color === 'green') return '🟢 ';
-      if(color === 'blue') return '🔵 ';
-      if(color === 'red') return '🔴 ';
-      if(color === 'yellow') return '🟡 ';
-      if(color === 'purple') return '🟣 ';
-      return '';
-    }
-
     window.buttonData = {
       main: [
-        { id: 'm1', label: '🛍 Products', action: 'show_products', row: 1, color: 'green', replyMsg: '', active: true },
+        { id: 'm1', label: '🛒 Products', action: 'show_products', row: 1, color: 'green', replyMsg: '', active: true },
         { id: 'm2', label: '👤 Profile', action: 'show_profile', row: 2, color: 'blue', replyMsg: '', active: true },
-        { id: 'm3', label: '💳 Wallet', action: 'show_wallet', row: 2, color: 'yellow', replyMsg: '', active: true },
-        { id: 'm4', label: '☎️ Help', action: 'show_support', row: 3, color: 'purple', replyMsg: '', active: true },
-        { id: 'm5', label: '🎁 Referrals', action: 'show_ref', row: 3, color: 'blue', replyMsg: '', active: true },
-        { id: 'm6', label: '📜 Bot Policy', action: 'show_policy', row: 4, color: 'red', replyMsg: '', active: true },
+        { id: 'm3', label: '🎁 Invite Center', action: 'show_ref', row: 2, color: 'purple', replyMsg: '', active: true },
+        { id: 'm4', label: '💲 Top up balance', action: 'show_wallet', row: 3, color: 'yellow', replyMsg: '', active: true },
+        { id: 'm5', label: '💳 Redeem Code', action: 'redeem_code', row: 3, color: 'blue', replyMsg: 'Send your code in chat.', active: true },
+        { id: 'm6', label: 'ℹ️ Bot Policy', action: 'show_policy', row: 4, color: 'red', replyMsg: '', active: true },
+        { id: 'm7', label: '❔ Help', action: 'show_support', row: 4, color: 'blue', replyMsg: '', active: true },
+        { id: 'm8', label: '📲 Reseller API', action: 'reseller_api', row: 5, color: 'default', replyMsg: 'API Docs available soon.', active: true },
       ],
       wallet: [
-        { id: 'w1', label: '➕ Top up', action: 'wallet_topup', row: 1, color: 'green', replyMsg: 'Please send funds to the address shown above.', active: true },
-        { id: 'w2', label: '🎟️ Deposit code', action: 'wallet_code', row: 2, color: 'blue', replyMsg: 'Send your deposit code to redeem balance.', active: true }
+        { id: 'w1', label: '➕ Top up', action: 'wallet_topup', row: 1, color: 'green', replyMsg: 'Please complete payment.', active: true },
+        { id: 'w2', label: '🎟️ Deposit code', action: 'wallet_code', row: 2, color: 'blue', replyMsg: 'Redeem code in chat.', active: true }
       ],
       payment: [
-        { id: 'p1', label: 'Binance Pay', action: 'pay_binance', row: 1, color: 'yellow', replyMsg: 'Binance Pay gateway selected.', active: true },
-        { id: 'p2', label: 'TRC20 (USDT)', action: 'pay_trc20', row: 2, color: 'green', replyMsg: 'Send USDT TRC20 to receive instant balance.', active: true }
+        { id: 'p1', label: 'Binance Pay', action: 'pay_binance', row: 1, color: 'yellow', replyMsg: 'Binance Pay ready.', active: true },
+        { id: 'p2', label: 'TRC20 (USDT)', action: 'pay_trc20', row: 2, color: 'green', replyMsg: 'Send TRC20 to address.', active: true }
       ],
       profile: [
-        { id: 'pr1', label: 'My orders', action: 'my_orders', row: 1, color: 'green', replyMsg: 'Loading your past purchases...', active: true },
-        { id: 'pr2', label: 'Languages', action: 'show_lang', row: 2, color: 'blue', replyMsg: 'Choose language.', active: true }
+        { id: 'pr1', label: 'My orders', action: 'my_orders', row: 1, color: 'green', replyMsg: 'Loading past orders...', active: true },
+        { id: 'pr2', label: 'Languages', action: 'show_lang', row: 2, color: 'blue', replyMsg: 'Select language.', active: true }
       ]
     };
 
@@ -257,7 +316,7 @@
       window.currentTab = tab;
       ['main', 'wallet', 'payment', 'profile'].forEach(t => {
         const btn = document.getElementById(`tab-btn-${t}`);
-        if(btn) btn.className = (t === tab) ? 'pb-2.5 tab-active' : 'pb-2.5 text-gray-500 hover:text-gray-800';
+        if(btn) btn.className = (t === tab) ? 'pb-2.5 tab-active flex items-center gap-1.5' : 'pb-2.5 text-slate-500 hover:text-slate-800 flex items-center gap-1.5';
       });
       renderKeyboardBuilder();
     };
@@ -279,25 +338,29 @@
 
       Object.keys(rows).forEach(rowNum => {
         const rowBtns = rows[rowNum];
-        let rowHtml = `<div class="flex items-center gap-2 mb-2"><span class="text-[10px] font-bold text-gray-400 w-3">${rowNum}</span><div class="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1">`;
+        let rowHtml = `
+          <div class="flex items-center gap-2 mb-2">
+            <span class="text-[10px] font-bold text-slate-400 w-4 text-center">R${rowNum}</span>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 flex-1">`;
+        
         let previewRowHtml = `<div class="flex gap-1.5 w-full">`;
 
         rowBtns.forEach(b => {
           const isSelected = (b.id === window.selectedBtnId);
           rowHtml += `
-            <div onclick="selectBtnForPreview('${b.id}')" class="border cursor-pointer transition ${isSelected ? 'border-purple-400 bg-purple-50/60 ring-1 ring-purple-300' : (b.active ? 'border-gray-200 bg-white' : 'border-gray-200 bg-gray-50 opacity-50')} rounded-xl p-2.5 space-y-2">
+            <div onclick="selectBtnForPreview('${b.id}')" class="border cursor-pointer transition ${isSelected ? 'border-purple-400 bg-purple-50/70 ring-2 ring-purple-400/20 shadow-xs' : (b.active ? 'border-slate-200 bg-white hover:border-slate-300' : 'border-slate-200 bg-slate-50 opacity-60')} rounded-xl p-2.5 space-y-2">
               <div class="flex justify-between items-center">
-                <span class="font-bold text-xs text-gray-800 truncate">${b.label}</span>
-                <span class="w-2.5 h-2.5 rounded-full ${b.color === 'green' ? 'bg-emerald-500' : b.color === 'blue' ? 'bg-sky-500' : b.color === 'red' ? 'bg-red-500' : b.color === 'yellow' ? 'bg-amber-400' : b.color === 'purple' ? 'bg-purple-500' : 'bg-gray-400'}"></span>
+                <span class="font-bold text-xs text-slate-800 truncate">${b.label}</span>
+                <span class="w-2.5 h-2.5 rounded-full ${b.color === 'green' ? 'bg-emerald-500' : b.color === 'blue' ? 'bg-sky-500' : b.color === 'red' ? 'bg-rose-500' : b.color === 'yellow' ? 'bg-amber-400' : b.color === 'purple' ? 'bg-purple-500' : 'bg-slate-400'} ring-1 ring-black/5"></span>
               </div>
-              <div class="flex items-center justify-between text-gray-400 text-[10px] pt-1 border-t border-gray-100">
+              <div class="flex items-center justify-between text-slate-400 text-[10px] pt-1.5 border-t border-slate-100">
                 <div class="flex gap-1">
-                  <button onclick="event.stopPropagation(); togglePower('${b.id}')" class="p-1 ${b.active ? 'text-purple-600' : 'text-gray-400'}"><i data-lucide="power" class="w-3 h-3"></i></button>
-                  <button onclick="event.stopPropagation(); openButtonEdit('${b.id}')" class="p-1 hover:text-purple-600"><i data-lucide="edit-3" class="w-3 h-3"></i></button>
+                  <button onclick="event.stopPropagation(); togglePower('${b.id}')" class="p-1 rounded-md hover:bg-slate-100 ${b.active ? 'text-purple-600' : 'text-slate-400'}"><i data-lucide="power" class="w-3 h-3"></i></button>
+                  <button onclick="event.stopPropagation(); openButtonEdit('${b.id}')" class="p-1 rounded-md hover:bg-slate-100 hover:text-purple-600"><i data-lucide="edit-3" class="w-3 h-3"></i></button>
                 </div>
-                <div class="flex gap-1 text-[9px]">
-                  <button onclick="event.stopPropagation(); moveBtn('${b.id}', 'up')" class="hover:text-gray-800">^</button>
-                  <button onclick="event.stopPropagation(); moveBtn('${b.id}', 'down')" class="hover:text-gray-800">v</button>
+                <div class="flex gap-1 text-[9px] font-mono">
+                  <button onclick="event.stopPropagation(); moveBtn('${b.id}', 'up')" class="px-1.5 py-0.5 rounded-md hover:bg-slate-100 hover:text-slate-800">^</button>
+                  <button onclick="event.stopPropagation(); moveBtn('${b.id}', 'down')" class="px-1.5 py-0.5 rounded-md hover:bg-slate-100 hover:text-slate-800">v</button>
                 </div>
               </div>
             </div>
@@ -306,7 +369,7 @@
           if (b.active) {
             const colorClass = `tg-btn-${b.color || 'default'}`;
             previewRowHtml += `
-              <button onclick="openButtonEdit('${b.id}')" class="flex-1 py-2 px-2.5 rounded-xl text-center font-medium truncate ${colorClass} ${isSelected ? 'tg-selected' : ''} shadow-sm transition">
+              <button onclick="openButtonEdit('${b.id}')" class="flex-1 py-2 px-2 rounded-xl text-center font-medium truncate ${colorClass} ${isSelected ? 'tg-selected' : ''} shadow-xs transition active:scale-95">
                 ${b.label}
               </button>
             `;
@@ -342,16 +405,37 @@
       renderKeyboardBuilder();
     };
 
+    window.addNewCustomButton = function() {
+      const list = window.buttonData[window.currentTab];
+      const maxRow = list.reduce((m, b) => Math.max(m, b.row || 1), 1);
+      const newId = `btn_${Date.now().toString().slice(-5)}`;
+      list.push({
+        id: newId,
+        label: '✨ New Action',
+        action: `act_${newId}`,
+        row: maxRow + 1,
+        color: 'blue',
+        replyMsg: 'Thank you for clicking!',
+        active: true
+      });
+      window.selectedBtnId = newId;
+      renderKeyboardBuilder();
+      openButtonEdit(newId);
+    };
+
     window.openButtonEdit = function(id) {
       const btn = window.buttonData[window.currentTab].find(b => b.id === id);
       if(!btn) return;
       window.selectedBtnId = id;
 
-      document.getElementById('edit-btn-title').innerText = `Edit "${btn.label}"`;
+      document.getElementById('edit-btn-title').innerText = `Edit: ${btn.label}`;
       document.getElementById('edit-label-en').value = btn.label;
-      document.getElementById('edit-color').value = btn.color || 'blue';
+      document.getElementById('edit-row-input').value = btn.row || 1;
+      document.getElementById('edit-action-input').value = btn.action || `btn_${btn.id}`;
       document.getElementById('edit-response-msg').value = btn.replyMsg || '';
       document.getElementById('edit-active').checked = btn.active;
+
+      selectColorTheme(btn.color || 'blue');
 
       document.getElementById('view-keyboard-builder').classList.add('hidden');
       document.getElementById('view-button-edit').classList.remove('hidden');
@@ -360,10 +444,31 @@
       window.scrollTo(0, 0);
     };
 
+    window.selectColorTheme = function(col) {
+      document.getElementById('edit-color').value = col;
+      ['green', 'blue', 'red', 'yellow', 'purple', 'default'].forEach(c => {
+        const btn = document.getElementById(`color-opt-${c}`);
+        if(btn) {
+          if(c === col) {
+            btn.className = 'p-2 border-2 border-purple-600 rounded-xl flex items-center gap-2 font-bold bg-purple-50/50 shadow-2xs';
+          } else {
+            btn.className = 'p-2 border border-slate-200 rounded-xl flex items-center gap-2 font-medium bg-slate-50 hover:bg-slate-100';
+          }
+        }
+      });
+      renderLiveEditPreview();
+    };
+
     window.backToBuilder = function() {
       document.getElementById('view-button-edit').classList.add('hidden');
       document.getElementById('view-keyboard-builder').classList.remove('hidden');
       renderKeyboardBuilder();
+    };
+
+    window.deleteCurrentButton = function() {
+      if(!confirm('এই বাটনটি মুছে ফেলতে চান?')) return;
+      window.buttonData[window.currentTab] = window.buttonData[window.currentTab].filter(b => b.id !== window.selectedBtnId);
+      backToBuilder();
     };
 
     window.renderLiveEditPreview = function() {
@@ -373,8 +478,12 @@
 
       const rows = {};
       list.forEach(btn => {
-        if (!rows[btn.row]) rows[btn.row] = [];
-        rows[btn.row].push(btn);
+        let r = btn.row;
+        if(btn.id === window.selectedBtnId) {
+          r = parseInt(document.getElementById('edit-row-input').value) || r;
+        }
+        if (!rows[r]) rows[r] = [];
+        rows[r].push(btn);
       });
 
       Object.keys(rows).forEach(rowNum => {
@@ -414,6 +523,8 @@
       if(btn) {
         btn.label = document.getElementById('edit-label-en').value.trim() || btn.label;
         btn.color = document.getElementById('edit-color').value;
+        btn.row = parseInt(document.getElementById('edit-row-input').value) || btn.row;
+        btn.action = document.getElementById('edit-action-input').value.trim() || btn.action;
         btn.replyMsg = document.getElementById('edit-response-msg').value.trim();
         btn.active = document.getElementById('edit-active').checked;
       }
@@ -427,9 +538,9 @@
           buttons: window.buttonData,
           updatedAt: new Date()
         });
-        alert("বাটন কনফিগারেশন Firebase-এ সেভ হয়েছে! বটে এখন আপনার পছন্দের লেআউট ও কালার ডট শো করবে।");
+        alert("বাটন কনফিগারেশন Firebase-এ সফলভাবে সংরক্ষিত হয়েছে! টেলিগ্রাম বটেও এই ডিজাইন লাইভ হয়ে গেছে।");
       } catch(err) {
-        alert("লোকালে সেভ হয়েছে, ফায়ারবেস ত্রুটি: " + err.message);
+        alert("লোকালে সংরক্ষিত হয়েছে, ফায়ারবেস ত্রুটি: " + err.message);
       }
     };
   </script>
