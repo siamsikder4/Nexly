@@ -1,9 +1,9 @@
 import { Telegraf, Markup } from "telegraf";
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc, collection, getDocs, updateDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, collection, getDocs, updateDoc, serverTimestamp } from "firebase/firestore";
 import http from "http";
 
-// Free Tier Web Service Ping Server
+// Render Free Tier Ping Server
 const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
   res.end("Bot Engine Active");
@@ -38,54 +38,70 @@ async function startBot() {
 
   const bot = new Telegraf(botToken);
 
-  // ডাইনামিক কিবোর্ড বিল্ডার (সরাসরি bot-buttons.html থেকে আনা হবে)
   async function getDynamicKeyboard(menuType = "main") {
     try {
       const layoutSnap = await getDoc(doc(db, "settings", "bot_layout"));
       if (layoutSnap.exists() && layoutSnap.data().buttons && layoutSnap.data().buttons[menuType]) {
         const btns = layoutSnap.data().buttons[menuType];
         const rows = {};
-        
         btns.forEach(b => {
           if (b.active) {
             if (!rows[b.row]) rows[b.row] = [];
             rows[b.row].push(Markup.button.callback(b.label, b.action || `act_${b.id}`));
           }
         });
-        
         return Object.values(rows);
       }
     } catch(e) {
-      console.error("Keyboard Layout Error:", e);
+      console.error("Keyboard Error:", e);
     }
-
-    return [[Markup.button.callback("Products", "show_products")]];
+    return [
+      [Markup.button.callback("🛍 Products", "show_products")],
+      [Markup.button.callback("👤 Profile", "show_profile"), Markup.button.callback("💳 Wallet", "show_wallet")]
+    ];
   }
 
-  // /start কমান্ড (টেক্সট ও বাটন পেজ থেকে ডাইনামিক আসবে)
+  // /start কমান্ড — ইউজার ডাটা সরাসরি Firebase-এ সেভ হবে
   bot.command("start", async (ctx) => {
+    try {
+      const user = ctx.from;
+      const userRef = doc(db, "customers", String(user.id));
+      const userSnap = await getDoc(userRef);
+
+      // নতুন ইউজার হলে ডাটাবেসে সেভ
+      if (!userSnap.exists()) {
+        await setDoc(userRef, {
+          telegramId: String(user.id),
+          name: `${user.first_name \vert{}\vert{} ""} ${user.last_name || ""}`.trim() || "Telegram User",
+          username: user.username || "N/A",
+          balance: 0.00,
+          totalSpend: 0.00,
+          purchases: 0,
+          status: "active",
+          joinedAt: serverTimestamp()
+        });
+        console.log(`New user registered: ${user.id}`);
+      }
+    } catch(err) {
+      console.error("Customer Save Error:", err);
+    }
+
     const sDoc = await getDoc(doc(db, "settings", "general"));
     const settings = sDoc.exists() ? sDoc.data() : {};
     
-    // মেইন্টেন্যান্স মোড চেক
     if (settings.maintenance) {
-      const maintMsg = settings.maintMsg || "Maintenance Mode Active.";
-      return ctx.reply(maintMsg);
+      return ctx.reply(settings.maintMsg || "Maintenance Mode Active.");
     }
 
     const welcomeMsg = settings.startMsg || "Welcome to the Store.";
     const keyboard = await getDynamicKeyboard("main");
-
     await ctx.reply(welcomeMsg, Markup.inlineKeyboard(keyboard));
   });
 
-  // প্রোডাক্ট ক্যাটালগ
   bot.action("show_products", async (ctx) => {
     try {
       const snap = await getDocs(collection(db, "products"));
-      if (snap.empty) {
-        return ctx.reply("Out of Stock.");
-      }
+      if (snap.empty) return ctx.reply("Out of Stock.");
 
       const buttons = [];
       snap.forEach(d => {
@@ -93,24 +109,19 @@ async function startBot() {
         buttons.push([Markup.button.callback(`${p.name} —${p.price} USDT`, `buy_${d.id}`)]);
       });
       buttons.push([Markup.button.callback("‹ Back", "back_to_main")]);
-
       await ctx.editMessageText("Select a Product:", Markup.inlineKeyboard(buttons));
     } catch(e) {
       ctx.reply("Error loading catalog.");
     }
   });
 
-  // ব্যাক টু মেইন মেনু
   bot.action("back_to_main", async (ctx) => {
     const sDoc = await getDoc(doc(db, "settings", "general"));
     const settings = sDoc.exists() ? sDoc.data() : {};
-    const welcomeMsg = settings.startMsg || "Main Menu:";
     const keyboard = await getDynamicKeyboard("main");
-
-    await ctx.editMessageText(welcomeMsg, Markup.inlineKeyboard(keyboard));
+    await ctx.editMessageText(settings.startMsg || "Main Menu:", Markup.inlineKeyboard(keyboard));
   });
 
-  // অটোমেটিক স্টক ডেলিভারি
   bot.action(/buy_(.+)/, async (ctx) => {
     const prodId = ctx.match[1];
     const stocksSnap = await getDocs(collection(db, "stocks"));
@@ -133,6 +144,16 @@ async function startBot() {
       soldAt: new Date()
     });
 
+    // ইউজারের পারচেজ কাউন্ট আপডেট
+    try {
+      const userRef = doc(db, "customers", String(ctx.from.id));
+      const uSnap = await getDoc(userRef);
+      if (uSnap.exists()) {
+        const curPurchases = uSnap.data().purchases || 0;
+        await updateDoc(userRef, { purchases: curPurchases + 1 });
+      }
+    } catch(e) {}
+
     const stockData = targetStockDoc.data();
     await ctx.reply(
       `Purchase Completed!\n\nProduct: ${stockData.productName || "Item"}\nAccess Key:\n\`${stockData.content}\``, 
@@ -140,41 +161,18 @@ async function startBot() {
     );
   });
 
-  // ওয়ালেট ভিউ
-  bot.action("show_wallet", async (ctx) => {
-    const walletKeyboard = await getDynamicKeyboard("wallet");
-    await ctx.reply("Wallet Balance: 0.00 USDT", Markup.inlineKeyboard(walletKeyboard));
-  });
-
-  // প্রোফাইল ভিউ
-  bot.action("show_profile", (ctx) => {
-    ctx.reply(`User ID: ${ctx.from.id}\nUsername: @${ctx.from.username || "N/A"}`);
-  });
-
-  // হেল্প ও পলিসি ভিউ (সরাসরি settings.html থেকে টেক্সট আনবে)
+  bot.action("show_wallet", (ctx) => ctx.reply("Wallet Balance: 0.00 USDT"));
+  bot.action("show_profile", (ctx) => ctx.reply(`User ID: ${ctx.from.id}\nUsername: @${ctx.from.username || "N/A"}`));
   bot.action("show_support", async (ctx) => {
     const sDoc = await getDoc(doc(db, "settings", "general"));
     const settings = sDoc.exists() ? sDoc.data() : {};
-    const supportText = settings.helpMsg || `Contact: ${settings.supportUsername || "@admin"}`;
-    ctx.reply(supportText);
+    ctx.reply(settings.helpMsg || `Contact: ${settings.supportUsername || "@admin"}`);
   });
-
-  bot.action("show_policy", (ctx) => {
-    ctx.reply("Store Policy: Instant delivery upon payment confirmation. All sales are final.");
-  });
-
-  bot.action("show_ref", (ctx) => {
-    ctx.reply(`Referral Link:\nhttps://t.me/${ctx.botInfo.username}?start=${ctx.from.id}`);
-  });
-
-  // জেনেরিক অ্যাকশন ফলব্যাক
-  bot.action(/act_(.+)/, (ctx) => {
-    ctx.answerCbQuery();
-    ctx.reply("Processing request...");
-  });
+  bot.action("show_policy", (ctx) => ctx.reply("Store Policy: Instant delivery. All sales final."));
+  bot.action("show_ref", (ctx) => ctx.reply(`Referral Link:\nhttps://t.me/${ctx.botInfo.username}?start=${ctx.from.id}`));
 
   bot.launch();
-  console.log("Dynamic bot started without hardcoded text!");
+  console.log("Bot with Customer Registration Running!");
 }
 
 startBot();
