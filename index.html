@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GG Builder - Complete Merchant Dashboard</title>
+  <title>GG Builder - Nexly Merchant Store</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons CDN -->
@@ -17,10 +17,10 @@
 </head>
 <body class="text-[#1c1b22] flex min-h-screen">
 
-  <!-- মোবাইল ড্রয়ার ওভারলে -->
+  <!-- মোবাইল সাইডবার ওভারলে -->
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
 
-  <!-- ১. ফুল সাইডবার (১৩টি সক্রিয় মেনু) -->
+  <!-- ১. ফুল সাইডবার (স্ক্রিনশটের সব মেনু) -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:w-64 shrink-0">
     <div class="flex items-center gap-3 px-2 py-2 mb-4">
       <div class="w-10 h-10 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center shadow-md">
@@ -64,9 +64,9 @@
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Channel</p>
         <div class="space-y-0.5">
-          <button onclick="navigate('settings')" id="btn-settings" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+          <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="settings" class="w-4 h-4 text-gray-500"></i> Settings
-          </button>
+          </a>
           <button onclick="navigate('languages')" id="btn-languages" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="flag" class="w-4 h-4 text-gray-500"></i> Languages
           </button>
@@ -108,7 +108,7 @@
     </div>
   </aside>
 
-  <!-- ২. মেইন কন্টেন্ট এরিয়া -->
+  <!-- ২. মূল কন্টেন্ট এরিয়া -->
   <div class="flex-1 flex flex-col min-w-0">
     
     <!-- টপ ন্যাভবার -->
@@ -129,7 +129,7 @@
     <!-- মূল পেজ কনটেন্ট -->
     <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-5xl w-full mx-auto">
       
-      <!-- ================= 1. HOME ================= -->
+      <!-- ================= 1. HOME (Store pulse) ================= -->
       <section id="view-home" class="space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Home</span>
@@ -172,6 +172,7 @@
           </div>
         </div>
 
+        <!-- চ্যানেল হেলথ -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
           <p class="text-xs font-bold text-teal-800 mb-2">Channel health</p>
           <div class="flex flex-wrap gap-2 text-xs">
@@ -179,10 +180,10 @@
             <span class="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-lg font-medium">Maintenance: Off</span>
             <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg font-medium">Payments: 1 active</span>
           </div>
-          <button onclick="navigate('settings')" class="block text-xs font-semibold text-purple-600 mt-3">Open bot settings &gt;</button>
+          <a href="settings.html" class="block text-xs font-semibold text-purple-600 mt-3">Open bot settings &gt;</a>
         </div>
 
-        <!-- Quick actions -->
+        <!-- কুইক অ্যাকশনস -->
         <div>
           <p class="text-xs font-bold text-gray-700 mb-2">Quick actions</p>
           <div class="flex flex-wrap gap-2">
@@ -214,11 +215,9 @@
           </div>
           <span class="px-2.5 py-1 text-xs font-bold bg-sky-50 text-sky-700 rounded-full">1 customer</span>
         </div>
-        <!-- কাস্টমার সার্চ -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs space-y-3">
           <input type="text" placeholder="Search by name, @username, or Telegram ID..." class="w-full border border-gray-200 rounded-xl p-2.5 text-xs outline-none focus:border-purple-600">
         </div>
-        <!-- কাস্টমার কার্ড -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
           <div class="flex justify-between items-start mb-2">
             <div>
@@ -228,7 +227,7 @@
             <div class="flex gap-1">
               <button onclick="alert('User ID Copied!')" class="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"><i data-lucide="copy" class="w-4 h-4"></i></button>
               <button onclick="alert('Balance: 0.00 USDT')" class="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"><i data-lucide="wallet" class="w-4 h-4"></i></button>
-              <button onclick="alert('Ban user functionality')" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><i data-lucide="ban" class="w-4 h-4"></i></button>
+              <button onclick="alert('User banned')" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><i data-lucide="ban" class="w-4 h-4"></i></button>
             </div>
           </div>
           <div class="text-xs text-gray-600 flex gap-4 pt-2 border-t mt-3">
@@ -253,7 +252,6 @@
             + New product
           </button>
         </div>
-        <!-- ক্যাটালগ টেবিল -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
           <div class="overflow-x-auto">
             <table class="w-full text-left text-xs">
@@ -376,7 +374,6 @@
             <p class="text-lg font-bold text-gray-900 mt-1">0</p>
           </div>
         </div>
-        <!-- চার্ট সিমুলেশন -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
           <div class="flex justify-between items-center mb-4">
             <span class="font-bold text-xs">Sales Ticker</span>
@@ -388,35 +385,7 @@
         </div>
       </section>
 
-      <!-- ================= 7. SETTINGS ================= -->
-      <section id="view-settings" class="hidden space-y-6">
-        <div class="text-xs text-gray-400 flex items-center gap-1.5">
-          <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Settings</span>
-        </div>
-        <div class="flex justify-between items-center">
-          <h1 class="text-xl font-bold text-gray-900">Bot & Store Settings</h1>
-          <button onclick="saveFormNotification('Settings')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700">Save changes</button>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs">
-          <div>
-            <label class="block font-semibold mb-1">Telegram Bot Token</label>
-            <input type="password" value="7382910394:AAHk_EXAMPLE_KEY_TOKEN" class="w-full border rounded-xl p-2.5 font-mono outline-none focus:border-purple-600">
-          </div>
-          <div>
-            <label class="block font-semibold mb-1">Store Name</label>
-            <input type="text" value="GG Builder Store" class="w-full border rounded-xl p-2.5 outline-none focus:border-purple-600">
-          </div>
-          <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl mt-2">
-            <div>
-              <p class="font-bold text-gray-800">Maintenance Mode</p>
-              <p class="text-[11px] text-gray-500">সাময়িকভাবে বটের অর্ডার গ্রহণ বন্ধ রাখুন</p>
-            </div>
-            <input type="checkbox" class="w-4 h-4 accent-purple-600">
-          </div>
-        </div>
-      </section>
-
-      <!-- ================= 8. LANGUAGES ================= -->
+      <!-- ================= 7. LANGUAGES ================= -->
       <section id="view-languages" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Languages</span>
@@ -442,7 +411,7 @@
         </div>
       </section>
 
-      <!-- ================= 9. BOT BUTTONS ================= -->
+      <!-- ================= 8. BOT BUTTONS ================= -->
       <section id="view-botbuttons" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Bot buttons</span>
@@ -469,7 +438,7 @@
         </div>
       </section>
 
-      <!-- ================= 10. BROADCAST ================= -->
+      <!-- ================= 9. BROADCAST ================= -->
       <section id="view-broadcast" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Broadcast</span>
@@ -484,7 +453,7 @@
         </div>
       </section>
 
-      <!-- ================= 11. PAYMENT METHODS ================= -->
+      <!-- ================= 10. PAYMENT METHODS ================= -->
       <section id="view-payments" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Money</span> <span>/</span> <span class="text-gray-700 font-medium">Payment methods</span>
@@ -507,7 +476,7 @@
         </div>
       </section>
 
-      <!-- ================= 12. TRANSACTIONS ================= -->
+      <!-- ================= 11. TRANSACTIONS ================= -->
       <section id="view-transactions" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Money</span> <span>/</span> <span class="text-gray-700 font-medium">Transactions</span>
@@ -537,7 +506,7 @@
         </div>
       </section>
 
-      <!-- ================= 13. DEPOSIT CODES ================= -->
+      <!-- ================= 12. DEPOSIT CODES ================= -->
       <section id="view-depositcodes" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Money</span> <span>/</span> <span class="text-gray-700 font-medium">Deposit codes</span>
@@ -557,24 +526,24 @@
         </div>
       </section>
 
-      <!-- ================= 14. LEARN / DOCS ================= -->
+      <!-- ================= 13. LEARN ================= -->
       <section id="view-learn" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Learn</span> <span>/</span> <span class="text-gray-700 font-medium">Documentation</span>
         </div>
         <h1 class="text-xl font-bold text-gray-900">GG Builder Academy</h1>
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs leading-relaxed text-gray-600">
-          <p class="font-bold text-gray-900 text-sm">টেলিগ্রাম স্টোর ম্যানেজমেন্ট নির্দেশিকা:</p>
+          <p class="font-bold text-gray-900 text-sm">টেলিগ্রাম স্টোর ব্যবহারের নির্দেশিকা:</p>
           <p>১. <strong>Catalog:</strong> প্রোডাক্ট অ্যাড করুন এবং প্রতি লাইনে ডিজিটাল ডেলিভারি কি/কোড দিয়ে দিন।</p>
-          <p>২. <strong>Bot Connection:</strong> Settings পেজ থেকে BotFather টোকেন সেট করে বট অ্যাক্টিভ রাখুন।</p>
-          <p>৩. <strong>Payment Methods:</strong> বিকাশ ও নগদ নম্বর যোগ করুন যাতে ইউজার পেমেন্ট পাঠানোর ঠিকানা পায়।</p>
+          <p>২. <strong>Settings:</strong> সাইডবারের Settings পেজে গিয়ে BotFather টোকেন দিয়ে কানেক্ট করুন।</p>
+          <p>৩. <strong>Payment Methods:</strong> বিকাশ ও নগদ নম্বর যুক্ত করুন যাতে ইউজার পেমেন্ট পাঠানোর ঠিকানা পায়।</p>
         </div>
       </section>
 
     </main>
   </div>
 
-  <!-- প্রোডাক্ট তৈরি করার পপআপ মোডাল -->
+  <!-- প্রোডাক্ট তৈরি করার মোডাল -->
   <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl text-xs">
       <div class="flex justify-between items-center border-b pb-2">
@@ -603,25 +572,21 @@
     </div>
   </div>
 
-  <!-- ৫. ইন্টার‍্যাকশন লজিক -->
   <script>
     lucide.createIcons();
 
-    // মোবাইল সাইডবার টগল
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('sidebarOverlay').classList.toggle('hidden');
     }
 
-    // অল মেনু নেভিগেশন কন্ট্রোলার (১৩টি মেনুর জন্য)
     function navigate(viewName) {
       const views = [
         'home', 'customers', 'catalog', 'inventory', 'orders', 'analytics',
-        'settings', 'languages', 'botbuttons', 'broadcast', 'payments', 
+        'languages', 'botbuttons', 'broadcast', 'payments', 
         'transactions', 'depositcodes', 'learn'
       ];
 
-      // সব সেকশন হাইড করা
       views.forEach(v => {
         const sec = document.getElementById(`view-${v}`);
         const btn = document.getElementById(`btn-${v}`);
@@ -629,24 +594,20 @@
         if(btn) btn.classList.remove('nav-active');
       });
 
-      // টার্গেট সেকশন শো করা
       const targetSec = document.getElementById(`view-${viewName}`);
       const targetBtn = document.getElementById(`btn-${viewName}`);
       if(targetSec) targetSec.classList.remove('hidden');
       if(targetBtn) targetBtn.classList.add('nav-active');
 
-      // মোবাইলে ক্লিক করলে সাইডবার হাইড হবে
       if(window.innerWidth < 768) {
         const sb = document.getElementById('sidebar');
         if(!sb.classList.contains('-translate-x-full')) toggleSidebar();
       }
     }
 
-    // মোডাল হ্যান্ডলার
     function openProductModal() { document.getElementById('productModal').classList.remove('hidden'); }
     function closeProductModal() { document.getElementById('productModal').classList.add('hidden'); }
 
-    // প্রোডাক্ট যোগ করা
     let productCount = 1;
     function saveNewProduct() {
       const name = document.getElementById('m-name').value;
@@ -685,7 +646,6 @@
       document.getElementById('dash-prod-count').innerText = productCount;
     }
 
-    // অর্ডার অ্যাপ্রুভ অ্যাকশন
     function approveOrderAction() {
       document.getElementById('ord-status').innerText = 'Delivered';
       document.getElementById('ord-status').className = 'px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded font-bold text-[10px]';
@@ -696,15 +656,13 @@
       alert('অর্ডার সফলভাবে অ্যাপ্রুভ হয়েছে এবং ইউজারের কাছে কোড পৌঁছে গেছে!');
     }
 
-    // ব্রডকাস্ট পাঠানো
     function sendBroadcastAction() {
       const msg = document.getElementById('bc-msg').value;
       if(!msg) return alert('অনুগ্রহ করে মেসেজ লিখুন');
-      alert(`সমস্ত বট ইউজারদের কাছে সফলভাবে পাঠানো হয়েছে:\n"${msg}"`);
+      alert(`সমস্ত বট ইউজারদের কাছে পাঠানো হয়েছে:\n"${msg}"`);
       document.getElementById('bc-msg').value = '';
     }
 
-    // ডিপোজিট কোড জেনারেটর
     function generateDepositCode() {
       const code = 'GIFT-' + Math.random().toString(36).substring(2, 7).toUpperCase();
       document.getElementById('codes-container').innerHTML += `
@@ -713,10 +671,9 @@
           <span class="text-emerald-600 font-bold">৳50 (Active)</span>
         </div>
       `;
-      alert('নতুন রিডিম কোড জেনারেট হয়েছে: ' + code);
+      alert('নতুন রিডিম কোড: ' + code);
     }
 
-    // সাধারণ ফর্ম নোটিফিকেশন
     function saveFormNotification(title) {
       alert(`${title} সফলভাবে আপডেট ও সংরক্ষিত হয়েছে!`);
     }
