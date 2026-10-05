@@ -7,6 +7,7 @@ import {
   setDoc, 
   collection, 
   getDocs, 
+  addDoc,
   updateDoc, 
   serverTimestamp,
   onSnapshot,
@@ -18,7 +19,7 @@ import http from "http";
 // Render Free Web Service পোর্ট লিসেনার
 const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("GGSoma Style Bot with Broadcast Running!");
+  res.end("GGSoma Style Bot with Wallet Deduction Running!");
 });
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
@@ -88,28 +89,238 @@ async function startBot() {
     await ctx.reply(welcome, mainPersistentKeyboard);
   });
 
-  // ১. 🛒 Products বাটন
+  // ==========================================
+  // ১. 🛒 স্টাইলিশ প্রোডাক্ট ক্যাটালগ UI
+  // ==========================================
   bot.hears("🛒 Products", async (ctx) => {
     try {
       const snap = await getDocs(collection(db, "products"));
       if (snap.empty) {
-        return ctx.reply("Currently, no products are in stock.", mainPersistentKeyboard);
+        return ctx.reply("❌ <b>Currently, no products are in stock.</b>", { parse_mode: "HTML", ...mainPersistentKeyboard });
       }
+
+      // স্টক হিসাব করা
+      const stocksSnap = await getDocs(collection(db, "stocks"));
+      const stockCounts = {};
+      stocksSnap.forEach(sDoc => {
+        const s = sDoc.data();
+        if (!s.isSold) {
+          stockCounts[s.productId] = (stockCounts[s.productId] || 0) + 1;
+        }
+      });
 
       const buttons = [];
       snap.forEach(d => {
         const p = d.data();
-        buttons.push([Markup.button.callback(`📦 ${p.name} — $${p.price} USDT`, `buy_${d.id}`)]);
+        const availableStock = stockCounts[d.id] || 0;
+        const stockBadge = availableStock > 0 ? `🟢 (${availableStock} In Stock)` : "🔴 (Out of Stock)";
+        
+        buttons.push([
+          Markup.button.callback(`📦 ${p.name} — $${parseFloat(p.price).toFixed(2)} ${stockBadge}`, `view_prod_${d.id}`)
+        ]);
       });
 
-      await ctx.reply("Select a product to purchase:", Markup.inlineKeyboard(buttons));
+      const catalogHeader = 
+`🛍 <b>DIGITAL PRODUCTS CATALOG</b>
+
+Select an item to view details and purchase using your wallet balance:`;
+
+      await ctx.reply(catalogHeader, {
+        parse_mode: "HTML",
+        ...Markup.inlineKeyboard(buttons)
+      });
     } catch(e) {
+      console.error(e);
       ctx.reply("Error loading products.");
     }
   });
 
-  // ২. 👤 Profile বাটন
-  bot.hears("👤 Profile", async (ctx) => {
+  // প্রোডাক্ট ডিটেইলস প্রিভিউ উইন্ডো
+  bot.action(/view_prod_(.+)/, async (ctx) => {
+    ctx.answerCbQuery();
+    const prodId = ctx.match[1];
+    const prodDoc = await getDoc(doc(db, "products", prodId));
+
+    if (!prodDoc.exists()) {
+      return ctx.reply("Product not found.");
+    }
+
+    const p = prodDoc.data();
+    const stocksSnap = await getDocs(collection(db, "stocks"));
+    let availableCount = 0;
+    stocksSnap.forEach(sDoc => {
+      const s = sDoc.data();
+      if (s.productId === prodId && !s.isSold) availableCount++;
+    });
+
+    const userSnap = await getDoc(doc(db, "customers", String(ctx.from.id)));
+    const userBalance = userSnap.exists() ? parseFloat(userSnap.data().balance || 0) : 0.00;
+
+    const detailMsg = 
+`📦 <b>Product:</b> <code>${p.name}</code>
+🏷 <b>Category:</b> ${p.category || "General"}
+💰 <b>Price:</b> <code>$${parseFloat(p.price).toFixed(2)} USDT</code>
+📊 <b>Stock Available:</b> <b>${availableCount} Units</b>
+
+💳 <b>Your Wallet Balance:</b> <code>$${userBalance.toFixed(2)} USDT</code>
+
+⚡ <i>Instant delivery to your chat right after confirmation.</i>`;
+
+    const detailButtons = [
+      [Markup.button.callback(`💳 Buy Now ($${parseFloat(p.price).toFixed(2)})`, `confirm_buy_${prodId}`)],
+      [Markup.button.callback("‹ Back to Products", "back_to_catalog")]
+    ];
+
+    await ctx.editMessageText(detailMsg, {
+      parse_mode: "HTML",
+      ...Markup.inlineKeyboard(detailButtons)
+    });
+  });
+
+  // ব্যাক টু ক্যাটালগ
+  bot.action("back_to_catalog", async (ctx) => {
+    ctx.answerCbQuery();
+    const snap = await getDocs(collection(db, "products"));
+    const stocksSnap = await getDocs(collection(db, "stocks"));
+    const stockCounts = {};
+    stocksSnap.forEach(sDoc => {
+      const s = sDoc.data();
+      if (!s.isSold) stockCounts[s.productId] = (stockCounts[s.productId] || 0) + 1;
+    });
+
+    const buttons = [];
+    snap.forEach(d => {
+      const p = d.data();
+      const availableStock = stockCounts[d.id] || 0;
+      const stockBadge = availableStock > 0 ? `🟢 (${availableStock} In Stock)` : "🔴 (Out of Stock)";
+      buttons.push([Markup.button.callback(`📦 ${p.name} — $${parseFloat(p.price).toFixed(2)} ${stockBadge}`, `view_prod_${d.id}`)]);
+    });
+
+    await ctx.editMessageText("🛍 <b>DIGITAL PRODUCTS CATALOG</b>\n\nSelect an item to view details:", {
+      parse_mode: "HTML",
+      ...Markup.inlineKeyboard(buttons)
+    });
+  });
+
+  // ==========================================
+  // ২. ওয়ালেট ব্যালেন্স চেক ও টাকা কাটার লজিক
+  // ==========================================
+  bot.action(/confirm_buy_(.+)/, async (ctx) => {
+    ctx.answerCbQuery();
+    const prodId = ctx.match[1];
+    const userId = String(ctx.from.id);
+
+    // ১. প্রোডাক্ট ও ইউজারের ডাটা আনা
+    const prodDoc = await getDoc(doc(db, "products", prodId));
+    if (!prodDoc.exists()) {
+      return ctx.reply("❌ Product does not exist.");
+    }
+    const product = prodDoc.data();
+    const price = parseFloat(product.price);
+
+    const userRef = doc(db, "customers", userId);
+    const userSnap = await getDoc(userRef);
+    const userData = userSnap.exists() ? userSnap.data() : { balance: 0.00 };
+    const currentBalance = parseFloat(userData.balance || 0);
+
+    // ২. ব্যালেন্স চেক: টাকা না থাকলে লাল নোটিশ ও কিছুই পাবে না
+    if (currentBalance < price) {
+      const needed = (price - currentBalance).toFixed(2);
+      const insufficientMsg = 
+`🚫 <b>INSUFFICIENT BALANCE!</b>
+
+You do not have enough funds in your wallet to purchase this item.
+
+💰 <b>Required Price:</b> $${price.toFixed(2)} USDT
+💳 <b>Your Current Balance:</b> $${currentBalance.toFixed(2)} USDT
+⚠️ <b>Shortage:</b> $${needed} USDT
+
+<i>Please top up your balance using the button below before purchasing.</i>`;
+
+      return ctx.reply(insufficientMsg, {
+        parse_mode: "HTML",
+        ...Markup.inlineKeyboard([
+          [Markup.button.callback("💲 Top up balance", "menu_topup")],
+          [Markup.button.callback("‹ Browse Other Products", "back_to_catalog")]
+        ])
+      });
+    }
+
+    // ৩. স্টক চেক
+    const stocksSnap = await getDocs(collection(db, "stocks"));
+    let targetStockDoc = null;
+    stocksSnap.forEach(sDoc => {
+      const s = sDoc.data();
+      if (s.productId === prodId && !s.isSold && !targetStockDoc) {
+        targetStockDoc = sDoc;
+      }
+    });
+
+    if (!targetStockDoc) {
+      return ctx.reply("⚠️ <b>Sold Out!</b> This item is currently out of stock.", {
+        parse_mode: "HTML",
+        ...Markup.inlineKeyboard([[Markup.button.callback("‹ Back to Products", "back_to_catalog")]])
+      });
+    }
+
+    // ৪. ব্যালেন্স থেকে টাকা কেটে নেওয়া এবং পারচেজ কাউন্ট বৃদ্ধি করা
+    const newBalance = currentBalance - price;
+    const newTotalSpend = parseFloat(userData.totalSpend || 0) + price;
+    const newPurchases = parseInt(userData.purchases || 0) + 1;
+
+    await updateDoc(userRef, {
+      balance: newBalance,
+      totalSpend: newTotalSpend,
+      purchases: newPurchases
+    });
+
+    // ৫. স্টক বিক্রিত চিহ্নিত করা
+    await updateDoc(doc(db, "stocks", targetStockDoc.id), {
+      isSold: true,
+      soldTo: ctx.from.id,
+      soldAt: new Date()
+    });
+
+    // ৬. অর্ডার হিস্ট্রিতে রেকর্ড যোগ করা
+    await addDoc(collection(db, "orders"), {
+      telegramId: userId,
+      username: ctx.from.username || "N/A",
+      productId: prodId,
+      productName: product.name,
+      price: price,
+      status: "completed",
+      trxId: `WALLET-DEDUCT-${Date.now().toString().slice(-6)}`,
+      createdAt: serverTimestamp()
+    });
+
+    const stockData = targetStockDoc.data();
+
+    // ৭. ডিজিটাল কোড ও ডেলিভারি মেসেজ পাঠানো
+    const successReceipt = 
+`✅ <b>PURCHASE SUCCESSFUL!</b>
+
+📦 <b>Item:</b> <code>${product.name}</code>
+💸 <b>Deducted:</b> <code>-$${price.toFixed(2)} USDT</code>
+💰 <b>Remaining Balance:</b> <code>$${newBalance.toFixed(2)} USDT</code>
+
+🔑 <b>YOUR DIGITAL ITEM:</b>
+<code>${stockData.content}</code>
+
+<i>Thank you for shopping with us! All sales are instant.</i>`;
+
+    await ctx.reply(successReceipt, {
+      parse_mode: "HTML",
+      ...Markup.inlineKeyboard([
+        [Markup.button.callback("👤 View Profile", "prof_view_inline")],
+        [Markup.button.callback("🛒 Buy More Products", "back_to_catalog")]
+      ])
+    });
+  });
+
+  // ==========================================
+  // ৩. প্রোফাইল ও টপ-আপ মেনু
+  // ==========================================
+  async function showUserProfile(ctx) {
     const user = ctx.from;
     const userSnap = await getDoc(doc(db, "customers", String(user.id)));
     const uData = userSnap.exists() ? userSnap.data() : { balance: 0.00, purchases: 0, totalSpend: 0.00 };
@@ -141,9 +352,14 @@ async function startBot() {
     ]);
 
     await ctx.reply(profileMsg, { parse_mode: "HTML", ...profileInlineButtons });
+  }
+
+  bot.hears("👤 Profile", showUserProfile);
+  bot.action("prof_view_inline", (ctx) => {
+    ctx.answerCbQuery();
+    showUserProfile(ctx);
   });
 
-  // ৩. 💲 Top up balance
   async function showTopupMenu(ctx) {
     const topupMsg = 
 `📥 <b>Choose your preferred payment method:</b>
@@ -188,7 +404,7 @@ async function startBot() {
     showTopupMenu(ctx);
   });
 
-  // অন্যান্য বাটন
+  // অন্যান্য মেনু
   bot.hears("🎁 Invite Center", (ctx) => {
     const link = `https://t.me/${ctx.botInfo.username}?start=${ctx.from.id}`;
     ctx.reply(`🎁 <b>Invite Center</b>\n\nInvite link:\n<code>${link}</code>`, { parse_mode: "HTML", ...mainPersistentKeyboard });
@@ -212,130 +428,83 @@ async function startBot() {
     ctx.reply("📲 <b>Reseller API:</b> Contact support for developer documentation and API keys.", { parse_mode: "HTML", ...mainPersistentKeyboard });
   });
 
-  // পেমেন্ট অ্যাকশন
-  bot.action("pay_binance", (ctx) => {
+  // পেমেন্ট মেথড
+  bot.action("pay_binance", (ctx) => { ctx.answerCbQuery(); ctx.reply("🔸 <b>Binance Pay ID:</b> <code>1266063</code>\nSend USDT and it will be credited automatically.", { parse_mode: "HTML" }); });
+  bot.action("pay_trc20", (ctx) => { ctx.answerCbQuery(); ctx.reply("🪙 <b>TRC20 (USDT):</b> <code>TXK98204918230912409ABC</code>", { parse_mode: "HTML" }); });
+  bot.action("pay_bep20", (ctx) => { ctx.answerCbQuery(); ctx.reply("🪙 <b>BEP20 (USDT):</b> <code>0x549446516653263db598b6b125d9d6ab24</code>", { parse_mode: "HTML" }); });
+  bot.action("pay_polygon", (ctx) => { ctx.answerCbQuery(); ctx.reply("🪙 <b>Polygon (USDT):</b> <code>0x549446516653263db598b6b125d9d6ab24</code>", { parse_mode: "HTML" }); });
+  bot.action("pay_stars", (ctx) => { ctx.answerCbQuery(); ctx.reply("⭐ Telegram Stars processing..."); });
+
+  bot.action("prof_orders", async (ctx) => {
     ctx.answerCbQuery();
-    ctx.reply("🔸 <b>Binance Pay ID:</b> <code>1266063</code>\nSend USDT and it will be credited automatically.", { parse_mode: "HTML" });
+    const ordersSnap = await getDocs(collection(db, "orders"));
+    let userOrders = [];
+    ordersSnap.forEach(oDoc => {
+      const o = oDoc.data();
+      if (o.telegramId === String(ctx.from.id)) userOrders.push(o);
+    });
+
+    if (userOrders.length === 0) return ctx.reply("📋 You have no active or completed orders.");
+    let msg = "📋 <b>Your Orders:</b>\n\n";
+    userOrders.slice(-5).forEach(o => {
+      msg += `• <b>${o.productName}</b> — $${o.price} USDT (Status: ${o.status})\n`;
+    });
+    ctx.reply(msg, { parse_mode: "HTML" });
   });
-  bot.action("pay_trc20", (ctx) => {
-    ctx.answerCbQuery();
-    ctx.reply("🪙 <b>TRC20 (USDT):</b> <code>TXK98204918230912409ABC</code>", { parse_mode: "HTML" });
-  });
-  bot.action("pay_bep20", (ctx) => {
-    ctx.answerCbQuery();
-    ctx.reply("🪙 <b>BEP20 (USDT):</b> <code>0x549446516653263db598b6b125d9d6ab24</code>", { parse_mode: "HTML" });
-  });
-  bot.action("pay_polygon", (ctx) => {
-    ctx.answerCbQuery();
-    ctx.reply("🪙 <b>Polygon (USDT):</b> <code>0x549446516653263db598b6b125d9d6ab24</code>", { parse_mode: "HTML" });
-  });
-  bot.action("pay_stars", (ctx) => {
-    ctx.answerCbQuery();
-    ctx.reply("⭐ Telegram Stars processing...");
-  });
+
+  bot.action("prof_status", (ctx) => { ctx.answerCbQuery(); ctx.reply("🏅 Status: Standard Tier. Spend $50 to reach VIP Level."); });
+  bot.action("prof_withdraw", (ctx) => { ctx.answerCbQuery(); ctx.reply("💰 Minimum withdraw amount is $10 USDT."); });
+  bot.action("prof_statement", (ctx) => { ctx.answerCbQuery(); ctx.reply("🏦 Wallet Statement: Check transactions in your merchant panel."); });
+  bot.action("prof_w_req", (ctx) => { ctx.answerCbQuery(); ctx.reply("📋 No pending withdrawal requests."); });
+  bot.action("prof_w_prof", (ctx) => { ctx.answerCbQuery(); ctx.reply("📑 Withdrawal profile not set."); });
 
   bot.action("back_close", (ctx) => {
     ctx.answerCbQuery();
     ctx.deleteMessage().catch(() => {});
   });
 
-  // প্রোডাক্ট কেনা ও অটো স্টক ডেলিভারি
-  bot.action(/buy_(.+)/, async (ctx) => {
-    const prodId = ctx.match[1];
-    const stocksSnap = await getDocs(collection(db, "stocks"));
-    let targetStockDoc = null;
-
-    stocksSnap.forEach(sDoc => {
-      const s = sDoc.data();
-      if (s.productId === prodId && !s.isSold && !targetStockDoc) {
-        targetStockDoc = sDoc;
-      }
-    });
-
-    if (!targetStockDoc) {
-      return ctx.reply("⚠️ Sold Out! This item is currently unavailable.");
-    }
-
-    await updateDoc(doc(db, "stocks", targetStockDoc.id), {
-      isSold: true,
-      soldTo: ctx.from.id,
-      soldAt: new Date()
-    });
-
-    try {
-      const userRef = doc(db, "customers", String(ctx.from.id));
-      const uSnap = await getDoc(userRef);
-      if (uSnap.exists()) {
-        const curPurchases = uSnap.data().purchases || 0;
-        await updateDoc(userRef, { purchases: curPurchases + 1 });
-      }
-    } catch(e) {}
-
-    const stockData = targetStockDoc.data();
-    await ctx.reply(
-      `✅ <b>Purchase Successful!</b>\n\n📦 <b>Product:</b> ${stockData.productName || "Item"}\n🔑 <b>Delivery Code / Account:</b>\n<code>${stockData.content}</code>`, 
-      { parse_mode: "HTML" }
-    );
-  });
-
   // ==========================================
-  // রিয়েল-টাইম ব্রডকাস্ট ইঞ্জিন (REAL-TIME BROADCAST ENGINE)
+  // ৪. ব্রডকাস্ট ও ডিরেক্ট মেসেজ ইঞ্জিন
   // ==========================================
   const qBroadcasts = query(collection(db, "broadcasts"), where("status", "==", "pending"));
   onSnapshot(qBroadcasts, async (snapshot) => {
     for (const bDoc of snapshot.docs) {
       const broadcast = bDoc.data();
       const broadcastId = bDoc.id;
-
-      console.log(`Starting Broadcast: ${broadcastId}`);
-
-      // সকল কাস্টমার লোড করা
       const customersSnap = await getDocs(collection(db, "customers"));
+
       if (customersSnap.empty) {
         await updateDoc(doc(db, "broadcasts", broadcastId), { status: "sent", sentCount: 0 });
         continue;
       }
 
       let extraOptions = { parse_mode: "HTML" };
-      if (broadcast.button && broadcast.button !== "none") {
-        if (broadcast.button === "shop") {
-          extraOptions.reply_markup = Markup.inlineKeyboard([[Markup.button.callback("🛍️ Open Store", "show_products")]]).reply_markup;
-        } else if (broadcast.button === "support") {
-          extraOptions.reply_markup = Markup.inlineKeyboard([[Markup.button.callback("☎️ Contact Support", "show_support")]]).reply_markup;
-        }
+      if (broadcast.button === "shop") {
+        extraOptions.reply_markup = Markup.inlineKeyboard([[Markup.button.callback("🛍️ Open Store", "back_to_catalog")]]).reply_markup;
       }
 
       let sentCount = 0;
       for (const cDoc of customersSnap.docs) {
         const cust = cDoc.data();
         const chatId = cust.telegramId || cDoc.id;
-
         try {
           if (broadcast.imageUrl) {
-            await bot.telegram.sendPhoto(chatId, broadcast.imageUrl, {
-              caption: broadcast.message,
-              ...extraOptions
-            });
+            await bot.telegram.sendPhoto(chatId, broadcast.imageUrl, { caption: broadcast.message, ...extraOptions });
           } else {
             await bot.telegram.sendMessage(chatId, broadcast.message, extraOptions);
           }
           sentCount++;
-        } catch (err) {
-          console.error(`Failed to send broadcast to ${chatId}:`, err.message);
-        }
+        } catch (err) {}
       }
 
-      // ব্রডকাস্ট শেষ হলে স্ট্যাটাস sent করে দেওয়া
       await updateDoc(doc(db, "broadcasts", broadcastId), {
         status: "sent",
         sentCount: sentCount,
         completedAt: serverTimestamp()
       });
-      console.log(`Broadcast ${broadcastId} completed! Total delivered: ${sentCount}`);
     }
   });
 
-  // সরাসরি কাস্টমার মেসেজ ইঞ্জিন (Direct Customer Messages)
   const qDirectMsg = query(collection(db, "direct_messages"), where("status", "==", "pending"));
   onSnapshot(qDirectMsg, async (snapshot) => {
     for (const mDoc of snapshot.docs) {
@@ -343,14 +512,12 @@ async function startBot() {
       try {
         await bot.telegram.sendMessage(msgData.customerId, msgData.message, { parse_mode: "HTML" });
         await updateDoc(doc(db, "direct_messages", mDoc.id), { status: "sent" });
-      } catch (err) {
-        console.error("Direct Message Error:", err.message);
-      }
+      } catch (err) {}
     }
   });
 
   bot.launch();
-  console.log("GGSoma Bot with Live Broadcast Engine Started!");
+  console.log("GGSoma Bot with Wallet Deduct & Store Engine Started!");
 }
 
 startBot();
