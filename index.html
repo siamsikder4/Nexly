@@ -3,26 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nexly - Merchant Store Dashboard</title>
+  <title>GG Builder - Complete Merchant Dashboard</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
-  <!-- Google Font Inter -->
+  <!-- Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #fbfbfe; }
-    .scrollbar-none::-webkit-scrollbar { display: none; }
+    .nav-active { background-color: #f3e8ff !important; color: #7c3aed !important; font-weight: 600; }
   </style>
 </head>
-<body class="text-[#1e1d24] flex min-h-screen">
+<body class="text-[#1c1b22] flex min-h-screen">
 
-  <!-- মোবাইল সাইডবার ড্রয়ারের জন্য ওভারলে -->
+  <!-- মোবাইল ড্রয়ার ওভারলে -->
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
 
-  <!-- ১. ফুল সাইডবার (স্ক্রিনশটের সব মেনু ও আইটেম) -->
+  <!-- ১. ফুল সাইডবার (১৩টি সক্রিয় মেনু) -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:w-64 shrink-0">
-    <!-- লোগো ও হেডার -->
     <div class="flex items-center gap-3 px-2 py-2 mb-4">
       <div class="w-10 h-10 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center shadow-md">
         <i data-lucide="box" class="w-5 h-5"></i>
@@ -33,29 +32,29 @@
       </div>
     </div>
 
-    <!-- সাইডবার আইটেম লিস্ট -->
-    <div class="flex-1 overflow-y-auto space-y-5 text-sm font-medium pr-1">
+    <!-- সাইডবার আইটেমস -->
+    <div class="flex-1 overflow-y-auto space-y-4 text-xs font-medium pr-1">
       
       <!-- OVERVIEW -->
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Overview</p>
         <div class="space-y-0.5">
-          <button onclick="navigate('home')" id="nav-home" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left bg-purple-50 text-[#7c3aed] font-semibold transition">
+          <button onclick="navigate('home')" id="btn-home" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left nav-active transition">
             <i data-lucide="layout-grid" class="w-4 h-4"></i> Home
           </button>
-          <button onclick="navigate('customers')" id="nav-customers" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+          <button onclick="navigate('customers')" id="btn-customers" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="users" class="w-4 h-4 text-gray-500"></i> Customers
           </button>
-          <button onclick="navigate('catalog')" id="nav-catalog" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+          <button onclick="navigate('catalog')" id="btn-catalog" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="layers" class="w-4 h-4 text-gray-500"></i> Catalog
           </button>
-          <button onclick="navigate('inventory')" id="nav-inventory" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+          <button onclick="navigate('inventory')" id="btn-inventory" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="package" class="w-4 h-4 text-gray-500"></i> Inventory
           </button>
-          <button onclick="navigate('orders')" id="nav-orders" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+          <button onclick="navigate('orders')" id="btn-orders" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="clipboard-list" class="w-4 h-4 text-gray-500"></i> Orders
           </button>
-          <button onclick="navigate('analytics')" id="nav-analytics" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+          <button onclick="navigate('analytics')" id="btn-analytics" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="trending-up" class="w-4 h-4 text-gray-500"></i> Analytics
           </button>
         </div>
@@ -65,16 +64,16 @@
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Channel</p>
         <div class="space-y-0.5">
-          <button onclick="navigate('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
-            <i data-lucide="bot" class="w-4 h-4 text-gray-500"></i> Settings
+          <button onclick="navigate('settings')" id="btn-settings" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="settings" class="w-4 h-4 text-gray-500"></i> Settings
           </button>
-          <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50">
+          <button onclick="navigate('languages')" id="btn-languages" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="flag" class="w-4 h-4 text-gray-500"></i> Languages
           </button>
-          <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50">
+          <button onclick="navigate('botbuttons')" id="btn-botbuttons" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="menu-square" class="w-4 h-4 text-gray-500"></i> Bot buttons
           </button>
-          <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50">
+          <button onclick="navigate('broadcast')" id="btn-broadcast" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="send" class="w-4 h-4 text-gray-500"></i> Broadcast
           </button>
         </div>
@@ -84,13 +83,13 @@
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Money</p>
         <div class="space-y-0.5">
-          <button onclick="navigate('payments')" id="nav-payments" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50">
+          <button onclick="navigate('payments')" id="btn-payments" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="wallet" class="w-4 h-4 text-gray-500"></i> Payment methods
           </button>
-          <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50">
+          <button onclick="navigate('transactions')" id="btn-transactions" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="arrow-left-right" class="w-4 h-4 text-gray-500"></i> Transactions
           </button>
-          <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50">
+          <button onclick="navigate('depositcodes')" id="btn-depositcodes" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="ticket" class="w-4 h-4 text-gray-500"></i> Deposit codes
           </button>
         </div>
@@ -100,8 +99,8 @@
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Learn</p>
         <div class="space-y-0.5">
-          <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50">
-            <i data-lucide="graduation-cap" class="w-4 h-4 text-gray-500"></i> Docs & Guide
+          <button onclick="navigate('learn')" id="btn-learn" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-gray-500"></i> Docs & Academy
           </button>
         </div>
       </div>
@@ -127,63 +126,52 @@
       </div>
     </header>
 
-    <!-- বডি কনটেন্ট পেজগুলো -->
+    <!-- মূল পেজ কনটেন্ট -->
     <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-5xl w-full mx-auto">
       
-      <!-- ================= 1. HOME SECTION ================= -->
-      <div id="section-home" class="space-y-6">
+      <!-- ================= 1. HOME ================= -->
+      <section id="view-home" class="space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Home</span>
         </div>
-
         <div>
           <h2 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">Store pulse</h2>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="bg-[#fbfafd] border-l-4 border-l-amber-500 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
-              <span class="text-[10px] font-bold text-gray-500 tracking-wider uppercase block">Needs Attention</span>
+            <div class="bg-[#fbfafd] border-l-4 border-l-amber-500 border border-gray-100 rounded-2xl p-3.5 shadow-2xs">
+              <span class="text-[10px] font-bold text-gray-500 uppercase block">Needs Attention</span>
               <p class="text-2xl font-bold text-gray-900 mt-1">0</p>
             </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-sky-500 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
-              <span class="text-[10px] font-bold text-sky-700 tracking-wider uppercase block">Customers</span>
+            <div class="bg-[#fbfafd] border-l-4 border-l-sky-500 border border-gray-100 rounded-2xl p-3.5 shadow-2xs">
+              <span class="text-[10px] font-bold text-sky-700 uppercase block">Customers</span>
+              <p class="text-2xl font-bold text-gray-900 mt-1" id="dash-cust-count">1</p>
+            </div>
+            <div class="bg-[#fbfafd] border-l-4 border-l-emerald-500 border border-gray-100 rounded-2xl p-3.5 shadow-2xs">
+              <span class="text-[10px] font-bold text-emerald-700 uppercase block">Active</span>
               <p class="text-2xl font-bold text-gray-900 mt-1">1</p>
             </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-emerald-500 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
-              <span class="text-[10px] font-bold text-emerald-700 tracking-wider uppercase block">Active</span>
-              <p class="text-2xl font-bold text-gray-900 mt-1">1</p>
-            </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-emerald-600 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
-              <span class="text-[10px] font-bold text-emerald-700 tracking-wider uppercase block">Wallet Balances</span>
+            <div class="bg-[#fbfafd] border-l-4 border-l-emerald-600 border border-gray-100 rounded-2xl p-3.5 shadow-2xs">
+              <span class="text-[10px] font-bold text-emerald-700 uppercase block">Wallet Balances</span>
               <p class="text-lg font-bold text-gray-900 mt-1">0.00 <span class="text-xs font-normal text-gray-500">USDT</span></p>
             </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-amber-400 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
-              <span class="text-[10px] font-bold text-amber-700 tracking-wider uppercase block">Total Spend</span>
+            <div class="bg-[#fbfafd] border-l-4 border-l-amber-400 border border-gray-100 rounded-2xl p-3.5 shadow-2xs">
+              <span class="text-[10px] font-bold text-amber-700 uppercase block">Total Spend</span>
               <p class="text-lg font-bold text-gray-900 mt-1">0.00 <span class="text-xs font-normal text-gray-500">USDT</span></p>
             </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-purple-600 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
-              <span class="text-[10px] font-bold text-purple-700 tracking-wider uppercase block">Purchases</span>
+            <div class="bg-[#fbfafd] border-l-4 border-l-purple-600 border border-gray-100 rounded-2xl p-3.5 shadow-2xs">
+              <span class="text-[10px] font-bold text-purple-700 uppercase block">Purchases</span>
               <p class="text-2xl font-bold text-gray-900 mt-1">0</p>
             </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-teal-500 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
-              <span class="text-[10px] font-bold text-teal-700 tracking-wider uppercase block">Deposits to review</span>
+            <div class="bg-[#fbfafd] border-l-4 border-l-teal-500 border border-gray-100 rounded-2xl p-3.5 shadow-2xs">
+              <span class="text-[10px] font-bold text-teal-700 uppercase block">Deposits to review</span>
               <p class="text-2xl font-bold text-gray-900 mt-1">0</p>
             </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-gray-900 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
-              <span class="text-[10px] font-bold text-gray-700 tracking-wider uppercase block">Live Products</span>
-              <p class="text-2xl font-bold text-gray-900 mt-1">1</p>
+            <div class="bg-[#fbfafd] border-l-4 border-l-gray-900 border border-gray-100 rounded-2xl p-3.5 shadow-2xs">
+              <span class="text-[10px] font-bold text-gray-700 uppercase block">Live Products</span>
+              <p class="text-2xl font-bold text-gray-900 mt-1" id="dash-prod-count">1</p>
             </div>
           </div>
         </div>
 
-        <div>
-          <div class="flex items-center gap-2 mb-1">
-            <h1 class="text-xl font-bold text-gray-900">Overview</h1>
-            <span class="px-2 py-0.5 text-[10px] font-bold bg-gray-100 text-gray-600 rounded">DRAFT</span>
-            <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-600 rounded">Connected</span>
-          </div>
-          <p class="text-xs text-gray-500">Store pulse, attention, and shortcuts — operate with confidence.</p>
-        </div>
-
-        <!-- Channel health -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
           <p class="text-xs font-bold text-teal-800 mb-2">Channel health</p>
           <div class="flex flex-wrap gap-2 text-xs">
@@ -193,254 +181,544 @@
           </div>
           <button onclick="navigate('settings')" class="block text-xs font-semibold text-purple-600 mt-3">Open bot settings &gt;</button>
         </div>
-      </div>
 
-      <!-- ================= 2. SETTINGS SECTION (Dedicated Channel Settings) ================= -->
-      <div id="section-settings" class="hidden space-y-6">
-        <div class="text-xs text-gray-400 flex items-center gap-1.5">
-          <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Settings</span>
-        </div>
-
-        <div class="flex justify-between items-center">
-          <div>
-            <h1 class="text-xl font-bold text-gray-900">Bot & Store Settings</h1>
-            <p class="text-xs text-gray-500 mt-0.5">Manage your Telegram bot credentials, operational parameters, and store branding.</p>
-          </div>
-          <button onclick="alert('Settings saved successfully!')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm hover:bg-purple-700 transition">
-            Save changes
-          </button>
-        </div>
-
-        <div class="space-y-4">
-          <!-- কার্ড ১: টেলিগ্রাম বট কানেকশন -->
-          <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs">
-            <div class="flex items-center justify-between pb-3 border-b mb-4">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
-                  <i data-lucide="bot" class="w-5 h-5"></i>
-                </div>
-                <div>
-                  <h3 class="text-sm font-bold text-gray-900">Telegram Bot Integration</h3>
-                  <p class="text-[11px] text-gray-400">Connect via BotFather API token</p>
-                </div>
-              </div>
-              <span class="px-2.5 py-1 text-[11px] font-bold bg-emerald-50 text-emerald-600 rounded-full flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Connected
-              </span>
-            </div>
-
-            <div class="space-y-3 text-xs">
-              <div>
-                <label class="block font-semibold text-gray-700 mb-1">Bot Token</label>
-                <div class="flex gap-2">
-                  <input type="password" value="7382910394:AAHk_EXAMPLE_KEY_TOKEN" class="flex-1 border border-gray-200 rounded-xl p-2.5 outline-none font-mono text-xs focus:border-purple-600">
-                  <button class="px-3 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-600 font-semibold text-xs">Verify</button>
-                </div>
-                <p class="text-[10px] text-gray-400 mt-1">Get this token from @BotFather on Telegram.</p>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <div>
-                  <label class="block font-semibold text-gray-700 mb-1">Bot Username</label>
-                  <input type="text" value="@MyDigitalShopBot" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-                </div>
-                <div>
-                  <label class="block font-semibold text-gray-700 mb-1">Admin Telegram ID(s)</label>
-                  <input type="text" placeholder="e.g. 8271633124 (for order alerts)" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- কার্ড ২: স্টোর আইডেন্টিটি -->
-          <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs">
-            <h3 class="text-sm font-bold text-gray-900 mb-3">Store Identity & Welcome Message</h3>
-            <div class="space-y-3 text-xs">
-              <div>
-                <label class="block font-semibold text-gray-700 mb-1">Store Display Name</label>
-                <input type="text" value="GG Builder Store" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-              </div>
-              <div>
-                <label class="block font-semibold text-gray-700 mb-1">Welcome Text (/start caption)</label>
-                <textarea rows="3" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">আমাদের ডিজিটাল স্টোরে স্বাগতম! নিচের ক্যাটালগ থেকে যেকোনো সার্ভিস বেছে নিতে পারেন।</textarea>
-              </div>
-              <div>
-                <label class="block font-semibold text-gray-700 mb-1">Customer Support Handle</label>
-                <input type="text" value="@SupportAdmin" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-              </div>
-            </div>
-          </div>
-
-          <!-- কার্ড ৩: অপারেশনাল কন্ট্রোল ও মেইন্টেন্যান্স -->
-          <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs">
-            <h3 class="text-sm font-bold text-gray-900 mb-3">Store Control & Modes</h3>
-            <div class="space-y-3 text-xs">
-              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                <div>
-                  <p class="font-bold text-gray-800">Maintenance Mode</p>
-                  <p class="text-[11px] text-gray-500">বটের সব অর্ডার সাময়িকভাবে বন্ধ রাখুন।</p>
-                </div>
-                <input type="checkbox" class="w-4 h-4 accent-purple-600">
-              </div>
-              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
-                <div>
-                  <p class="font-bold text-gray-800">Instant Delivery Only</p>
-                  <p class="text-[11px] text-gray-500">শুধুমাত্র স্টক থাকা অবস্থায় ইউজারকে অর্ডার করতে দিন।</p>
-                </div>
-                <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
-              </div>
-            </div>
+        <!-- Quick actions -->
+        <div>
+          <p class="text-xs font-bold text-gray-700 mb-2">Quick actions</p>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="navigate('catalog')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
+              <i data-lucide="plus" class="w-3.5 h-3.5 text-purple-600"></i> New product
+            </button>
+            <button onclick="navigate('inventory')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
+              <i data-lucide="package" class="w-3.5 h-3.5 text-purple-600"></i> Inventory
+            </button>
+            <button onclick="navigate('orders')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
+              <i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-purple-600"></i> Orders
+            </button>
+            <button onclick="navigate('broadcast')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
+              <i data-lucide="send" class="w-3.5 h-3.5 text-purple-600"></i> Broadcast
+            </button>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- ================= 3. CUSTOMERS SECTION ================= -->
-      <div id="section-customers" class="hidden space-y-6">
+      <!-- ================= 2. CUSTOMERS ================= -->
+      <section id="view-customers" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Customers</span>
         </div>
-        <div class="flex items-center gap-2 mb-1">
-          <h1 class="text-xl font-bold text-gray-900">Customers</h1>
-          <span class="px-2 py-0.5 text-[10px] font-bold bg-sky-50 text-sky-700 rounded-full">1 customers</span>
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-xl font-bold text-gray-900">Customers</h1>
+            <p class="text-xs text-gray-500">Store-scoped ops desk for identity, balances, spend, and activity.</p>
+          </div>
+          <span class="px-2.5 py-1 text-xs font-bold bg-sky-50 text-sky-700 rounded-full">1 customer</span>
         </div>
+        <!-- কাস্টমার সার্চ -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs space-y-3">
+          <input type="text" placeholder="Search by name, @username, or Telegram ID..." class="w-full border border-gray-200 rounded-xl p-2.5 text-xs outline-none focus:border-purple-600">
+        </div>
+        <!-- কাস্টমার কার্ড -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
           <div class="flex justify-between items-start mb-2">
             <div>
               <h3 class="font-bold text-sm text-gray-900">Siam Hossain</h3>
-              <p class="text-xs text-gray-500">@Zvshshhvc • 8271633124</p>
+              <p class="text-xs text-gray-500">@Zvshshhvc • ID: 8271633124</p>
             </div>
             <div class="flex gap-1">
-              <button class="p-1.5 text-gray-400 hover:text-purple-600"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
-              <button class="p-1.5 text-gray-400 hover:text-purple-600"><i data-lucide="eye" class="w-3.5 h-3.5"></i></button>
+              <button onclick="alert('User ID Copied!')" class="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"><i data-lucide="copy" class="w-4 h-4"></i></button>
+              <button onclick="alert('Balance: 0.00 USDT')" class="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"><i data-lucide="wallet" class="w-4 h-4"></i></button>
+              <button onclick="alert('Ban user functionality')" class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><i data-lucide="ban" class="w-4 h-4"></i></button>
+            </div>
+          </div>
+          <div class="text-xs text-gray-600 flex gap-4 pt-2 border-t mt-3">
+            <span><strong>Balance:</strong> 0.00 USDT</span>
+            <span><strong>Total Spend:</strong> 0.00 USDT</span>
+            <span><strong>Purchases:</strong> 0</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 3. CATALOG ================= -->
+      <section id="view-catalog" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Catalog</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-xl font-bold text-gray-900">Catalog</h1>
+            <p class="text-xs text-gray-500">Build products that will power your telegram bot store.</p>
+          </div>
+          <button onclick="openProductModal()" class="bg-[#7c3aed] text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm hover:bg-purple-700 transition">
+            + New product
+          </button>
+        </div>
+        <!-- ক্যাটালগ টেবিল -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="text-[10px] font-bold text-gray-400 uppercase border-b pb-2">
+                <tr>
+                  <th class="py-2.5">Product</th>
+                  <th class="py-2.5">Category</th>
+                  <th class="py-2.5">Price</th>
+                  <th class="py-2.5">Stock Status</th>
+                  <th class="py-2.5 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody id="catalog-table-body" class="divide-y divide-gray-100">
+                <tr>
+                  <td class="py-3 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-sky-500 text-white flex items-center justify-center font-bold">N</div>
+                    <div>
+                      <p class="font-semibold text-gray-900">NordVpn</p>
+                      <p class="text-[10px] text-gray-400">nordvpn</p>
+                    </div>
+                  </td>
+                  <td class="py-3 text-gray-600">VPN</td>
+                  <td class="py-3 font-semibold">0.3 USDT</td>
+                  <td class="py-3"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md font-bold text-[10px]">Instant</span></td>
+                  <td class="py-3 text-right">
+                    <button onclick="deleteProductRow(this)" class="text-red-500 hover:text-red-700 font-medium">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 4. INVENTORY ================= -->
+      <section id="view-inventory" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Overview</span> <span>/</span> <span class="text-gray-700 font-medium">Inventory</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-xl font-bold text-gray-900">Inventory Units</h1>
+            <p class="text-xs text-gray-500">Manage digital accounts, serial keys, and file credentials.</p>
+          </div>
+          <button onclick="navigate('catalog')" class="bg-[#7c3aed] text-white px-3 py-1.5 rounded-xl text-xs font-semibold">+ Add Units</button>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
+          <div class="flex justify-between text-xs font-semibold border-b pb-2">
+            <span>Available Stock Items</span>
+            <span class="text-purple-600">3 Units In Queue</span>
+          </div>
+          <div class="space-y-2 font-mono text-xs text-gray-700">
+            <div class="p-2.5 bg-gray-50 rounded-xl flex justify-between items-center border">
+              <span>user1@gmail.com:NordPass2026</span>
+              <span class="px-2 py-0.5 bg-blue-50 text-blue-600 rounded text-[10px]">NordVpn</span>
+            </div>
+            <div class="p-2.5 bg-gray-50 rounded-xl flex justify-between items-center border">
+              <span>KEY-8392-TGPREM-1M</span>
+              <span class="px-2 py-0.5 bg-purple-50 text-purple-600 rounded text-[10px]">Telegram Prem</span>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- ================= 4. CATALOG SECTION ================= -->
-      <div id="section-catalog" class="hidden space-y-6">
+      <!-- ================= 5. ORDERS ================= -->
+      <section id="view-orders" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
-          <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Your products</span>
+          <span>Overview</span> <span>/</span> <span class="text-gray-700 font-medium">Orders</span>
         </div>
-        <div class="flex justify-between items-start">
-          <h1 class="text-xl font-bold text-gray-900">Catalog</h1>
-          <button onclick="openProductModal()" class="bg-[#7c3aed] text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700">New product</button>
-        </div>
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
+        <h1 class="text-xl font-bold text-gray-900">Orders Lifecycle</h1>
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs overflow-x-auto">
           <table class="w-full text-left text-xs">
             <thead class="text-[10px] font-bold text-gray-400 uppercase border-b pb-2">
               <tr>
-                <th class="py-2">Products</th>
-                <th class="py-2">Category</th>
-                <th class="py-2">Price</th>
-                <th class="py-2">Duration</th>
+                <th class="py-2.5">Order ID</th>
+                <th class="py-2.5">Telegram User</th>
+                <th class="py-2.5">Item</th>
+                <th class="py-2.5">TrxID / Method</th>
+                <th class="py-2.5">Status</th>
+                <th class="py-2.5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="catalog-products-table">
-              <tr>
-                <td class="py-3 font-semibold text-gray-900">NordVpn</td>
-                <td class="py-3 text-gray-600">VPN</td>
-                <td class="py-3 font-semibold">0.3 USDT</td>
-                <td class="py-3 text-gray-500">None</td>
+            <tbody id="orders-table-body">
+              <tr class="border-b">
+                <td class="py-3 font-mono font-bold">#ORD-1092</td>
+                <td class="py-3">@Zvshshhvc</td>
+                <td class="py-3 font-medium">NordVpn (1M)</td>
+                <td class="py-3 font-mono text-gray-500">BL98X2K (bKash)</td>
+                <td class="py-3"><span id="ord-status" class="px-2 py-0.5 bg-amber-50 text-amber-600 rounded font-bold text-[10px]">Pending</span></td>
+                <td class="py-3 text-right">
+                  <button id="ord-btn" onclick="approveOrderAction()" class="bg-[#7c3aed] text-white px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-purple-700">Approve & Deliver</button>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
-      </div>
+      </section>
 
-      <!-- ================= 5. ANALYTICS SECTION ================= -->
-      <div id="section-analytics" class="hidden space-y-6">
-        <h1 class="text-xl font-bold text-gray-900">Analytics</h1>
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
-          <p class="text-xs text-gray-500">Live store inflows from fulfilled sales and completed deposits.</p>
+      <!-- ================= 6. ANALYTICS ================= -->
+      <section id="view-analytics" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Analytics</span>
         </div>
-      </div>
+        <h1 class="text-xl font-bold text-gray-900">Analytics</h1>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          <div class="bg-[#fbfafd] border-l-4 border-l-emerald-500 border border-gray-100 rounded-2xl p-3 shadow-2xs">
+            <span class="text-[10px] font-bold text-emerald-700 uppercase block">Sales</span>
+            <p class="text-lg font-bold text-gray-900 mt-1">0.00 USDT</p>
+          </div>
+          <div class="bg-[#fbfafd] border-l-4 border-l-sky-500 border border-gray-100 rounded-2xl p-3 shadow-2xs">
+            <span class="text-[10px] font-bold text-sky-700 uppercase block">Deposits</span>
+            <p class="text-lg font-bold text-gray-900 mt-1">0.00 USDT</p>
+          </div>
+          <div class="bg-[#fbfafd] border-l-4 border-l-purple-600 border border-gray-100 rounded-2xl p-3 shadow-2xs">
+            <span class="text-[10px] font-bold text-purple-700 uppercase block">Combined Inflow</span>
+            <p class="text-lg font-bold text-gray-900 mt-1">0.00 USDT</p>
+          </div>
+          <div class="bg-[#fbfafd] border-l-4 border-l-teal-500 border border-gray-100 rounded-2xl p-3 shadow-2xs">
+            <span class="text-[10px] font-bold text-teal-700 uppercase block">Orders</span>
+            <p class="text-lg font-bold text-gray-900 mt-1">0</p>
+          </div>
+        </div>
+        <!-- চার্ট সিমুলেশন -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
+          <div class="flex justify-between items-center mb-4">
+            <span class="font-bold text-xs">Sales Ticker</span>
+            <span class="text-[10px] text-gray-400">Oct 5, 2026</span>
+          </div>
+          <div class="h-28 border-b border-l flex items-end px-2 pb-1 relative">
+            <div class="w-full h-0.5 bg-emerald-500"></div>
+          </div>
+        </div>
+      </section>
 
-      <!-- ================= 6. ORDERS, INVENTORY, PAYMENTS ================= -->
-      <div id="section-orders" class="hidden space-y-4">
-        <h1 class="text-xl font-bold text-gray-900">Orders</h1>
-        <div class="bg-white p-6 rounded-2xl border text-xs text-gray-500">কোনো নতুন অর্ডার আসেনি।</div>
-      </div>
+      <!-- ================= 7. SETTINGS ================= -->
+      <section id="view-settings" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Settings</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <h1 class="text-xl font-bold text-gray-900">Bot & Store Settings</h1>
+          <button onclick="saveFormNotification('Settings')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700">Save changes</button>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold mb-1">Telegram Bot Token</label>
+            <input type="password" value="7382910394:AAHk_EXAMPLE_KEY_TOKEN" class="w-full border rounded-xl p-2.5 font-mono outline-none focus:border-purple-600">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Store Name</label>
+            <input type="text" value="GG Builder Store" class="w-full border rounded-xl p-2.5 outline-none focus:border-purple-600">
+          </div>
+          <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl mt-2">
+            <div>
+              <p class="font-bold text-gray-800">Maintenance Mode</p>
+              <p class="text-[11px] text-gray-500">সাময়িকভাবে বটের অর্ডার গ্রহণ বন্ধ রাখুন</p>
+            </div>
+            <input type="checkbox" class="w-4 h-4 accent-purple-600">
+          </div>
+        </div>
+      </section>
 
-      <div id="section-inventory" class="hidden space-y-4">
-        <h1 class="text-xl font-bold text-gray-900">Inventory</h1>
-        <div class="bg-white p-6 rounded-2xl border text-xs text-gray-500">ইনভেন্টরি স্টক ও লাইসেন্স কি লিস্ট।</div>
-      </div>
+      <!-- ================= 8. LANGUAGES ================= -->
+      <section id="view-languages" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Languages</span>
+        </div>
+        <h1 class="text-xl font-bold text-gray-900">Store Languages</h1>
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs">
+          <p class="text-gray-500 mb-2">টেলিগ্রাম বট এবং ড্যাশবোর্ডের প্রাথমিক ভাষা নির্বাচন করুন:</p>
+          <label class="flex items-center gap-3 p-3 border rounded-xl cursor-pointer hover:bg-gray-50">
+            <input type="radio" name="lang" checked class="accent-purple-600">
+            <div>
+              <p class="font-bold text-gray-900">বাংলা (Bangla - Default)</p>
+              <p class="text-gray-400 text-[11px]">বটের সব বাটন ও মেসেজ বাংলায় প্রদর্শিত হবে</p>
+            </div>
+          </label>
+          <label class="flex items-center gap-3 p-3 border rounded-xl cursor-pointer hover:bg-gray-50">
+            <input type="radio" name="lang" class="accent-purple-600">
+            <div>
+              <p class="font-bold text-gray-900">English (Global)</p>
+              <p class="text-gray-400 text-[11px]">All commands will be in English</p>
+            </div>
+          </label>
+          <button onclick="saveFormNotification('Language settings')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl font-semibold">Save Language</button>
+        </div>
+      </section>
 
-      <div id="section-payments" class="hidden space-y-4">
-        <h1 class="text-xl font-bold text-gray-900">Payment methods</h1>
-        <div class="bg-white p-6 rounded-2xl border text-xs text-gray-500">বিকাশ, নগদ বা USDT অ্যাড্রেস কনফিগার করুন।</div>
-      </div>
+      <!-- ================= 9. BOT BUTTONS ================= -->
+      <section id="view-botbuttons" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Bot buttons</span>
+        </div>
+        <h1 class="text-xl font-bold text-gray-900">Bot Menu & Inline Buttons</h1>
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4 text-xs">
+          <p class="text-gray-500">ইউজার /start চাপলে টেলিগ্রাম কীবোর্ডে যে বাটনগুলো দেখতে পাবে:</p>
+          <div class="space-y-2">
+            <div class="flex gap-2">
+              <input value="🛍️ সব প্রোডাক্ট দেখুন" class="flex-1 border rounded-xl p-2.5">
+              <button class="px-3 border rounded-xl text-red-500">Remove</button>
+            </div>
+            <div class="flex gap-2">
+              <input value="💳 ওয়ালেট ব্যালেন্স" class="flex-1 border rounded-xl p-2.5">
+              <button class="px-3 border rounded-xl text-red-500">Remove</button>
+            </div>
+            <div class="flex gap-2">
+              <input value="☎️ কাস্টমার সাপোর্ট" class="flex-1 border rounded-xl p-2.5">
+              <button class="px-3 border rounded-xl text-red-500">Remove</button>
+            </div>
+          </div>
+          <button onclick="alert('নতুন বাটন ফিল্ড যোগ হয়েছে')" class="border border-purple-600 text-purple-600 px-3 py-1.5 rounded-xl font-semibold">+ Add Button</button>
+          <button onclick="saveFormNotification('Bot buttons')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl font-semibold ml-2">Save Layout</button>
+        </div>
+      </section>
+
+      <!-- ================= 10. BROADCAST ================= -->
+      <section id="view-broadcast" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Broadcast</span>
+        </div>
+        <h1 class="text-xl font-bold text-gray-900">Broadcast Notification</h1>
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs max-w-lg">
+          <p class="text-gray-500">বটের সমস্ত সক্রিয় কাস্টমারদের ইনবক্সে সরাসরি মেসেজ বা অফার নোটিশ পাঠান:</p>
+          <textarea id="bc-msg" rows="4" placeholder="মেসেজ লিখুন (যেমন: আজ সব প্রোডাক্টে ১০% ডিসকাউন্ট!)..." class="w-full border rounded-xl p-3 outline-none focus:border-purple-600"></textarea>
+          <button onclick="sendBroadcastAction()" class="bg-[#7c3aed] text-white px-4 py-2.5 rounded-xl font-semibold hover:bg-purple-700 transition">
+            🚀 Send Broadcast to All Users
+          </button>
+        </div>
+      </section>
+
+      <!-- ================= 11. PAYMENT METHODS ================= -->
+      <section id="view-payments" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Money</span> <span>/</span> <span class="text-gray-700 font-medium">Payment methods</span>
+        </div>
+        <h1 class="text-xl font-bold text-gray-900">Payment Gateways & Accounts</h1>
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4 text-xs max-w-lg">
+          <div>
+            <label class="block font-semibold mb-1">bKash Personal / Merchant Number</label>
+            <input id="pay-bkash" value="01700000000" class="w-full border rounded-xl p-2.5 outline-none focus:border-purple-600">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Nagad Personal Number</label>
+            <input id="pay-nagad" value="01800000000" class="w-full border rounded-xl p-2.5 outline-none focus:border-purple-600">
+          </div>
+          <div>
+            <label class="block font-semibold mb-1">Binance Pay ID / USDT TRC20 Address</label>
+            <input id="pay-usdt" value="TXK98204918230912409" class="w-full border rounded-xl p-2.5 outline-none font-mono focus:border-purple-600">
+          </div>
+          <button onclick="saveFormNotification('Payment details')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl font-semibold">Save Payment Gateways</button>
+        </div>
+      </section>
+
+      <!-- ================= 12. TRANSACTIONS ================= -->
+      <section id="view-transactions" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Money</span> <span>/</span> <span class="text-gray-700 font-medium">Transactions</span>
+        </div>
+        <h1 class="text-xl font-bold text-gray-900">All Transactions</h1>
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs overflow-x-auto text-xs">
+          <table class="w-full text-left">
+            <thead class="text-[10px] font-bold text-gray-400 uppercase border-b pb-2">
+              <tr>
+                <th class="py-2.5">Date</th>
+                <th class="py-2.5">User</th>
+                <th class="py-2.5">Amount</th>
+                <th class="py-2.5">Method</th>
+                <th class="py-2.5">Status</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr>
+                <td class="py-3 text-gray-500">Oct 5, 2026</td>
+                <td class="py-3 font-semibold">@Zvshshhvc</td>
+                <td class="py-3 font-bold text-emerald-600">+0.30 USDT</td>
+                <td class="py-3 font-mono">bKash (BL98X2K)</td>
+                <td class="py-3"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded text-[10px] font-bold">Successful</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ================= 13. DEPOSIT CODES ================= -->
+      <section id="view-depositcodes" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Money</span> <span>/</span> <span class="text-gray-700 font-medium">Deposit codes</span>
+        </div>
+        <div class="flex justify-between items-center">
+          <h1 class="text-xl font-bold text-gray-900">Gift & Redeem Codes</h1>
+          <button onclick="generateDepositCode()" class="bg-[#7c3aed] text-white px-3 py-1.5 rounded-xl text-xs font-semibold">+ Generate Code</button>
+        </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs">
+          <p class="text-gray-500">ইউজাররা বটের মধ্যে এই কোডটি রিডিম করে ওয়ালেটে ফান্ড অ্যাড করতে পারবে:</p>
+          <div id="codes-container" class="space-y-2 font-mono">
+            <div class="p-2.5 bg-gray-50 border rounded-xl flex justify-between items-center">
+              <span>GIFT-100BDT-928A</span>
+              <span class="text-emerald-600 font-bold">৳100 (Unclaimed)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= 14. LEARN / DOCS ================= -->
+      <section id="view-learn" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Learn</span> <span>/</span> <span class="text-gray-700 font-medium">Documentation</span>
+        </div>
+        <h1 class="text-xl font-bold text-gray-900">GG Builder Academy</h1>
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs leading-relaxed text-gray-600">
+          <p class="font-bold text-gray-900 text-sm">টেলিগ্রাম স্টোর ম্যানেজমেন্ট নির্দেশিকা:</p>
+          <p>১. <strong>Catalog:</strong> প্রোডাক্ট অ্যাড করুন এবং প্রতি লাইনে ডিজিটাল ডেলিভারি কি/কোড দিয়ে দিন।</p>
+          <p>২. <strong>Bot Connection:</strong> Settings পেজ থেকে BotFather টোকেন সেট করে বট অ্যাক্টিভ রাখুন।</p>
+          <p>৩. <strong>Payment Methods:</strong> বিকাশ ও নগদ নম্বর যোগ করুন যাতে ইউজার পেমেন্ট পাঠানোর ঠিকানা পায়।</p>
+        </div>
+      </section>
 
     </main>
   </div>
 
-  <!-- ৪. মোডাল ও স্ক্রিপ্ট -->
+  <!-- প্রোডাক্ট তৈরি করার পপআপ মোডাল -->
   <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl text-xs">
-      <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="font-bold text-sm">নতুন প্রোডাক্ট তৈরি করুন</h3>
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="font-bold text-sm text-gray-900">নতুন প্রোডাক্ট তৈরি করুন</h3>
         <button onclick="closeProductModal()"><i data-lucide="x" class="w-4 h-4 text-gray-400"></i></button>
       </div>
-      <input id="modalName" placeholder="Product Name" class="w-full border p-2.5 rounded-xl outline-none">
-      <input id="modalPrice" type="number" placeholder="Price (USDT / ৳)" class="w-full border p-2.5 rounded-xl outline-none">
-      <textarea id="modalStock" rows="3" placeholder="Stock keys (প্রতি লাইনে ১টি)" class="w-full border p-2.5 rounded-xl font-mono outline-none"></textarea>
-      <button onclick="saveProductLocally()" class="w-full py-2.5 rounded-xl bg-[#7c3aed] text-white font-semibold">Save Product</button>
+      <div>
+        <label class="block font-medium mb-1">Product Name</label>
+        <input id="m-name" placeholder="যেমন: Telegram Premium বা Netflix" class="w-full border rounded-xl p-2.5 outline-none focus:border-purple-600">
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <label class="block font-medium mb-1">Price</label>
+          <input id="m-price" placeholder="0.30 USDT বা 350 ৳" class="w-full border rounded-xl p-2.5 outline-none focus:border-purple-600">
+        </div>
+        <div>
+          <label class="block font-medium mb-1">Category</label>
+          <input id="m-cat" placeholder="VPN / Subscription" class="w-full border rounded-xl p-2.5 outline-none focus:border-purple-600">
+        </div>
+      </div>
+      <div>
+        <label class="block font-medium mb-1">Digital Items (প্রতি লাইনে ১টি অ্যাকাউন্ট বা কী)</label>
+        <textarea id="m-stock" rows="3" placeholder={"user1@mail.com:pass\nKEY-789-VIP"} class="w-full border rounded-xl p-2.5 font-mono outline-none focus:border-purple-600"></textarea>
+      </div>
+      <button onclick="saveNewProduct()" class="w-full py-2.5 rounded-xl bg-[#7c3aed] text-white font-semibold hover:bg-purple-700">Save Product</button>
     </div>
   </div>
 
+  <!-- ৫. ইন্টার‍্যাকশন লজিক -->
   <script>
     lucide.createIcons();
 
+    // মোবাইল সাইডবার টগল
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('sidebarOverlay').classList.toggle('hidden');
     }
 
-    function navigate(view) {
-      const views = ['home', 'settings', 'customers', 'catalog', 'inventory', 'orders', 'analytics', 'payments'];
+    // অল মেনু নেভিগেশন কন্ট্রোলার (১৩টি মেনুর জন্য)
+    function navigate(viewName) {
+      const views = [
+        'home', 'customers', 'catalog', 'inventory', 'orders', 'analytics',
+        'settings', 'languages', 'botbuttons', 'broadcast', 'payments', 
+        'transactions', 'depositcodes', 'learn'
+      ];
+
+      // সব সেকশন হাইড করা
       views.forEach(v => {
-        const el = document.getElementById(`section-${v}`);
-        if(el) el.classList.add('hidden');
-        const nav = document.getElementById(`nav-${v}`);
-        if(nav) {
-          nav.classList.remove('bg-purple-50', 'text-[#7c3aed]', 'font-semibold');
-          nav.classList.add('text-gray-700');
-        }
+        const sec = document.getElementById(`view-${v}`);
+        const btn = document.getElementById(`btn-${v}`);
+        if(sec) sec.classList.add('hidden');
+        if(btn) btn.classList.remove('nav-active');
       });
 
-      const activeEl = document.getElementById(`section-${view}`);
-      if(activeEl) activeEl.classList.remove('hidden');
+      // টার্গেট সেকশন শো করা
+      const targetSec = document.getElementById(`view-${viewName}`);
+      const targetBtn = document.getElementById(`btn-${viewName}`);
+      if(targetSec) targetSec.classList.remove('hidden');
+      if(targetBtn) targetBtn.classList.add('nav-active');
 
-      const activeNav = document.getElementById(`nav-${view}`);
-      if(activeNav) {
-        activeNav.classList.add('bg-purple-50', 'text-[#7c3aed]', 'font-semibold');
-        activeNav.classList.remove('text-gray-700');
-      }
-
+      // মোবাইলে ক্লিক করলে সাইডবার হাইড হবে
       if(window.innerWidth < 768) {
         const sb = document.getElementById('sidebar');
         if(!sb.classList.contains('-translate-x-full')) toggleSidebar();
       }
     }
 
+    // মোডাল হ্যান্ডলার
     function openProductModal() { document.getElementById('productModal').classList.remove('hidden'); }
     function closeProductModal() { document.getElementById('productModal').classList.add('hidden'); }
 
-    function saveProductLocally() {
-      const name = document.getElementById('modalName').value;
-      const price = document.getElementById('modalPrice').value;
-      if(!name || !price) return alert('Name and Price required');
-      document.getElementById('catalog-products-table').innerHTML += `
+    // প্রোডাক্ট যোগ করা
+    let productCount = 1;
+    function saveNewProduct() {
+      const name = document.getElementById('m-name').value;
+      const price = document.getElementById('m-price').value;
+      const cat = document.getElementById('m-cat').value || 'Digital';
+
+      if(!name || !price) return alert('দয়া করে নাম ও দাম লিখুন');
+
+      const tbody = document.getElementById('catalog-table-body');
+      tbody.innerHTML += `
         <tr>
-          <td class="py-3 font-semibold text-gray-900">${name}</td>
-          <td class="py-3 text-gray-600">Digital</td>
-          <td class="py-3 font-semibold">${price} USDT</td>
-          <td class="py-3 text-gray-500">None</td>
+          <td class="py-3 flex items-center gap-2">
+            <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold">${name.charAt(0)}</div>
+            <div>
+              <p class="font-semibold text-gray-900">${name}</p>
+              <p class="text-[10px] text-gray-400">${name.toLowerCase().replace(/\s+/g, '')}</p>
+            </div>
+          </td>
+          <td class="py-3 text-gray-600">${cat}</td>
+          <td class="py-3 font-semibold">${price}</td>
+          <td class="py-3"><span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-md font-bold text-[10px]">Instant</span></td>
+          <td class="py-3 text-right">
+            <button onclick="deleteProductRow(this)" class="text-red-500 hover:text-red-700 font-medium">Delete</button>
+          </td>
         </tr>
       `;
+      productCount++;
+      document.getElementById('dash-prod-count').innerText = productCount;
       closeProductModal();
-      alert('Product Added!');
+      alert('প্রোডাক্ট সফলভাবে যুক্ত হয়েছে!');
+    }
+
+    function deleteProductRow(btn) {
+      btn.closest('tr').remove();
+      productCount = Math.max(0, productCount - 1);
+      document.getElementById('dash-prod-count').innerText = productCount;
+    }
+
+    // অর্ডার অ্যাপ্রুভ অ্যাকশন
+    function approveOrderAction() {
+      document.getElementById('ord-status').innerText = 'Delivered';
+      document.getElementById('ord-status').className = 'px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded font-bold text-[10px]';
+      const btn = document.getElementById('ord-btn');
+      btn.innerText = 'Completed';
+      btn.className = 'bg-gray-100 text-gray-500 px-2.5 py-1 rounded-lg text-xs font-semibold cursor-not-allowed';
+      btn.onclick = null;
+      alert('অর্ডার সফলভাবে অ্যাপ্রুভ হয়েছে এবং ইউজারের কাছে কোড পৌঁছে গেছে!');
+    }
+
+    // ব্রডকাস্ট পাঠানো
+    function sendBroadcastAction() {
+      const msg = document.getElementById('bc-msg').value;
+      if(!msg) return alert('অনুগ্রহ করে মেসেজ লিখুন');
+      alert(`সমস্ত বট ইউজারদের কাছে সফলভাবে পাঠানো হয়েছে:\n"${msg}"`);
+      document.getElementById('bc-msg').value = '';
+    }
+
+    // ডিপোজিট কোড জেনারেটর
+    function generateDepositCode() {
+      const code = 'GIFT-' + Math.random().toString(36).substring(2, 7).toUpperCase();
+      document.getElementById('codes-container').innerHTML += `
+        <div class="p-2.5 bg-gray-50 border rounded-xl flex justify-between items-center">
+          <span>${code}</span>
+          <span class="text-emerald-600 font-bold">৳50 (Active)</span>
+        </div>
+      `;
+      alert('নতুন রিডিম কোড জেনারেট হয়েছে: ' + code);
+    }
+
+    // সাধারণ ফর্ম নোটিফিকেশন
+    function saveFormNotification(title) {
+      alert(`${title} সফলভাবে আপডেট ও সংরক্ষিত হয়েছে!`);
     }
   </script>
 </body>
