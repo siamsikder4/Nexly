@@ -18,7 +18,6 @@
 </head>
 <body class="text-[#1c1b22] flex min-h-screen">
 
-  <!-- মোবাইল সাইডবার ড্রয়ার ওভারলে -->
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
 
   <!-- ১. ফুল সাইডবার মেনু -->
@@ -52,9 +51,9 @@
           <button onclick="navigate('orders')" id="btn-orders" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="clipboard-list" class="w-4 h-4 text-gray-500"></i> Orders
           </button>
-          <button onclick="navigate('analytics')" id="btn-analytics" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+          <a href="analytics.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="trending-up" class="w-4 h-4 text-gray-500"></i> Analytics
-          </button>
+          </a>
         </div>
       </div>
 
@@ -95,7 +94,7 @@
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Learn</p>
         <div class="space-y-0.5">
           <button onclick="navigate('learn')" id="btn-learn" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
-            <i data-lucide="graduation-cap" class="w-4 h-4 text-gray-500"></i> Docs & Academy
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-gray-500"></i> Store guide
           </button>
         </div>
       </div>
@@ -155,7 +154,7 @@
             </div>
             <div class="bg-white border-l-4 border-l-teal-500 border border-gray-200/70 rounded-2xl p-3.5 shadow-2xs">
               <span class="text-[10px] font-bold text-teal-700 uppercase block">Deposits to review</span>
-              <p class="text-2xl font-bold text-gray-900 mt-1">0</p>
+              <p class="text-2xl font-bold text-gray-900 mt-1" id="dash-deposits-review">0</p>
             </div>
             <div class="bg-white border-l-4 border-l-gray-900 border border-gray-200/70 rounded-2xl p-3.5 shadow-2xs">
               <span class="text-[10px] font-bold text-gray-700 uppercase block">Live Products</span>
@@ -173,15 +172,35 @@
           </div>
           <a href="settings.html" class="block text-xs font-semibold text-purple-600 mt-3">Open bot settings &gt;</a>
         </div>
+
+        <div>
+          <p class="text-xs font-bold text-gray-700 mb-2">Quick actions</p>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="navigate('catalog')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
+              <i data-lucide="plus" class="w-3.5 h-3.5 text-purple-600"></i> New product
+            </button>
+            <button onclick="navigate('inventory')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
+              <i data-lucide="package" class="w-3.5 h-3.5 text-purple-600"></i> Inventory
+            </button>
+            <button onclick="navigate('orders')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
+              <i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-purple-600"></i> Orders
+            </button>
+            <a href="bot-buttons.html" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600 text-gray-700">
+              <i data-lucide="menu-square" class="w-3.5 h-3.5 text-purple-600"></i> Bot buttons
+            </a>
+            <a href="payment-methods.html" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600 text-gray-700">
+              <i data-lucide="wallet" class="w-3.5 h-3.5 text-purple-600"></i> Payment methods
+            </a>
+          </div>
+        </div>
       </section>
 
-      <!-- ================= VIEW: CUSTOMERS (স্ক্রিনশট ৩৬ হুবহু) ================= -->
+      <!-- ================= VIEW: CUSTOMERS ================= -->
       <section id="view-customers" class="hidden space-y-5">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Customers</span>
         </div>
 
-        <!-- Customer pulse (স্ক্রিনশট ৩৬) -->
         <div>
           <h2 class="text-xs font-bold text-gray-800 mb-2">Customer pulse</h2>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -221,13 +240,10 @@
         </div>
 
         <div class="flex items-center justify-between">
-          <div>
-            <h1 class="text-lg font-bold text-gray-900">Customers <span class="text-xs font-semibold px-2 py-0.5 bg-sky-50 text-sky-700 rounded-full" id="customers-badge">0 customers</span></h1>
-            <p class="text-xs text-gray-500">Store-scoped ops desk for identity, balances, spend, and activity.</p>
-          </div>
+          <h1 class="text-lg font-bold text-gray-900">Customers <span class="text-xs font-semibold px-2 py-0.5 bg-sky-50 text-sky-700 rounded-full" id="customers-badge">0 customers</span></h1>
         </div>
 
-        <!-- ফিল্টার কার্ড (স্ক্রিনশট ৩৬) -->
+        <!-- ফিল্টার কার্ড -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs space-y-3 text-xs">
           <div>
             <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SEARCH</label>
@@ -252,16 +268,14 @@
           </div>
         </div>
 
-        <!-- কাস্টমার লিস্ট কার্ড কনটেইনার (স্ক্রিনশট ৩৬) -->
+        <!-- কাস্টমার লিস্ট কার্ড কনটেইনার -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs space-y-3">
           <div class="flex justify-between items-center text-xs text-gray-400 font-semibold border-b pb-2">
             <span>Customer</span>
             <span id="results-count">0 results</span>
           </div>
           
-          <div id="customers-list-container" class="space-y-3">
-            <!-- কাস্টমার কার্ড রেন্ডার হবে -->
-          </div>
+          <div id="customers-list-container" class="space-y-3"></div>
 
           <div class="flex justify-between items-center text-xs text-gray-400 pt-2 border-t">
             <span>Page 1 of 1</span>
@@ -273,7 +287,7 @@
         </div>
       </section>
 
-      <!-- ================= VIEW: CUSTOMER DETAILS (স্ক্রিনশট ৩৯ হুবহু) ================= -->
+      <!-- ================= VIEW: CUSTOMER DETAILS ================= -->
       <section id="view-customer-details" class="hidden space-y-5 text-xs">
         <div>
           <button onclick="navigate('customers')" class="text-xs text-purple-600 font-medium hover:underline flex items-center gap-1 mb-2">
@@ -285,21 +299,17 @@
           <div class="flex justify-between items-start">
             <div>
               <div class="flex items-center gap-2">
-                <h1 class="text-lg font-bold text-gray-900" id="det-name">Siam Hossain</h1>
+                <h1 class="text-lg font-bold text-gray-900" id="det-name">Customer</h1>
                 <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-600 rounded-full" id="det-status-badge">Active</span>
               </div>
-              <p class="text-gray-500 font-medium mt-0.5" id="det-username">@Zvshshhvc</p>
+              <p class="text-gray-500 font-medium mt-0.5" id="det-username">@unknown</p>
               <div class="flex items-center gap-1 text-gray-400 text-[11px] mt-1 font-mono">
-                <span id="det-id">8271633124</span>
+                <span id="det-id">0000000000</span>
                 <button onclick="copyDetailId()" class="hover:text-purple-600"><i data-lucide="copy" class="w-3 h-3"></i></button>
               </div>
-              <p class="text-[11px] text-gray-400 mt-2">
-                Joined: <span id="det-joined">Oct 5, 2026, 3:27 PM</span> • Last seen: <span id="det-lastseen">Oct 5, 2026, 8:00 PM</span>
-              </p>
             </div>
           </div>
 
-          <!-- অ্যাকশন বাটনসমূহ (স্ক্রিনশট ৩৯) -->
           <div class="flex flex-wrap gap-2 pt-2">
             <button onclick="openSendMessageModalCurrent()" class="flex items-center gap-1.5 px-3.5 py-2 border border-gray-200 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 transition">
               <i data-lucide="send" class="w-3.5 h-3.5 text-purple-600"></i> Send message
@@ -309,7 +319,6 @@
             </button>
           </div>
 
-          <!-- মেট্রিক কার্ড গ্রিড (স্ক্রিনশট ৩৯) -->
           <div class="grid grid-cols-2 gap-2.5 pt-2">
             <div class="bg-[#f0fdf4] border border-emerald-100 rounded-2xl p-3.5 text-center">
               <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">BALANCE</span>
@@ -327,23 +336,6 @@
               <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">DEPOSITS</span>
               <p class="text-base font-bold text-emerald-600 mt-1">0.00 USDT</p>
             </div>
-            <div class="col-span-2 bg-[#faf5ff] border border-purple-100 rounded-2xl p-3.5 text-center">
-              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">REFUNDS</span>
-              <p class="text-base font-bold text-purple-600 mt-1">0.00 USDT</p>
-            </div>
-          </div>
-
-          <!-- সাব-ট্যাব (Transactions, Orders) -->
-          <div class="pt-4 border-t border-gray-100 space-y-3">
-            <div class="border-b flex gap-6 text-xs font-medium">
-              <button class="pb-2 subtab-active">Transactions</button>
-              <button class="pb-2 text-gray-400">Orders</button>
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">SEARCH</label>
-              <input type="text" placeholder="Reference, product, or order" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600 text-xs">
-            </div>
-            <div class="text-center py-6 text-gray-400 italic">No transactions found for this customer.</div>
           </div>
         </div>
       </section>
@@ -408,29 +400,6 @@
         </div>
       </section>
 
-      <!-- ================= VIEW: ANALYTICS ================= -->
-      <section id="view-analytics" class="hidden space-y-6">
-        <h1 class="text-xl font-bold text-gray-900">Analytics</h1>
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="bg-white border-l-4 border-l-emerald-500 border border-gray-200/70 rounded-2xl p-3 shadow-2xs">
-            <span class="text-[10px] font-bold text-emerald-700 uppercase block">Sales</span>
-            <p class="text-lg font-bold text-gray-900 mt-1">0.00 USDT</p>
-          </div>
-          <div class="bg-white border-l-4 border-l-sky-500 border border-gray-200/70 rounded-2xl p-3 shadow-2xs">
-            <span class="text-[10px] font-bold text-sky-700 uppercase block">Deposits</span>
-            <p class="text-lg font-bold text-gray-900 mt-1">0.00 USDT</p>
-          </div>
-          <div class="bg-white border-l-4 border-l-purple-600 border border-gray-200/70 rounded-2xl p-3 shadow-2xs">
-            <span class="text-[10px] font-bold text-purple-700 uppercase block">Combined Inflow</span>
-            <p class="text-lg font-bold text-gray-900 mt-1">0.00 USDT</p>
-          </div>
-          <div class="bg-white border-l-4 border-l-teal-500 border border-gray-200/70 rounded-2xl p-3 shadow-2xs">
-            <span class="text-[10px] font-bold text-teal-700 uppercase block">Orders</span>
-            <p class="text-lg font-bold text-gray-900 mt-1" id="analytics-orders-count">0</p>
-          </div>
-        </div>
-      </section>
-
       <!-- ================= VIEW: LANGUAGES ================= -->
       <section id="view-languages" class="hidden space-y-6">
         <h1 class="text-xl font-bold text-gray-900">Store Languages</h1>
@@ -474,7 +443,7 @@
 
       <!-- ================= VIEW: LEARN ================= -->
       <section id="view-learn" class="hidden space-y-6">
-        <h1 class="text-xl font-bold text-gray-900">GG Builder Documentation</h1>
+        <h1 class="text-xl font-bold text-gray-900">Store Documentation</h1>
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-2 text-xs text-gray-600">
           <p>1. Catalog থেকে প্রোডাক্ট ও স্টক যোগ করুন।</p>
           <p>2. Telegram Bot ব্যবহারকারীরা সরাসরি Customers পেজে সিঙ্ক হবে।</p>
@@ -484,14 +453,14 @@
     </main>
   </div>
 
-  <!-- ================= MODAL 1: SEND MESSAGE (স্ক্রিনশট ৩৭ হুবহু) ================= -->
+  <!-- MODAL: SEND MESSAGE -->
   <div id="modalSendMessage" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl text-xs">
       <div class="flex justify-between items-start">
         <div>
           <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">CUSTOMER MESSAGE</span>
           <h3 class="text-base font-bold text-gray-900">Send message</h3>
-          <p class="text-xs text-gray-600 font-medium" id="modal-msg-cust-name">Siam Hossain</p>
+          <p class="text-xs text-gray-600 font-medium" id="modal-msg-cust-name">Customer</p>
         </div>
         <button onclick="closeModal('modalSendMessage')" class="p-1 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
@@ -501,7 +470,6 @@
         <div class="border border-gray-200 rounded-xl overflow-hidden focus-within:border-purple-600 transition">
           <div class="bg-gray-50 px-2.5 py-1.5 border-b flex gap-2 text-gray-500">
             <span class="cursor-pointer">😊</span>
-            <span class="cursor-pointer">👁</span>
           </div>
           <textarea id="modal-msg-input" oninput="updateMsgPreview()" rows="5" class="w-full p-2.5 outline-none text-xs" placeholder="Write message to customer..."></textarea>
         </div>
@@ -524,14 +492,14 @@
     </div>
   </div>
 
-  <!-- ================= MODAL 2: WALLET CORRECTION / ADJUST BALANCE (স্ক্রিনশট ৩৮ হুবহু) ================= -->
+  <!-- MODAL: ADJUST BALANCE -->
   <div id="modalAdjustBalance" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl text-xs">
       <div class="flex justify-between items-start">
         <div>
           <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">WALLET CORRECTION</span>
           <h3 class="text-base font-bold text-gray-900">Adjust balance</h3>
-          <p class="text-xs text-gray-600 font-medium" id="modal-adj-cust-name">Siam Hossain</p>
+          <p class="text-xs text-gray-600 font-medium" id="modal-adj-cust-name">Customer</p>
         </div>
         <button onclick="closeModal('modalAdjustBalance')" class="p-1 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-4 h-4"></i></button>
       </div>
@@ -554,7 +522,6 @@
       <div>
         <label class="block font-medium text-gray-700 mb-1">Reason</label>
         <textarea id="modal-adj-reason" rows="2" placeholder="Why this correction is needed" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600 text-xs"></textarea>
-        <span class="text-[10px] text-gray-400">0/500</span>
       </div>
 
       <div class="space-y-1">
@@ -571,7 +538,7 @@
     </div>
   </div>
 
-  <!-- MODAL 3: প্রোডাক্ট তৈরির মোডাল -->
+  <!-- MODAL: NEW PRODUCT -->
   <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl text-xs">
       <div class="flex justify-between items-center border-b pb-2">
@@ -641,7 +608,7 @@
 
     window.navigate = function(viewName) {
       const views = [
-        'home', 'customers', 'customer-details', 'catalog', 'inventory', 'orders', 'analytics',
+        'home', 'customers', 'customer-details', 'catalog', 'inventory', 'orders',
         'languages', 'transactions', 'depositcodes', 'learn'
       ];
       views.forEach(v => {
@@ -665,15 +632,10 @@
     window.openProductModal = () => document.getElementById('productModal').classList.remove('hidden');
     window.closeProductModal = () => document.getElementById('productModal').classList.add('hidden');
 
-    // ১. রিয়েল-টাইম কাস্টমার লোড ও সিঙ্ক (স্ক্রিনশট ৩৬)
+    // ১. কাস্টমার লাইভ সিঙ্ক
     onSnapshot(collection(db, "customers"), (snapshot) => {
       window.allCustomersCache = [];
-      let totalCust = 0;
-      let activeCount = 0;
-      let bannedCount = 0;
-      let totalBal = 0;
-      let totalSpend = 0;
-      let totalPurchases = 0;
+      let totalCust = 0, activeCount = 0, bannedCount = 0, totalBal = 0, totalSpend = 0, totalPurchases = 0;
 
       snapshot.forEach(d => {
         totalCust++;
@@ -692,7 +654,6 @@
         else activeCount++;
       });
 
-      // Customer pulse মেট্রিক্স আপডেট (স্ক্রিনশট ৩৬)
       document.getElementById('cp-customers').innerText = totalCust;
       document.getElementById('cp-active').innerText = activeCount;
       document.getElementById('cp-banned').innerText = bannedCount;
@@ -701,7 +662,6 @@
       document.getElementById('cp-total-spend').innerText = totalSpend.toFixed(2);
       document.getElementById('cp-purchases').innerText = totalPurchases;
 
-      // হোম ড্যাশবোর্ড আপডেট
       document.getElementById('dash-cust-count').innerText = totalCust;
       document.getElementById('dash-active-count').innerText = activeCount;
       document.getElementById('dash-total-balance').innerText = totalBal.toFixed(2);
@@ -713,7 +673,6 @@
       lucide.createIcons();
     });
 
-    // কাস্টমার ফিল্টারিং ও রেন্ডারিং (স্ক্রিনশট ৩৬ হুবহু)
     window.filterCustomerList = function() {
       const query = document.getElementById('cust-search-input').value.toLowerCase().trim();
       const activity = document.getElementById('cust-filter-activity').value;
@@ -725,15 +684,12 @@
         const name = (c.name || '').toLowerCase();
         const username = (c.username || '').toLowerCase();
         const id = (c.telegramId || c.id || '').toLowerCase();
-
         const matchQuery = name.includes(query) || username.includes(query) || id.includes(query);
         const matchActivity = (activity === 'all') || (activity === 'banned' && c.status === 'banned') || (activity === 'active' && c.status !== 'banned');
         return matchQuery && matchActivity;
       });
 
-      if (sort === 'balance') {
-        filtered.sort((a, b) => (b.balance || 0) - (a.balance || 0));
-      }
+      if (sort === 'balance') filtered.sort((a, b) => (b.balance || 0) - (a.balance || 0));
 
       document.getElementById('results-count').innerText = `${filtered.length} results`;
 
@@ -744,7 +700,7 @@
 
       filtered.forEach(c => {
         const isBanned = (c.status === 'banned');
-        const cardHtml = `
+        container.innerHTML += `
           <div class="border border-gray-200 rounded-2xl p-4 hover:border-purple-300 transition shadow-2xs">
             <div class="flex justify-between items-start mb-2">
               <div>
@@ -752,57 +708,38 @@
                 <p class="text-xs text-gray-500 font-medium">@${c.username || 'unknown'}</p>
                 <p class="text-[11px] text-gray-400 font-mono mt-0.5">${c.telegramId || c.id}</p>
               </div>
-
-              <!-- অ্যাকশন বাটনস (স্ক্রিনশট ৩৬ হুবহু) -->
               <div class="flex items-center gap-1">
-                <button onclick="navigator.clipboard.writeText('${c.telegramId || c.id}'); alert('Copied ID!');" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="Copy ID">
-                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
-                </button>
-                <button onclick="viewCustomerDetails('${c.id}')" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="View details">
-                  <i data-lucide="eye" class="w-3.5 h-3.5"></i>
-                </button>
-                <button onclick="openAdjustBalanceModal('${c.id}')" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="Adjust balance">
-                  <i data-lucide="wallet" class="w-3.5 h-3.5"></i>
-                </button>
-                <button onclick="openSendMessageModal('${c.id}')" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="Send message">
-                  <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                </button>
-                <button onclick="toggleBanCustomer('${c.id}', ${isBanned})" class="p-1.5 ${isBanned ? 'text-red-600 bg-red-50' : 'text-gray-400 hover:text-red-600'} rounded-lg hover:bg-red-50" title="Toggle Ban">
-                  <i data-lucide="ban" class="w-3.5 h-3.5"></i>
-                </button>
+                <button onclick="navigator.clipboard.writeText('${c.telegramId || c.id}'); alert('Copied ID!');" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="Copy ID"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+                <button onclick="viewCustomerDetails('${c.id}')" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="View details"><i data-lucide="eye" class="w-3.5 h-3.5"></i></button>
+                <button onclick="openAdjustBalanceModal('${c.id}')" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="Adjust balance"><i data-lucide="wallet" class="w-3.5 h-3.5"></i></button>
+                <button onclick="openSendMessageModal('${c.id}')" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="Send message"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
+                <button onclick="toggleBanCustomer('${c.id}', ${isBanned})" class="p-1.5 ${isBanned ? 'text-red-600 bg-red-50' : 'text-gray-400 hover:text-red-600'} rounded-lg hover:bg-red-50" title="Toggle Ban"><i data-lucide="ban" class="w-3.5 h-3.5"></i></button>
               </div>
             </div>
-
             <div class="text-[11px] text-gray-600 flex flex-wrap gap-4 pt-2.5 border-t border-gray-100 mt-2">
               <span class="text-emerald-600 font-semibold">Balance: ${parseFloat(c.balance || 0).toFixed(2)} USDT</span>
               <span class="text-amber-600 font-semibold">Spend: ${parseFloat(c.totalSpend || 0).toFixed(2)} USDT</span>
               <span>Purchases: ${c.purchases || 0}</span>
-              <span class="text-gray-400">Joined: Oct 5, 2026</span>
               <span class="px-2 py-0.5 ${isBanned ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'} rounded-full font-bold text-[10px] ml-auto">${isBanned ? 'Banned' : 'Active'}</span>
             </div>
           </div>
         `;
-        container.innerHTML += cardHtml;
       });
       lucide.createIcons();
     };
 
-    // কাস্টমার ডিটেইলস ভিউ ওপেন করা (স্ক্রিনশট ৩৯)
     window.viewCustomerDetails = function(id) {
       const c = window.allCustomersCache.find(u => u.id === id);
       if (!c) return;
       window.selectedCustomer = c;
-
       document.getElementById('det-name').innerText = c.name || 'Telegram User';
       document.getElementById('det-username').innerText = `@${c.username || 'unknown'}`;
       document.getElementById('det-id').innerText = c.telegramId || c.id;
       document.getElementById('det-status-badge').innerText = (c.status === 'banned') ? 'Banned' : 'Active';
       document.getElementById('det-status-badge').className = (c.status === 'banned') ? 'px-2 py-0.5 text-[10px] font-bold bg-red-50 text-red-600 rounded-full' : 'px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-600 rounded-full';
-      
       document.getElementById('det-card-balance').innerText = parseFloat(c.balance || 0).toFixed(2);
       document.getElementById('det-card-spend').innerText = parseFloat(c.totalSpend || 0).toFixed(2);
       document.getElementById('det-card-purchases').innerText = c.purchases || 0;
-
       window.navigate('customer-details');
     };
 
@@ -813,7 +750,6 @@
       }
     };
 
-    // Send Message Modal কন্ট্রোল (স্ক্রিনশট ৩৭)
     window.openSendMessageModal = function(id) {
       const c = window.allCustomersCache.find(u => u.id === id);
       if(!c) return;
@@ -821,7 +757,6 @@
       document.getElementById('modal-msg-cust-name').innerText = c.name || 'Telegram User';
       document.getElementById('modal-msg-input').value = '';
       document.getElementById('modal-msg-preview').innerText = 'Message body will appear here';
-      document.getElementById('modal-msg-chars').innerText = '0/3500';
       document.getElementById('modalSendMessage').classList.remove('hidden');
     };
     window.openSendMessageModalCurrent = () => {
@@ -844,14 +779,11 @@
           sentAt: serverTimestamp(),
           status: 'pending'
         });
-        alert(`মেসেজ সফলভাবে ${window.selectedCustomer.name}-এর টেলিগ্রামে পাঠানো হয়েছে!`);
+        alert(`মেসেজ সফলভাবে পাঠানো হয়েছে!`);
         window.closeModal('modalSendMessage');
-      } catch(err) {
-        alert(err.message);
-      }
+      } catch(err) { alert(err.message); }
     };
 
-    // Adjust Balance Modal কন্ট্রোল (স্ক্রিনশট ৩৮)
     window.openAdjustBalanceModal = function(id) {
       const c = window.allCustomersCache.find(u => u.id === id);
       if(!c) return;
@@ -890,43 +822,29 @@
       const cur = parseFloat(window.selectedCustomer.balance || 0);
       const amt = parseFloat(document.getElementById('modal-adj-amount').value) || 0;
       let newBal = (window.currentAdjustDirection === 'Credit') ? (cur + amt) : Math.max(0, cur - amt);
-
       document.getElementById('modal-adj-preview').innerText = `${cur.toFixed(2)} USDT ➔ ${newBal.toFixed(2)} USDT`;
     };
 
     window.submitBalanceAdjustment = async function() {
       const amt = parseFloat(document.getElementById('modal-adj-amount').value);
-      const reason = document.getElementById('modal-adj-reason').value.trim();
       if(isNaN(amt) || amt <= 0) return alert('সঠিক অ্যামাউন্ট দিন!');
-
       try {
         const cur = parseFloat(window.selectedCustomer.balance || 0);
         let newBal = (window.currentAdjustDirection === 'Credit') ? (cur + amt) : Math.max(0, cur - amt);
-
-        await updateDoc(doc(db, "customers", window.selectedCustomer.id), {
-          balance: newBal
-        });
-
-        alert(`ব্যালেন্স সফলভাবে আপডেট হয়েছে! নতুন ব্যালেন্স: ${newBal.toFixed(2)} USDT`);
+        await updateDoc(doc(db, "customers", window.selectedCustomer.id), { balance: newBal });
+        alert(`ব্যালেন্স আপডেট হয়েছে! নতুন ব্যালেন্স: ${newBal.toFixed(2)} USDT`);
         window.closeModal('modalAdjustBalance');
-      } catch(err) {
-        alert(err.message);
-      }
+      } catch(err) { alert(err.message); }
     };
 
     window.toggleBanCustomer = async function(id, isBanned) {
-      const action = isBanned ? 'Unban' : 'Ban';
-      if(!confirm(`Are you sure you want to ${action} this customer?`)) return;
+      if(!confirm(`Are you sure?`)) return;
       try {
-        await updateDoc(doc(db, "customers", id), {
-          status: isBanned ? 'active' : 'banned'
-        });
-      } catch(err) {
-        alert(err.message);
-      }
+        await updateDoc(doc(db, "customers", id), { status: isBanned ? 'active' : 'banned' });
+      } catch(err) { alert(err.message); }
     };
 
-    // ২. প্রোডাক্ট ক্যাটালগ
+    // ২. প্রোডাক্ট ও ইনভেন্টরি
     window.saveNewProduct = async function() {
       const name = document.getElementById('m-name').value.trim();
       const price = parseFloat(document.getElementById('m-price').value);
@@ -972,10 +890,7 @@
           <tr>
             <td class="py-3 flex items-center gap-2">
               <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold">${p.name.charAt(0)}</div>
-              <div>
-                <p class="font-semibold text-gray-900">${p.name}</p>
-                <p class="text-[10px] text-gray-400">${id.substring(0, 8)}</p>
-              </div>
+              <div><p class="font-semibold text-gray-900">${p.name}</p></div>
             </td>
             <td class="py-3 text-gray-600">${p.category}</td>
             <td class="py-3 font-semibold">${p.price} USDT</td>
@@ -1035,7 +950,6 @@
         `;
       });
       document.getElementById('dash-attention-count').innerText = pendingCount;
-      document.getElementById('analytics-orders-count').innerText = snapshot.size;
     });
 
     window.approveOrder = async (id) => {
