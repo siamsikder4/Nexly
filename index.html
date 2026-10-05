@@ -3,119 +3,360 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bot Store Admin</title>
+  <title>GG Builder - Merchant Store</title>
+  <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <script type="module">
-    // Firebase CDN
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    // আপনার Firebase Config এখানে বসান
-    const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // প্রোডাক্ট যোগ করার ফাংশন
-    window.addProduct = async function() {
-      const name = document.getElementById('pName').value;
-      const price = Number(document.getElementById('pPrice').value);
-      const stock = document.getElementById('pStock').value.split('\n').filter(Boolean);
-
-      if(!name || !price) return alert("নাম ও দাম দিন!");
-
-      try {
-        await addDoc(collection(db, "products"), {
-          name,
-          price,
-          stock, // ডিজিটাল কোড/অ্যাকাউন্টের অ্যারে
-          createdAt: new Date()
-        });
-        alert("প্রোডাক্ট এবং ডিজিটাল স্টক সেভ হয়েছে!");
-        location.reload();
-      } catch(e) {
-        alert("ত্রুটি: " + e.message);
-      }
-    };
-
-    // অর্ডার লোড করার ফাংশন
-    async function loadOrders() {
-      const ordersList = document.getElementById('ordersList');
-      const snap = await getDocs(collection(db, "orders"));
-      ordersList.innerHTML = "";
-      snap.forEach(docSnap => {
-        const o = docSnap.data();
-        ordersList.innerHTML += `
-          <tr class="border-b">
-            <td class="p-3">${o.telegramUserId}</td>
-            <td class="p-3">${o.productName}</td>
-            <td class="p-3">${o.trxId}</td>
-            <td class="p-3 font-bold ${o.status === 'completed' ? 'text-green-600' : 'text-amber-500'}">${o.status}</td>
-            <td class="p-3">
-              ${o.status === 'pending' ? `<button onclick="approveOrder('${docSnap.id}', '${o.productId}', '${o.telegramUserId}')" class="bg-purple-600 text-white px-3 py-1 rounded text-xs">Approve & Deliver</button>` : 'ডেলিভার্ড'}
-            </td>
-          </tr>
-        `;
-      });
-    }
-    window.loadOrders = loadOrders;
-    loadOrders();
-  </script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Font Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+  </style>
 </head>
-<body class="bg-gray-100 flex min-h-screen font-sans">
+<body class="bg-[#faf9fd] text-[#1c1b22] flex min-h-screen">
 
-  <!-- সাইডবার -->
-  <aside class="w-64 bg-[#f8f7fc] border-r p-4 hidden md:block">
-    <div class="flex items-center gap-3 mb-6">
-      <div class="w-9 h-9 bg-purple-600 text-white rounded-lg flex items-center justify-center font-bold">TG</div>
-      <span class="font-bold text-gray-800">GG Builder Store</span>
-    </div>
-    <nav class="space-y-2 text-sm font-medium text-gray-600">
-      <a href="#" class="block p-2 bg-purple-600 text-white rounded-lg">📦 Catalog & Stock</a>
-      <a href="#orders" class="block p-2 hover:bg-gray-200 rounded-lg">📋 Orders</a>
-      <a href="#payments" class="block p-2 hover:bg-gray-200 rounded-lg">💳 Payment methods</a>
-    </nav>
-  </aside>
+  <!-- সাইডবার ওভারলে (মোবাইলের জন্য) -->
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-20 hidden md:hidden"></div>
 
-  <!-- কনটেন্ট -->
-  <main class="flex-1 p-6 space-y-6">
-    <!-- প্রোডাক্ট ও স্টক ফর্ম -->
-    <div class="bg-white p-5 rounded-xl shadow-sm border max-w-xl">
-      <h2 class="text-lg font-bold mb-4">ডিজিটাল প্রোডাক্ট ও স্টক যোগ করুন</h2>
-      <div class="space-y-3">
-        <input id="pName" placeholder="প্রোডাক্ট নাম (যেমন: Netflix 1 Month)" class="w-full border p-2 rounded text-sm outline-none">
-        <input id="pPrice" type="number" placeholder="দাম (৳)" class="w-full border p-2 rounded text-sm outline-none">
-        <textarea id="pStock" rows="4" placeholder="ডিজিটাল কোড বা অ্যাকাউন্ট (প্রতি লাইনে একটি)" class="w-full border p-2 rounded text-sm font-mono outline-none"></textarea>
-        <button onclick="addProduct()" class="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded text-sm font-semibold">প্রোডাক্ট অ্যাড করুন</button>
+  <!-- ১. সাইডবার (স্ক্রিনশট ১ এর হুবহু মেনু) -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-30 w-72 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:w-64">
+    <!-- লোগো -->
+    <div class="flex items-center gap-3 px-2 py-2 mb-4">
+      <div class="w-10 h-10 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center shadow-md">
+        <i data-lucide="box" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h2 class="font-bold text-gray-900 text-sm">GG Builder</h2>
+        <p class="text-[11px] text-gray-500 font-medium">Merchant store</p>
       </div>
     </div>
 
-    <!-- অর্ডার টেবিল -->
-    <div id="orders" class="bg-white p-5 rounded-xl shadow-sm border">
-      <h2 class="text-lg font-bold mb-4">অর্ডার সমূহ (TrxID ভেরিফিকেশন)</h2>
-      <table class="w-full text-left text-sm">
-        <thead class="bg-gray-50 border-b">
-          <tr>
-            <th class="p-3">User ID</th>
-            <th class="p-3">Product</th>
-            <th class="p-3">TrxID</th>
-            <th class="p-3">Status</th>
-            <th class="p-3">Action</th>
-          </tr>
-        </thead>
-        <tbody id="ordersList">
-          <!-- লোড হবে -->
-        </tbody>
-      </table>
-    </div>
-  </main>
+    <!-- মেনু সেকশন -->
+    <div class="flex-1 overflow-y-auto space-y-5 text-sm font-medium">
+      <!-- OVERVIEW -->
+      <div>
+        <p class="text-[11px] font-bold text-gray-400 tracking-wider px-3 mb-1.5 uppercase">Overview</p>
+        <div class="space-y-0.5">
+          <a href="#" onclick="showSection('home')" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="layout-grid" class="w-4 h-4 text-gray-500"></i> Home
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="users" class="w-4 h-4 text-gray-500"></i> Customers
+          </a>
+          <a href="#" onclick="showSection('catalog')" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="menu" class="w-4 h-4 text-gray-500"></i> Catalog
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="package" class="w-4 h-4 text-gray-500"></i> Inventory
+          </a>
+          <a href="#" onclick="showSection('orders')" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-gray-500"></i> Orders
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="trending-up" class="w-4 h-4 text-gray-500"></i> Analytics
+          </a>
+        </div>
+      </div>
 
+      <!-- CHANNEL -->
+      <div>
+        <p class="text-[11px] font-bold text-gray-400 tracking-wider px-3 mb-1.5 uppercase">Channel</p>
+        <div class="space-y-0.5">
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="bot" class="w-4 h-4 text-gray-500"></i> Settings
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="flag" class="w-4 h-4 text-gray-500"></i> Languages
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="menu-square" class="w-4 h-4 text-gray-500"></i> Bot buttons
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="send" class="w-4 h-4 text-gray-500"></i> Broadcast
+          </a>
+        </div>
+      </div>
+
+      <!-- MONEY -->
+      <div>
+        <p class="text-[11px] font-bold text-gray-400 tracking-wider px-3 mb-1.5 uppercase">Money</p>
+        <div class="space-y-0.5">
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-white bg-[#7c3aed] rounded-xl font-semibold shadow-sm">
+            <i data-lucide="wallet" class="w-4 h-4 text-white"></i> Payment methods
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="arrow-left-right" class="w-4 h-4 text-gray-500"></i> Transactions
+          </a>
+          <a href="#" class="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-xl">
+            <i data-lucide="ticket" class="w-4 h-4 text-gray-500"></i> Deposit codes
+          </a>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ২. মূল কনটেন্ট এরিয়া -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- টপবার -->
+    <header class="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4 sm:px-6">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="p-1.5 text-gray-600 rounded-lg hover:bg-gray-100 md:hidden">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <span class="font-semibold text-gray-800 text-sm">Nexly</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-full"><i data-lucide="bell" class="w-4 h-4"></i></button>
+        <button class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-full"><i data-lucide="moon" class="w-4 h-4"></i></button>
+        <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 text-xs font-bold flex items-center justify-center">NE</div>
+      </div>
+    </header>
+
+    <!-- মেইন বডি -->
+    <main class="flex-1 p-4 sm:p-6 overflow-y-auto">
+      
+      <!-- হোম ভিউ (স্ক্রিনশট ২ এর ৯টি কার্ড) -->
+      <div id="homeSection">
+        <div class="mb-6">
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Build your store with confidence</h1>
+          <p class="text-xs sm:text-sm text-gray-500 mt-1">A practical path from connecting your bot to handling your first order. Pick the task in front of you and keep moving.</p>
+          
+          <!-- সার্চ বক্স -->
+          <div class="mt-4 max-w-md relative">
+            <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3 top-3"></i>
+            <input type="text" placeholder="Search payments, products, inventory..." class="w-full pl-9 pr-4 py-2 border border-gray-200 rounded-xl text-xs sm:text-sm outline-none focus:border-purple-600 bg-white">
+          </div>
+        </div>
+
+        <!-- ৯টি কার্ডের গ্রিড -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Card 1: Start here -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-start gap-3 bg-purple-50/70 p-3 rounded-xl mb-3">
+              <i data-lucide="sparkles" class="w-5 h-5 text-purple-600 mt-0.5"></i>
+              <div>
+                <h3 class="font-bold text-sm text-purple-950">Start here</h3>
+                <p class="text-xs text-purple-700">Ten minutes that save a week.</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-[11px] text-gray-400 font-medium mb-3">
+              <span>3 topics</span><span>0 completed</span>
+            </div>
+            <ul class="text-xs text-gray-600 space-y-2 mb-4">
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> What exactly is your store?</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Your first 15 minutes: the right order</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Terms you will encounter</li>
+            </ul>
+            <a href="#" class="text-xs font-semibold text-gray-800 hover:text-purple-600 flex items-center gap-1">Open section &gt;</a>
+          </div>
+
+          <!-- Card 2: Bot & settings -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-start gap-3 bg-blue-50/70 p-3 rounded-xl mb-3">
+              <i data-lucide="bot" class="w-5 h-5 text-blue-600 mt-0.5"></i>
+              <div>
+                <h3 class="font-bold text-sm text-blue-950">Bot & settings</h3>
+                <p class="text-xs text-blue-700">The channel your customer sees.</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-[11px] text-gray-400 font-medium mb-3">
+              <span>4 topics</span><span>0 completed</span>
+            </div>
+            <ul class="text-xs text-gray-600 space-y-2 mb-4">
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Connect your store bot</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Store identity</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Maintenance mode</li>
+            </ul>
+            <a href="#" class="text-xs font-semibold text-gray-800 hover:text-purple-600 flex items-center gap-1">Open section &gt;</a>
+          </div>
+
+          <!-- Card 3: Payment methods -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-start gap-3 bg-amber-50/70 p-3 rounded-xl mb-3">
+              <i data-lucide="wallet" class="w-5 h-5 text-amber-600 mt-0.5"></i>
+              <div>
+                <h3 class="font-bold text-sm text-amber-950">Payment methods</h3>
+                <p class="text-xs text-amber-700">How money actually reaches you.</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-[11px] text-gray-400 font-medium mb-3">
+              <span>6 topics</span><span>0 completed</span>
+            </div>
+            <ul class="text-xs text-gray-600 space-y-2 mb-4">
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> How payments work here</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Binance Pay / bKash / Nagad</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> On-chain USDT transfer</li>
+            </ul>
+            <a href="#" class="text-xs font-semibold text-gray-800 hover:text-purple-600 flex items-center gap-1">Open section &gt;</a>
+          </div>
+
+          <!-- Card 4: Catalog & categories -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-start gap-3 bg-indigo-50/70 p-3 rounded-xl mb-3">
+              <i data-lucide="layers" class="w-5 h-5 text-indigo-600 mt-0.5"></i>
+              <div>
+                <h3 class="font-bold text-sm text-indigo-950">Catalog & categories</h3>
+                <p class="text-xs text-indigo-700">How customers see what you sell.</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-[11px] text-gray-400 font-medium mb-3">
+              <span>4 topics</span><span>0 completed</span>
+            </div>
+            <ul class="text-xs text-gray-600 space-y-2 mb-4">
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> How the catalog is structured</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Create and order categories</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Shared product fields</li>
+            </ul>
+            <a href="#" onclick="showSection('catalog')" class="text-xs font-semibold text-gray-800 hover:text-purple-600 flex items-center gap-1">Open section &gt;</a>
+          </div>
+
+          <!-- Card 5: Products: instant & manual -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-start gap-3 bg-rose-50/70 p-3 rounded-xl mb-3">
+              <i data-lucide="box" class="w-5 h-5 text-rose-600 mt-0.5"></i>
+              <div>
+                <h3 class="font-bold text-sm text-rose-950">Products: instant & manual</h3>
+                <p class="text-xs text-rose-700">The most important choice in your store.</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-[11px] text-gray-400 font-medium mb-3">
+              <span>5 topics</span><span>0 completed</span>
+            </div>
+            <ul class="text-xs text-gray-600 space-y-2 mb-4">
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Instant vs manual – the core choice</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Create an instant product step by step</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Create a manual product step by step</li>
+            </ul>
+            <a href="#" onclick="showSection('catalog')" class="text-xs font-semibold text-gray-800 hover:text-purple-600 flex items-center gap-1">Open section &gt;</a>
+          </div>
+
+          <!-- Card 6: Inventory -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-start gap-3 bg-cyan-50/70 p-3 rounded-xl mb-3">
+              <i data-lucide="package-search" class="w-5 h-5 text-cyan-600 mt-0.5"></i>
+              <div>
+                <h3 class="font-bold text-sm text-cyan-950">Inventory</h3>
+                <p class="text-xs text-cyan-700">What you deliver, one row at a time.</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-[11px] text-gray-400 font-medium mb-3">
+              <span>3 topics</span><span>0 completed</span>
+            </div>
+            <ul class="text-xs text-gray-600 space-y-2 mb-4">
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> What is a unit?</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Add and import stock</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Stock health and alerts</li>
+            </ul>
+            <a href="#" class="text-xs font-semibold text-gray-800 hover:text-purple-600 flex items-center gap-1">Open section &gt;</a>
+          </div>
+
+          <!-- Card 7: Orders -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-start gap-3 bg-red-50/70 p-3 rounded-xl mb-3">
+              <i data-lucide="shopping-cart" class="w-5 h-5 text-red-600 mt-0.5"></i>
+              <div>
+                <h3 class="font-bold text-sm text-red-950">Orders</h3>
+                <p class="text-xs text-red-700">From Confirm to Done</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-[11px] text-gray-400 font-medium mb-3">
+              <span>6 topics</span><span>0 completed</span>
+            </div>
+            <ul class="text-xs text-gray-600 space-y-2 mb-4">
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Three independent truths</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Instant order lifecycle</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Manual order lifecycle</li>
+            </ul>
+            <a href="#" onclick="showSection('orders')" class="text-xs font-semibold text-gray-800 hover:text-purple-600 flex items-center gap-1">Open section &gt;</a>
+          </div>
+
+          <!-- Card 8: Customers & wallet -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm">
+            <div class="flex items-start gap-3 bg-purple-50/70 p-3 rounded-xl mb-3">
+              <i data-lucide="user-check" class="w-5 h-5 text-purple-600 mt-0.5"></i>
+              <div>
+                <h3 class="font-bold text-sm text-purple-950">Customers & wallet</h3>
+                <p class="text-xs text-purple-700">Who buys from you and how their money is kept.</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-[11px] text-gray-400 font-medium mb-3">
+              <span>3 topics</span><span>0 completed</span>
+            </div>
+            <ul class="text-xs text-gray-600 space-y-2 mb-4">
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Wallet and ledger rules</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Customer file</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Operational alerts</li>
+            </ul>
+            <a href="#" class="text-xs font-semibold text-gray-800 hover:text-purple-600 flex items-center gap-1">Open section &gt;</a>
+          </div>
+
+          <!-- Card 9: Launch & troubleshooting -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-sm md:col-span-2">
+            <div class="flex items-start gap-3 bg-amber-50/70 p-3 rounded-xl mb-3">
+              <i data-lucide="flag" class="w-5 h-5 text-amber-600 mt-0.5"></i>
+              <div>
+                <h3 class="font-bold text-sm text-amber-950">Launch & troubleshooting</h3>
+                <p class="text-xs text-amber-700">Before you announce your store.</p>
+              </div>
+            </div>
+            <div class="flex justify-between text-[11px] text-gray-400 font-medium mb-3">
+              <span>3 topics</span><span>0 completed</span>
+            </div>
+            <ul class="text-xs text-gray-600 space-y-2 mb-4">
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Launch checklist</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Quick troubleshooting map</li>
+              <li class="flex items-center gap-2"><i data-lucide="book-open" class="w-3.5 h-3.5 text-gray-400"></i> Messages you may see</li>
+            </ul>
+            <a href="#" class="text-xs font-semibold text-gray-800 hover:text-purple-600 flex items-center gap-1">Open section &gt;</a>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ক্যাটালগ ও স্টক ফর্ম সেকশন -->
+      <div id="catalogSection" class="hidden max-w-xl bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h2 class="text-lg font-bold mb-4">নতুন ডিজিটাল প্রোডাক্ট যোগ করুন</h2>
+        <div class="space-y-3 text-sm">
+          <input id="pName" placeholder="প্রোডাক্ট নাম (যেমন: Netflix বা Telegram Premium)" class="w-full border p-2.5 rounded-xl outline-none focus:border-purple-600">
+          <input id="pPrice" type="number" placeholder="দাম (৳ BDT)" class="w-full border p-2.5 rounded-xl outline-none focus:border-purple-600">
+          <textarea id="pStock" rows="4" placeholder="ডিজিটাল স্টক (প্রতি লাইনে ১টি কোড বা অ্যাকাউন্ট)" class="w-full border p-2.5 rounded-xl font-mono text-xs outline-none focus:border-purple-600"></textarea>
+          <button onclick="alert('Firebase কনফিগ যুক্ত করলে সেভ হবে')" class="w-full bg-purple-600 text-white font-medium py-2.5 rounded-xl hover:bg-purple-700 transition">প্রোডাক্ট সেভ করুন</button>
+        </div>
+      </div>
+
+      <!-- অর্ডার সেকশন -->
+      <div id="ordersSection" class="hidden bg-white p-6 rounded-2xl border border-gray-200 shadow-sm">
+        <h2 class="text-lg font-bold mb-4">অর্ডার সমূহ (TrxID ভেরিফিকেশন)</h2>
+        <p class="text-xs text-gray-500">টেলিগ্রাম বট থেকে অর্ডার আসলে এখানে দেখাবে।</p>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // Lucide Icons ইনিশিয়ালাইজেশন
+    lucide.createIcons();
+
+    // মোবাইল সাইডবার টগল
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+      sidebar.classList.toggle('-translate-x-full');
+      overlay.classList.toggle('hidden');
+    }
+
+    // পেজ ভিউ সুইচিং
+    function showSection(section) {
+      document.getElementById('homeSection').classList.add('hidden');
+      document.getElementById('catalogSection').classList.add('hidden');
+      document.getElementById('ordersSection').classList.add('hidden');
+
+      if (section === 'home') document.getElementById('homeSection').classList.remove('hidden');
+      if (section === 'catalog') document.getElementById('catalogSection').classList.remove('hidden');
+      if (section === 'orders') document.getElementById('ordersSection').classList.remove('hidden');
+    }
+  </script>
 </body>
 </html>
