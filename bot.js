@@ -61,18 +61,19 @@ async function startBot() {
     ];
   }
 
-  // /start কমান্ড — ইউজার ডাটা সরাসরি Firebase-এ সেভ হবে
+  // /start কমান্ড — কাস্টমার রেজিস্ট্রেশন ফিক্সড
   bot.command("start", async (ctx) => {
     try {
       const user = ctx.from;
       const userRef = doc(db, "customers", String(user.id));
       const userSnap = await getDoc(userRef);
 
-      // নতুন ইউজার হলে ডাটাবেসে সেভ
+      const fullName = [user.first_name, user.last_name].filter(Boolean).join(" ") || "Telegram User";
+
       if (!userSnap.exists()) {
         await setDoc(userRef, {
           telegramId: String(user.id),
-          name: `${user.first_name \vert{}\vert{} ""} ${user.last_name || ""}`.trim() || "Telegram User",
+          name: fullName,
           username: user.username || "N/A",
           balance: 0.00,
           totalSpend: 0.00,
@@ -144,7 +145,6 @@ async function startBot() {
       soldAt: new Date()
     });
 
-    // ইউজারের পারচেজ কাউন্ট আপডেট
     try {
       const userRef = doc(db, "customers", String(ctx.from.id));
       const uSnap = await getDoc(userRef);
@@ -172,7 +172,7 @@ async function startBot() {
   bot.action("show_ref", (ctx) => ctx.reply(`Referral Link:\nhttps://t.me/${ctx.botInfo.username}?start=${ctx.from.id}`));
 
   bot.launch();
-  console.log("Bot with Customer Registration Running!");
+  console.log("Bot Engine Successfully Started!");
 }
 
 startBot();
