@@ -1,6 +1,202 @@
-<!-- bot-buttons.html এর স্ক্রিপ্ট আপডেট করুন -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bot Buttons - Nexly Merchant</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #faf9fd; -webkit-tap-highlight-color: transparent; }
+    .tab-active { border-bottom: 2px solid #7c3aed; color: #7c3aed !important; font-weight: 600; }
+    .btn-green { background-color: #1e4635; color: #4ade80; border: 1px solid #166534; }
+    .btn-blue { background-color: #1e3a5f; color: #60a5fa; border: 1px solid #1e40af; }
+    .btn-red { background-color: #4c1d24; color: #f87171; border: 1px solid #991b1b; }
+    .btn-default { background-color: #27303f; color: #e2e8f0; border: 1px solid #334155; }
+  </style>
+</head>
+<body class="text-[#1c1b22] flex min-h-screen">
+
+  <!-- মোবাইল ড্রয়ার ওভারলে -->
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
+
+  <!-- ১. ফুল সাইডবার -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:w-64 shrink-0">
+    <div class="flex items-center gap-3 px-2 py-2 mb-4">
+      <div class="w-10 h-10 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center shadow-md">
+        <i data-lucide="box" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h2 class="font-bold text-gray-900 text-sm leading-tight">GG Builder</h2>
+        <p class="text-[11px] text-gray-500 font-medium">Merchant store</p>
+      </div>
+    </div>
+
+    <!-- সাইডবার লিঙ্কসমূহ -->
+    <div class="flex-1 overflow-y-auto space-y-4 text-xs font-medium pr-1">
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Overview</p>
+        <div class="space-y-0.5">
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+            <i data-lucide="layout-grid" class="w-4 h-4 text-gray-500"></i> Home
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+            <i data-lucide="layers" class="w-4 h-4 text-gray-500"></i> Catalog
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-gray-500"></i> Orders
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Channel</p>
+        <div class="space-y-0.5">
+          <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+            <i data-lucide="settings" class="w-4 h-4 text-gray-500"></i> Settings
+          </a>
+          <a href="bot-buttons.html" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-purple-50 text-[#7c3aed] font-semibold">
+            <i data-lucide="menu-square" class="w-4 h-4 text-[#7c3aed]"></i> Bot buttons
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Money</p>
+        <div class="space-y-0.5">
+          <a href="payment-methods.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
+            <i data-lucide="wallet" class="w-4 h-4 text-gray-500"></i> Payment methods
+          </a>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ২. মূল কন্টেন্ট ফ্রেম -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="p-1.5 text-gray-600 rounded-lg hover:bg-gray-100 md:hidden">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <span class="font-semibold text-gray-800 text-sm">Nexly</span>
+      </div>
+      <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 text-xs font-bold flex items-center justify-center">NE</div>
+    </header>
+
+    <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-5xl w-full mx-auto space-y-4">
+      
+      <!-- কিবোর্ড বিল্ডার ভিউ -->
+      <div id="view-keyboard-builder" class="space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div>
+            <div class="text-[11px] text-gray-400 flex items-center gap-1 mb-0.5">
+              <span>Dashboard</span> <span>/</span> <span class="text-gray-700">Bot buttons</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <h1 class="text-lg font-bold text-gray-900 leading-tight">Bot buttons</h1>
+              <span class="text-[10px] bg-purple-50 text-purple-700 px-2 py-0.5 rounded font-medium">Revision 5</span>
+              <span class="text-[10px] bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded font-medium" id="active-badge">Active 6/6</span>
+            </div>
+            <p class="text-xs text-gray-500 mt-0.5">Arrange the Telegram keyboard, then open a button to edit color and visibility.</p>
+          </div>
+          <button onclick="saveButtonsToFirebase()" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700 transition self-start sm:self-auto shadow-xs">
+            Save changes
+          </button>
+        </div>
+
+        <!-- ৪টি সাব-ট্যাব -->
+        <div class="border-b border-gray-200 flex gap-6 text-xs font-medium overflow-x-auto">
+          <button onclick="switchTab('main')" id="tab-btn-main" class="pb-2.5 tab-active">Main menu</button>
+          <button onclick="switchTab('wallet')" id="tab-btn-wallet" class="pb-2.5 text-gray-500 hover:text-gray-800">Wallet</button>
+          <button onclick="switchTab('payment')" id="tab-btn-payment" class="pb-2.5 text-gray-500 hover:text-gray-800">Payment</button>
+          <button onclick="switchTab('profile')" id="tab-btn-profile" class="pb-2.5 text-gray-500 hover:text-gray-800">Profile</button>
+        </div>
+
+        <!-- গ্রিড এবং টেলিগ্রাম প্রিভিউ -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+          <div class="lg:col-span-8 bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
+            <div class="flex justify-between items-center text-[11px] mb-3">
+              <div>
+                <span class="font-bold text-gray-800">Keyboard</span>
+                <p class="text-[10px] text-gray-400">Drag with arrows. Eye opens full edit. Power toggles visibility.</p>
+              </div>
+              <span class="text-gray-400">Max / row 3</span>
+            </div>
+            <div id="keyboard-grid-container" class="space-y-2"></div>
+          </div>
+
+          <div class="lg:col-span-4 bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs self-start sticky top-16">
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2">LIVE PREVIEW</p>
+            <div class="bg-[#182533] border border-[#2b3a4a] rounded-2xl p-3 shadow-inner">
+              <div class="text-[10px] text-gray-400 pb-2 border-b border-[#2b3a4a] mb-2 font-mono flex justify-between">
+                <span>Bot buttons</span>
+                <span class="text-purple-400">inline</span>
+              </div>
+              <div id="live-preview-grid" class="space-y-1 text-xs font-medium"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- বাটন এডিটর ভিউ -->
+      <div id="view-button-edit" class="hidden space-y-4">
+        <div>
+          <button onclick="backToBuilder()" class="text-xs text-purple-600 font-medium hover:underline flex items-center gap-1 mb-2">
+            ‹ Back to Bot buttons
+          </button>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h1 id="edit-btn-title" class="text-base sm:text-lg font-bold text-gray-900 leading-tight">Edit Button</h1>
+            <button onclick="saveSingleButtonEdit()" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700 transition self-start sm:self-auto shadow-xs">
+              Save changes
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4 text-xs max-w-xl">
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Button label</label>
+            <input id="edit-label-en" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+          </div>
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Button color</label>
+            <select id="edit-color" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+              <option value="green">🟢 Green – success</option>
+              <option value="blue">🔵 Blue – primary</option>
+              <option value="red">🔴 Red – danger</option>
+              <option value="default">⚪ Default – secondary</option>
+            </select>
+          </div>
+          <div class="flex items-center gap-2 pt-1">
+            <input type="checkbox" id="edit-active" class="w-4 h-4 accent-purple-600">
+            <label for="edit-active" class="font-medium text-gray-700 cursor-pointer">Active in bot</label>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ৩. অল-ইন-ওয়ান স্ক্রিপ্ট (ফায়ারবেস সরাসরি যুক্ত) -->
   <script type="module">
-    import { db, doc, setDoc, getDoc } from "./firebase-config.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjxk1DR009Is4w20gjqdNOXRNE1GKotdQ",
+      authDomain: "nexly-5ecf5.firebaseapp.com",
+      projectId: "nexly-5ecf5",
+      storageBucket: "nexly-5ecf5.firebasestorage.app",
+      messagingSenderId: "549446516653",
+      appId: "1:549446516653:web:263db598b6b125d9d6ab24"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     lucide.createIcons();
 
@@ -9,42 +205,53 @@
       document.getElementById('sidebarOverlay').classList.toggle('hidden');
     };
 
-    // ৪টি ট্যাবের বাটন ডাটাবেস
     window.buttonData = {
       main: [
-        { id: 'm1', label: '🛍️ Products', action: 'show_products', row: 1, active: true },
-        { id: 'm2', label: '👤 Profile', action: 'show_profile', row: 2, active: true },
-        { id: 'm3', label: '💳 Wallet', action: 'show_wallet', row: 2, active: true },
-        { id: 'm4', label: '☎️ Help', action: 'show_support', row: 3, active: true },
-        { id: 'm5', label: '🎁 Referrals', action: 'show_ref', row: 3, active: true },
-        { id: 'm6', label: '📜 Bot Policy', action: 'show_policy', row: 4, active: true },
+        { id: 'm1', label: '🛍️️ Products', action: 'show_products', row: 1, color: 'green', active: true },
+        { id: 'm2', label: '👤 Profile', action: 'show_profile', row: 2, color: 'blue', active: true },
+        { id: 'm3', label: '💳 Wallet', action: 'show_wallet', row: 2, color: 'blue', active: true },
+        { id: 'm4', label: '☎️ Help', action: 'show_support', row: 3, color: 'blue', active: true },
+        { id: 'm5', label: '🎁 Referrals', action: 'show_ref', row: 3, color: 'blue', active: true },
+        { id: 'm6', label: '📜 Bot Policy', action: 'show_policy', row: 4, color: 'red', active: true },
       ],
       wallet: [
-        { id: 'w1', label: '➕ Top up', action: 'wallet_topup', row: 1, active: true },
-        { id: 'w2', label: '🎟️ Deposit code', action: 'wallet_code', row: 2, active: true }
+        { id: 'w1', label: '➕ Top up', action: 'wallet_topup', row: 1, color: 'green', active: true },
+        { id: 'w2', label: '🎟️ Deposit code', action: 'wallet_code', row: 2, color: 'blue', active: true }
+      ],
+      payment: [
+        { id: 'p1', label: 'Binance Pay', action: 'pay_binance', row: 1, color: 'green', active: true },
+        { id: 'p2', label: 'TRC20 (USDT)', action: 'pay_trc20', row: 2, color: 'blue', active: true }
+      ],
+      profile: [
+        { id: 'pr1', label: 'My orders', action: 'my_orders', row: 1, color: 'green', active: true },
+        { id: 'pr2', label: 'Languages', action: 'show_lang', row: 2, color: 'blue', active: true }
       ]
     };
 
     window.currentTab = 'main';
     window.currentEditingBtn = null;
 
-    // Firebase থেকে আগে সেভ করা বাটন লোড করা
-    async function loadButtonsFromFirebase() {
+    // ১. ডাটাবেস থেকে লোড করা
+    async function loadButtons() {
       try {
         const snap = await getDoc(doc(db, "settings", "bot_layout"));
         if (snap.exists() && snap.data().buttons) {
           window.buttonData = snap.data().buttons;
+        } else {
+          const cached = localStorage.getItem('bot_buttons_cache');
+          if (cached) window.buttonData = JSON.parse(cached);
         }
       } catch(e) {
-        console.log("Using default buttons");
+        const cached = localStorage.getItem('bot_buttons_cache');
+        if (cached) window.buttonData = JSON.parse(cached);
       }
       renderKeyboardBuilder();
     }
-    loadButtonsFromFirebase();
+    loadButtons();
 
     window.switchTab = function(tab) {
       window.currentTab = tab;
-      ['main', 'wallet'].forEach(t => {
+      ['main', 'wallet', 'payment', 'profile'].forEach(t => {
         const btn = document.getElementById(`tab-btn-${t}`);
         if(btn) btn.className = (t === tab) ? 'pb-2.5 tab-active' : 'pb-2.5 text-gray-500 hover:text-gray-800';
       });
@@ -76,6 +283,7 @@
             <div class="border ${b.active ? 'border-purple-200 bg-purple-50/40' : 'border-gray-200 bg-gray-50 opacity-60'} rounded-xl p-2.5 space-y-2">
               <div class="flex justify-between items-center">
                 <span class="font-bold text-xs text-gray-800 truncate">${b.label}</span>
+                <span class="w-2 h-2 rounded-full ${b.color === 'green' ? 'bg-emerald-500' : b.color === 'blue' ? 'bg-sky-500' : b.color === 'red' ? 'bg-red-500' : 'bg-gray-400'}"></span>
               </div>
               <div class="flex items-center justify-between text-gray-400 text-[10px] pt-1 border-t border-purple-100">
                 <button onclick="togglePower('${b.id}')" class="p-1 ${b.active ? 'text-purple-600' : 'text-gray-400'}"><i data-lucide="power" class="w-3 h-3"></i></button>
@@ -84,7 +292,8 @@
             </div>
           `;
           if (b.active) {
-            previewRowHtml += `<button class="flex-1 py-1.5 px-2 rounded-lg text-center font-medium bg-[#27303f] text-white border border-[#334155] text-xs truncate">${b.label}</button>`;
+            const colorClass = b.color === 'green' ? 'btn-green' : b.color === 'blue' ? 'btn-blue' : b.color === 'red' ? 'btn-red' : 'btn-default';
+            previewRowHtml += `<button onclick="openButtonEdit('${b.id}')" class="flex-1 py-1.5 px-2 rounded-lg text-center font-medium truncate ${colorClass} hover:opacity-90 transition">${b.label}</button>`;
           }
         });
 
@@ -93,6 +302,9 @@
         gridContainer.innerHTML += rowHtml;
         liveGrid.innerHTML += previewRowHtml;
       });
+
+      const activeCount = list.filter(b => b.active).length;
+      document.getElementById('active-badge').innerText = `Active ${activeCount}/${list.length}`;
       lucide.createIcons();
     };
 
@@ -107,6 +319,9 @@
       window.currentEditingBtn = btn;
       document.getElementById('edit-btn-title').innerText = btn.label;
       document.getElementById('edit-label-en').value = btn.label;
+      document.getElementById('edit-color').value = btn.color || 'blue';
+      document.getElementById('edit-active').checked = btn.active;
+
       document.getElementById('view-keyboard-builder').classList.add('hidden');
       document.getElementById('view-button-edit').classList.remove('hidden');
     };
@@ -120,20 +335,25 @@
     window.saveSingleButtonEdit = function() {
       if(window.currentEditingBtn) {
         window.currentEditingBtn.label = document.getElementById('edit-label-en').value;
+        window.currentEditingBtn.color = document.getElementById('edit-color').value;
+        window.currentEditingBtn.active = document.getElementById('edit-active').checked;
       }
       backToBuilder();
     };
 
-    // FIREBASE-এ সম্পূর্ণ লেআউট সেভ করা
-    window.saveAllChanges = async function() {
+    // ২. ফায়ারবেস ও লোকাল স্টোরেজে সেভ করা
+    window.saveButtonsToFirebase = async function() {
       try {
+        localStorage.setItem('bot_buttons_cache', JSON.stringify(window.buttonData));
         await setDoc(doc(db, "settings", "bot_layout"), {
           buttons: window.buttonData,
           updatedAt: new Date()
         });
-        alert("টেলিগ্রাম বটের সমস্ত বাটন Firebase-এ সেভ হয়েছে! বট এখন এই লেআউট অনুযায়ী দেখাবে।");
+        alert("বাটন কনফিগারেশন Firebase-এ সেভ হয়েছে! বট এখন এই লেআউটেই চলবে।");
       } catch(err) {
-        alert("ত্রুটি: " + err.message);
+        alert("লোকালে সেভ হয়েছে, কিন্তু ফায়ারবেস এরর: " + err.message);
       }
     };
   </script>
+</body>
+</html>
