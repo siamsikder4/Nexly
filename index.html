@@ -17,7 +17,6 @@
 </head>
 <body class="text-[#1c1b22] flex min-h-screen">
 
-  <!-- মোবাইল ড্রয়ার ওভারলে -->
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
 
   <!-- ১. ফুল সাইডবার মেনু -->
@@ -32,9 +31,7 @@
       </div>
     </div>
 
-    <!-- সাইডবার আইটেমস -->
     <div class="flex-1 overflow-y-auto space-y-4 text-xs font-medium pr-1">
-      <!-- OVERVIEW -->
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Overview</p>
         <div class="space-y-0.5">
@@ -59,7 +56,6 @@
         </div>
       </div>
 
-      <!-- CHANNEL -->
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Channel</p>
         <div class="space-y-0.5">
@@ -78,7 +74,6 @@
         </div>
       </div>
 
-      <!-- MONEY -->
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Money</p>
         <div class="space-y-0.5">
@@ -94,7 +89,6 @@
         </div>
       </div>
 
-      <!-- LEARN -->
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Learn</p>
         <div class="space-y-0.5">
@@ -214,7 +208,7 @@
         </div>
 
         <div id="customers-list-container" class="space-y-3">
-          <!-- কাস্টমার লোড হবে -->
+          <!-- লাইভ কাস্টমার লোড হবে -->
         </div>
       </section>
 
@@ -293,18 +287,13 @@
                 <th class="py-2.5 text-right">Action</th>
               </tr>
             </thead>
-            <tbody id="orders-table-body" class="divide-y divide-gray-100">
-              <!-- লাইভ অর্ডার লোড হবে -->
-            </tbody>
+            <tbody id="orders-table-body" class="divide-y divide-gray-100"></tbody>
           </table>
         </div>
       </section>
 
       <!-- ================= 6. ANALYTICS ================= -->
       <section id="view-analytics" class="hidden space-y-6">
-        <div class="text-xs text-gray-400 flex items-center gap-1.5">
-          <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Analytics</span>
-        </div>
         <h1 class="text-xl font-bold text-gray-900">Analytics</h1>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div class="bg-white border-l-4 border-l-emerald-500 border border-gray-200/70 rounded-2xl p-3 shadow-2xs">
@@ -333,13 +322,7 @@
           <label class="flex items-center gap-3 p-3 border rounded-xl cursor-pointer hover:bg-gray-50">
             <input type="radio" name="lang" checked class="accent-purple-600">
             <div>
-              <p class="font-bold text-gray-900">বাংলা (Bangla - Default)</p>
-            </div>
-          </label>
-          <label class="flex items-center gap-3 p-3 border rounded-xl cursor-pointer hover:bg-gray-50">
-            <input type="radio" name="lang" class="accent-purple-600">
-            <div>
-              <p class="font-bold text-gray-900">English (Global)</p>
+              <p class="font-bold text-gray-900">English (Default)</p>
             </div>
           </label>
         </div>
@@ -349,7 +332,7 @@
       <section id="view-broadcast" class="hidden space-y-6">
         <h1 class="text-xl font-bold text-gray-900">Broadcast Notification</h1>
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs max-w-lg">
-          <textarea id="bc-msg" rows="4" placeholder="মেসেজ লিখুন..." class="w-full border rounded-xl p-3 outline-none focus:border-purple-600"></textarea>
+          <textarea id="bc-msg" rows="4" placeholder="Write broadcast message..." class="w-full border rounded-xl p-3 outline-none focus:border-purple-600"></textarea>
           <button onclick="sendBroadcastAction()" class="bg-[#7c3aed] text-white px-4 py-2.5 rounded-xl font-semibold hover:bg-purple-700 transition">
             🚀 Send Broadcast to All Users
           </button>
@@ -390,8 +373,8 @@
       <section id="view-learn" class="hidden space-y-6">
         <h1 class="text-xl font-bold text-gray-900">GG Builder Documentation</h1>
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-2 text-xs text-gray-600">
-          <p>১. Catalog থেকে প্রোডাক্ট ও স্টক যোগ করুন।</p>
-          <p>২. Telegram Bot চালু করলে স্বয়ংক্রিয়ভাবে স্টক থেকে ডাটা বিক্রি হবে।</p>
+          <p>1. Add products and stock from Catalog.</p>
+          <p>2. Users chatting with the Telegram Bot will instantly be saved in Customers.</p>
         </div>
       </section>
 
@@ -402,12 +385,12 @@
   <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl text-xs">
       <div class="flex justify-between items-center border-b pb-2">
-        <h3 class="font-bold text-sm text-gray-900">নতুন প্রোডাক্ট তৈরি করুন</h3>
+        <h3 class="font-bold text-sm text-gray-900">Add New Product</h3>
         <button onclick="closeProductModal()"><i data-lucide="x" class="w-4 h-4 text-gray-400"></i></button>
       </div>
       <div>
         <label class="block font-medium mb-1">Product Name</label>
-        <input id="m-name" placeholder="যেমন: Telegram Premium বা Netflix" class="w-full border rounded-xl p-2.5 outline-none focus:border-purple-600">
+        <input id="m-name" placeholder="e.g. NordVPN or Netflix" class="w-full border rounded-xl p-2.5 outline-none focus:border-purple-600">
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div>
@@ -420,17 +403,18 @@
         </div>
       </div>
       <div>
-        <label class="block font-medium mb-1">Digital Items (প্রতি লাইনে ১টি অ্যাকাউন্ট বা কী)</label>
+        <label class="block font-medium mb-1">Digital Items (1 per line)</label>
         <textarea id="m-stock" rows="4" placeholder={"user1@mail.com:pass\nKEY-789-VIP"} class="w-full border rounded-xl p-2.5 font-mono outline-none focus:border-purple-600"></textarea>
       </div>
       <button onclick="saveNewProduct()" class="w-full py-2.5 rounded-xl bg-[#7c3aed] text-white font-semibold hover:bg-purple-700">Save Product</button>
     </div>
   </div>
 
-  <!-- ৩. FIREBASE লাইভ স্ক্রিপ্ট -->
+  <!-- ৩. অল-ইন-ওয়ান FIREBASE লাইভ স্ক্রিপ্ট -->
   <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { 
-      db, 
+      getFirestore, 
       collection, 
       addDoc, 
       doc, 
@@ -440,7 +424,19 @@
       onSnapshot, 
       query, 
       orderBy 
-    } from "./firebase-config.js";
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjxk1DR009Is4w20gjqdNOXRNE1GKotdQ",
+      authDomain: "nexly-5ecf5.firebaseapp.com",
+      projectId: "nexly-5ecf5",
+      storageBucket: "nexly-5ecf5.firebasestorage.app",
+      messagingSenderId: "549446516653",
+      appId: "1:549446516653:web:263db598b6b125d9d6ab24"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     lucide.createIcons();
 
@@ -474,14 +470,14 @@
     window.openProductModal = () => document.getElementById('productModal').classList.remove('hidden');
     window.closeProductModal = () => document.getElementById('productModal').classList.add('hidden');
 
-    // ১. প্রোডাক্ট ও ডিজিটাল স্টক সেভ করা
+    // ১. প্রোডাক্ট ও ডিজিটাল স্টক সেভ
     window.saveNewProduct = async function() {
       const name = document.getElementById('m-name').value.trim();
       const price = parseFloat(document.getElementById('m-price').value);
       const cat = document.getElementById('m-cat').value.trim() || 'General';
       const rawStock = document.getElementById('m-stock').value.trim();
 
-      if(!name || isNaN(price)) return alert('দয়া করে প্রোডাক্টের নাম ও সঠিক দাম দিন!');
+      if(!name || isNaN(price)) return alert('Please provide valid product name and price.');
 
       try {
         const productRef = await addDoc(collection(db, "products"), {
@@ -502,14 +498,14 @@
           });
         }
 
-        alert('প্রোডাক্ট ও ডিজিটাল স্টক সফলভাবে সেভ হয়েছে!');
+        alert('Product and stock items added successfully!');
         document.getElementById('m-name').value = '';
         document.getElementById('m-price').value = '';
         document.getElementById('m-cat').value = '';
         document.getElementById('m-stock').value = '';
         window.closeProductModal();
       } catch (err) {
-        alert('ত্রুটি: ' + err.message);
+        alert('Error: ' + err.message);
       }
     };
 
@@ -547,7 +543,7 @@
     });
 
     window.deleteProduct = async (id) => {
-      if(confirm('মুছে ফেলতে চান?')) await deleteDoc(doc(db, "products", id));
+      if(confirm('Delete product?')) await deleteDoc(doc(db, "products", id));
     };
 
     // ৩. রিয়েল-টাইম স্টক লোড
@@ -571,17 +567,20 @@
       document.getElementById('inventory-stock-badge').innerText = `${unsold} Units In Queue`;
     });
 
-    // ৪. রিয়েল-টাইম কাস্টমার লোড
+    // ৪. রিয়েল-টাইম কাস্টমার লোড (CUSTOMERS ও DASHBOARD PULSE)
     onSnapshot(collection(db, "customers"), (snapshot) => {
       const container = document.getElementById('customers-list-container');
       container.innerHTML = '';
       let totalCust = 0;
       let totalBal = 0;
+      let totalPurchases = 0;
 
       snapshot.forEach(d => {
         totalCust++;
         const c = d.data();
         totalBal += parseFloat(c.balance || 0);
+        totalPurchases += parseInt(c.purchases || 0);
+
         container.innerHTML += `
           <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
             <div class="flex justify-between items-start mb-2">
@@ -589,33 +588,38 @@
                 <h3 class="font-bold text-sm text-gray-900">${c.name || 'Telegram User'}</h3>
                 <p class="text-xs text-gray-500">@${c.username || 'unknown'} • ID: ${c.telegramId || d.id}</p>
               </div>
+              <div class="flex gap-1">
+                <button onclick="navigator.clipboard.writeText('${c.telegramId}'); alert('Copied ID');" class="p-1.5 text-gray-400 hover:text-purple-600"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              </div>
             </div>
             <div class="text-xs text-gray-600 flex gap-4 pt-2 border-t mt-3">
-              <span><strong>Balance:</strong> ${c.balance || 0} USDT</span>
-              <span><strong>Orders:</strong> ${c.ordersCount || 0}</span>
+              <span><strong>Balance:</strong> ${parseFloat(c.balance || 0).toFixed(2)} USDT</span>
+              <span><strong>Purchases:</strong> ${c.purchases || 0}</span>
+              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded font-bold text-[10px]">Active</span>
             </div>
           </div>
         `;
       });
 
+      // ড্যাশবোর্ড কার্ড আপডেট
       document.getElementById('dash-cust-count').innerText = totalCust;
       document.getElementById('dash-active-count').innerText = totalCust;
       document.getElementById('customers-badge').innerText = `${totalCust} customers`;
       document.getElementById('dash-total-balance').innerText = totalBal.toFixed(2);
+      document.getElementById('dash-purchases-count').innerText = totalPurchases;
+      lucide.createIcons();
     });
 
-    // ৫. রিয়েল-টাইম অর্ডার লোড ও অ্যাপ্রুভাল
+    // ৫. রিয়েল-টাইম অর্ডার লোড
     onSnapshot(collection(db, "orders"), (snapshot) => {
       const tbody = document.getElementById('orders-table-body');
       tbody.innerHTML = '';
       let pendingCount = 0;
-      let completedCount = 0;
 
       snapshot.forEach(d => {
         const ord = d.data();
         const id = d.id;
         if(ord.status === 'pending') pendingCount++;
-        if(ord.status === 'completed') completedCount++;
 
         tbody.innerHTML += `
           <tr class="border-b">
@@ -636,29 +640,26 @@
       });
 
       document.getElementById('dash-attention-count').innerText = pendingCount;
-      document.getElementById('dash-purchases-count').innerText = completedCount;
       document.getElementById('analytics-orders-count').innerText = snapshot.size;
     });
 
     window.approveOrder = async (id) => {
       await updateDoc(doc(db, "orders", id), { status: "completed" });
-      alert("অর্ডার অ্যাপ্রুভ হয়েছে এবং ইউজারের ইনবক্সে ডেলিভারি পাঠানো হয়েছে!");
+      alert("Order Approved!");
     };
 
-    // ৬. ব্রডকাস্ট পাঠানো
     window.sendBroadcastAction = async function() {
       const msg = document.getElementById('bc-msg').value.trim();
-      if(!msg) return alert('মেসেজ লিখুন');
+      if(!msg) return alert('Message is empty');
       await addDoc(collection(db, "broadcasts"), { message: msg, sentAt: serverTimestamp() });
-      alert('ব্রডকাস্ট মেসেজ পাঠানো হয়েছে!');
+      alert('Broadcast message saved!');
       document.getElementById('bc-msg').value = '';
     };
 
-    // ৭. রিডিম কোড জেনারেশন
     window.generateDepositCode = async function() {
       const code = 'GIFT-' + Math.random().toString(36).substring(2, 7).toUpperCase();
       await addDoc(collection(db, "deposit_codes"), { code: code, amount: 50, isClaimed: false });
-      alert('নতুন রিডিম কোড: ' + code);
+      alert('New Code: ' + code);
     };
 
     onSnapshot(collection(db, "deposit_codes"), (snapshot) => {
