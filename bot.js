@@ -3,17 +3,14 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 import http from "http";
 
-// Render-এর ফ্রি Web Service সচল রাখার জন্য ডামি সার্ভার
+// Render-এর ফ্রি Web Service সচল রাখার সার্ভার
 const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("Bot is running perfectly on free tier!");
+  res.end("Bot is running!");
 });
 const PORT = process.env.PORT || 3000;
-server.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+server.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
-// আপনার Firebase Credentials
 const firebaseConfig = {
   apiKey: "AIzaSyBjxk1DR009Is4w20gjqdNOXRNE1GKotdQ",
   authDomain: "nexly-5ecf5.firebaseapp.com",
@@ -27,8 +24,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 async function startBot() {
-  console.log("Checking token from Firebase...");
-  
   const settingsSnap = await getDoc(doc(db, "settings", "general"));
   let botToken = process.env.BOT_TOKEN;
 
@@ -37,31 +32,55 @@ async function startBot() {
   }
 
   if (!botToken) {
-    console.error("Token not found. Waiting...");
+    console.log("No token. Waiting...");
     return setTimeout(startBot, 10000);
   }
 
   const bot = new Telegraf(botToken);
+
+  // ওয়েবসাইট থেকে কিবোর্ড বাটন ডাইনামিকালি তৈরি করার ফাংশন
+  async function getDynamicKeyboard() {
+    try {
+      const layoutSnap = await getDoc(doc(db, "settings", "bot_layout"));
+      if (layoutSnap.exists() && layoutSnap.data().buttons && layoutSnap.data().buttons.main) {
+        const mainBtns = layoutSnap.data().buttons.main;
+        const rows = {};
+        mainBtns.forEach(b => {
+          if (b.active) {
+            if (!rows[b.row]) rows[b.row] = [];
+            rows[b.row].push(Markup.button.callback(b.label, b.action || 'show_products'));
+          }
+        });
+        return Object.values(rows);
+      }
+    } catch(e) {
+      console.log("Layout fetch error:", e);
+    }
+
+    // ডিফল্ট লেআউট (যদি কোনো কনফিগ না পায়)
+    return [
+      [Markup.button.callback("🛍️ Products", "show_products")],
+      [Markup.button.callback("👤 Profile", "show_profile"), Markup.button.callback("💳 Wallet", "show_wallet")],
+      [Markup.button.callback("☎️ Help", "show_support"), Markup.button.callback("🎁 Referrals", "show_ref")],
+      [Markup.button.callback("📜 Bot Policy", "show_policy")]
+    ];
+  }
 
   // /start কমান্ড
   bot.command("start", async (ctx) => {
     const sDoc = await getDoc(doc(db, "settings", "general"));
     const settings = sDoc.exists() ? sDoc.data() : {};
     const welcome = settings.startMsg || "👋 আমাদের ডিজিটাল স্টোরে স্বাগতম! নিচের অপশনগুলো থেকে বেছে নিন:";
+    const keyboard = await getDynamicKeyboard();
 
-    await ctx.reply(welcome, Markup.inlineKeyboard([
-      [Markup.button.callback("🛍️ ক্যাটালগ ও প্রোডাক্ট", "show_products")],
-      [Markup.button.callback("💳 ওয়ালেট ব্যালেন্স", "show_wallet"), Markup.button.callback("☎ সাপোর্ট", "show_support")]
-    ]));
+    await ctx.reply(welcome, Markup.inlineKeyboard(keyboard));
   });
 
-  // প্রোডাক্ট ক্যাটালগ
+  // প্রোডাক্ট তালিকা
   bot.action("show_products", async (ctx) => {
     try {
       const snap = await getDocs(collection(db, "products"));
-      if (snap.empty) {
-        return ctx.reply("বর্তমানে কোনো প্রোডাক্ট স্টকে নেই।");
-      }
+      if (snap.empty) return ctx.reply("বর্তমানে কোনো প্রোডাক্ট স্টকে নেই।");
 
       const buttons = [];
       snap.forEach(d => {
@@ -77,13 +96,11 @@ async function startBot() {
   });
 
   bot.action("back_to_main", async (ctx) => {
-    await ctx.editMessageText("👋 আমাদের ডিজিটাল স্টোরে স্বাগতম!", Markup.inlineKeyboard([
-      [Markup.button.callback("🛍️ ক্যাটালগ ও প্রোডাক্ট", "show_products")],
-      [Markup.button.callback("💳 ওয়ালেট ব্যালেন্স", "show_wallet"), Markup.button.callback("☎ সাপোর্ট", "show_support")]
-    ]));
+    const keyboard = await getDynamicKeyboard();
+    await ctx.editMessageText("👋 আমাদের ডিজিটাল স্টোরে স্বাগতম!", Markup.inlineKeyboard(keyboard));
   });
 
-  // প্রোডাক্ট ক্রয় ও অটোমেটিক ডেলিভারি
+  // স্বয়ংক্রিয় ডিজিটাল ডেলিভারি
   bot.action(/buy_(.+)/, async (ctx) => {
     const prodId = ctx.match[1];
     const stocksSnap = await getDocs(collection(db, "stocks"));
@@ -107,22 +124,17 @@ async function startBot() {
     });
 
     const stockData = targetStockDoc.data();
-    await ctx.reply(`✅ *ক্রয় সফল হয়েছে!*\n\n📦 প্রোডাক্ট: *${stockData.productName || "Digital Item"}*\n🔑 আপনার ডিজিটাল কোড / অ্যাকাউন্ট:\n\`${stockData.content}\``, { parse_mode: "Markdown" });
+    await ctx.reply(`✅ *ক্রয় সফল হয়েছে!*\n\n📦 প্রোডাক্ট: *${stockData.productName || "Digital Item"}*\n🔑 ডেলিভারি কোড:\n\`${stockData.content}\``, { parse_mode: "Markdown" });
   });
 
-  bot.action("show_support", async (ctx) => {
-    const sDoc = await getDoc(doc(db, "settings", "general"));
-    const settings = sDoc.exists() ? sDoc.data() : {};
-    const supportUser = settings.supportUsername || "@admin";
-    await ctx.reply(`যেকোনো প্রয়োজনে যোগাযোগ করুন: ${supportUser}`);
-  });
-
-  bot.action("show_wallet", (ctx) => {
-    ctx.reply("আপনার বর্তমান ওয়ালেট ব্যালেন্স: 0.00 USDT\nটপ-আপ করতে এডমিনের সাথে যোগাযোগ করুন।");
-  });
+  bot.action("show_wallet", (ctx) => ctx.reply("💳 আপনার ওয়ালেট ব্যালেন্স: 0.00 USDT"));
+  bot.action("show_profile", (ctx) => ctx.reply(`👤 ইউজার আইডি: ${ctx.from.id}\nইউজারনেম: @${ctx.from.username || 'নেই'}`));
+  bot.action("show_support", (ctx) => ctx.reply("☎️ সাপোর্টের জন্য এডমিনের সাথে যোগাযোগ করুন।"));
+  bot.action("show_ref", (ctx) => ctx.reply(`🎁 আপনার রেফারেল লিঙ্ক:\nhttps://t.me/${ctx.botInfo.username}?start=${ctx.from.id}`));
+  bot.action("show_policy", (ctx) => ctx.reply("📜 স্টোর পলিসি: ডিজিটাল প্রোডাক্ট কেনার সাথে সাথে ডেলিভারি কনফার্ম হয়। কোনো রিফান্ড প্রযোজ্য নয়।"));
 
   bot.launch();
-  console.log("বট সফলভাবে চালু হয়েছে!");
+  console.log("Dynamic keyboard bot running!");
 }
 
 startBot();
