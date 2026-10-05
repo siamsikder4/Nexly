@@ -3,10 +3,9 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, doc, getDoc, setDoc, collection, getDocs, updateDoc, serverTimestamp } from "firebase/firestore";
 import http from "http";
 
-// Render Free Tier Ping Server
 const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("Bot Engine Active");
+  res.end("Bot Engine Running");
 });
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
@@ -23,6 +22,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+// কালার অনুযায়ী স্টাইলিশ ডট/ব্যাজ দেওয়ার ফাংশন
+function formatStylishButtonLabel(label, color) {
+  let badge = "";
+  if (color === "green") badge = "🟢 ";
+  else if (color === "blue") badge = "🔵 ";
+  else if (color === "red") badge = "🔴 ";
+  else if (color === "yellow") badge = "🟡 ";
+  else if (color === "purple") badge = "🟣 ";
+  
+  // যদি ইউজারের লেবেলে ইতিমধ্যে কোনো কালার ডট না থাকে, তবে ডট যোগ করবে
+  if (!label.startsWith("🟢") && !label.startsWith("🔵") && !label.startsWith("🔴") && !label.startsWith("🟡") && !label.startsWith("🟣")) {
+    return `${badge}${label}`;
+  }
+  return label;
+}
+
 async function startBot() {
   const settingsSnap = await getDoc(doc(db, "settings", "general"));
   let botToken = process.env.BOT_TOKEN;
@@ -38,6 +53,7 @@ async function startBot() {
 
   const bot = new Telegraf(botToken);
 
+  // ওয়েবসাইট থেকে স্টাইলিশ কিবোর্ড নিয়ে আসা
   async function getDynamicKeyboard(menuType = "main") {
     try {
       const layoutSnap = await getDoc(doc(db, "settings", "bot_layout"));
@@ -47,7 +63,8 @@ async function startBot() {
         btns.forEach(b => {
           if (b.active) {
             if (!rows[b.row]) rows[b.row] = [];
-            rows[b.row].push(Markup.button.callback(b.label, b.action || `act_${b.id}`));
+            const styledLabel = formatStylishButtonLabel(b.label, b.color);
+            rows[b.row].push(Markup.button.callback(styledLabel, b.action || `btn_${b.id}`));
           }
         });
         return Object.values(rows);
@@ -56,18 +73,17 @@ async function startBot() {
       console.error("Keyboard Error:", e);
     }
     return [
-      [Markup.button.callback("🛍 Products", "show_products")],
-      [Markup.button.callback("👤 Profile", "show_profile"), Markup.button.callback("💳 Wallet", "show_wallet")]
+      [Markup.button.callback("🟢 🛍 Products", "show_products")],
+      [Markup.button.callback("🔵 👤 Profile", "show_profile"), Markup.button.callback("🟡 💳 Wallet", "show_wallet")]
     ];
   }
 
-  // /start কমান্ড — কাস্টমার রেজিস্ট্রেশন ফিক্সড
+  // /start কমান্ড
   bot.command("start", async (ctx) => {
     try {
       const user = ctx.from;
       const userRef = doc(db, "customers", String(user.id));
       const userSnap = await getDoc(userRef);
-
       const fullName = [user.first_name, user.last_name].filter(Boolean).join(" ") || "Telegram User";
 
       if (!userSnap.exists()) {
@@ -81,10 +97,9 @@ async function startBot() {
           status: "active",
           joinedAt: serverTimestamp()
         });
-        console.log(`New user registered: ${user.id}`);
       }
     } catch(err) {
-      console.error("Customer Save Error:", err);
+      console.error("User Save Error:", err);
     }
 
     const sDoc = await getDoc(doc(db, "settings", "general"));
@@ -99,6 +114,7 @@ async function startBot() {
     await ctx.reply(welcomeMsg, Markup.inlineKeyboard(keyboard));
   });
 
+  // প্রোডাক্ট ক্যাটালগ
   bot.action("show_products", async (ctx) => {
     try {
       const snap = await getDocs(collection(db, "products"));
@@ -107,7 +123,7 @@ async function startBot() {
       const buttons = [];
       snap.forEach(d => {
         const p = d.data();
-        buttons.push([Markup.button.callback(`${p.name} —${p.price} USDT`, `buy_${d.id}`)]);
+        buttons.push([Markup.button.callback(`📦 ${p.name} —${p.price} USDT`, `buy_${d.id}`)]);
       });
       buttons.push([Markup.button.callback("‹ Back", "back_to_main")]);
       await ctx.editMessageText("Select a Product:", Markup.inlineKeyboard(buttons));
@@ -123,6 +139,7 @@ async function startBot() {
     await ctx.editMessageText(settings.startMsg || "Main Menu:", Markup.inlineKeyboard(keyboard));
   });
 
+  // স্বয়ংক্রিয় ডেলিভারি
   bot.action(/buy_(.+)/, async (ctx) => {
     const prodId = ctx.match[1];
     const stocksSnap = await getDocs(collection(db, "stocks"));
@@ -161,8 +178,28 @@ async function startBot() {
     );
   });
 
-  bot.action("show_wallet", (ctx) => ctx.reply("Wallet Balance: 0.00 USDT"));
-  bot.action("show_profile", (ctx) => ctx.reply(`User ID: ${ctx.from.id}\nUsername: @${ctx.from.username || "N/A"}`));
+  // ডায়নামিক কাস্টম রেসপন্স হ্যান্ডলার (ইউজার ওয়েবসাইটে যে রিপ্লাই টেক্সট লিখে সেভ করেছে)
+  bot.action(/btn_(.+)/, async (ctx) => {
+    const btnId = ctx.match[1];
+    try {
+      const layoutSnap = await getDoc(doc(db, "settings", "bot_layout"));
+      if (layoutSnap.exists() && layoutSnap.data().buttons) {
+        let found = null;
+        Object.values(layoutSnap.data().buttons).forEach(arr => {
+          const match = arr.find(b => b.id === btnId);
+          if (match) found = match;
+        });
+
+        if (found && found.replyMsg) {
+          return ctx.reply(found.replyMsg);
+        }
+      }
+    } catch(e) {}
+    ctx.reply("Action processed.");
+  });
+
+  bot.action("show_wallet", (ctx) => ctx.reply("💳 Wallet Balance: 0.00 USDT"));
+  bot.action("show_profile", (ctx) => ctx.reply(`👤 User ID: ${ctx.from.id}\nUsername: @${ctx.from.username || "N/A"}`));
   bot.action("show_support", async (ctx) => {
     const sDoc = await getDoc(doc(db, "settings", "general"));
     const settings = sDoc.exists() ? sDoc.data() : {};
@@ -172,7 +209,7 @@ async function startBot() {
   bot.action("show_ref", (ctx) => ctx.reply(`Referral Link:\nhttps://t.me/${ctx.botInfo.username}?start=${ctx.from.id}`));
 
   bot.launch();
-  console.log("Bot Engine Successfully Started!");
+  console.log("Stylish Button Engine Started!");
 }
 
 startBot();
