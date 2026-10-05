@@ -1,88 +1,124 @@
 import { Telegraf, Markup } from "telegraf";
-import { initializeApp, cert } from "firebase-admin/app";
-import { getFirestore } from "firebase-admin/firestore";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, getDoc, collection, getDocs, updateDoc } from "firebase/firestore";
 
-// Firebase Admin SDK ইনিশিয়ালাইজেশন
-// (Render বা Railway-তে চালানোর সময় FIREBASE_SERVICE_ACCOUNT এনভায়রনমেন্ট ভেরিয়েবল দেবেন)
-const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
-initializeApp({ credential: cert(serviceAccount) });
-const db = getFirestore();
+// আপনার Firebase Credentials
+const firebaseConfig = {
+  apiKey: "AIzaSyBjxk1DR009Is4w20gjqdNOXRNE1GKotdQ",
+  authDomain: "nexly-5ecf5.firebaseapp.com",
+  projectId: "nexly-5ecf5",
+  storageBucket: "nexly-5ecf5.firebasestorage.app",
+  messagingSenderId: "549446516653",
+  appId: "1:549446516653:web:263db598b6b125d9d6ab24"
+};
 
-async function startBotEngine() {
-  console.log("Firebase থেকে সেটিংস আনা হচ্ছে...");
-  const settingsSnap = await db.collection("settings").doc("general").get();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+async function startBot() {
+  console.log("Firebase থেকে কনফিগ চেক করা হচ্ছে...");
   
-  if (!settingsSnap.exists || !settingsSnap.data().botToken) {
-    console.log("ওয়েবসাইটে এখনও কোনো Bot Token দেওয়া হয়নি। সেটিংস পেজে গিয়ে বট টোকেন সেভ করুন।");
-    return setTimeout(startBotEngine, 10000); // ১০ সেকেন্ড পর পর চেক করবে
+  // সেটিংস থেকে বটের টোকেন নেওয়া
+  const settingsSnap = await getDoc(doc(db, "settings", "general"));
+  let botToken = process.env.BOT_TOKEN;
+
+  if (settingsSnap.exists() && settingsSnap.data().botToken) {
+    botToken = settingsSnap.data().botToken;
   }
 
-  const settings = settingsSnap.data();
-  const bot = new Telegraf(settings.botToken);
+  if (!botToken) {
+    console.error("কোনো Bot Token পাওয়া যায়নি! ওয়েবসাইটের Settings পেজে গিয়ে বট টোকেন সেভ করুন।");
+    return setTimeout(startBot, 10000);
+  }
 
-  // ১. /start কমান্ড
+  const bot = new Telegraf(botToken);
+
+  // /start কমান্ড হ্যান্ডলার
   bot.command("start", async (ctx) => {
-    const welcome = settings.startMsg || "আমাদের ডিজিটাল স্টোরে স্বাগতম! নিচের বাটন চাপুন:";
-    ctx.reply(welcome, Markup.inlineKeyboard([
-      [Markup.button.callback("🛍️ সব প্রোডাক্ট দেখুন", "show_catalog")],
-      [Markup.button.callback("💳 ওয়ালেট ব্যালেন্স", "show_wallet")],
-      [Markup.button.callback("☎️️ সাপোর্ট", "show_support")]
+    const sDoc = await getDoc(doc(db, "settings", "general"));
+    const settings = sDoc.exists() ? sDoc.data() : {};
+    const welcome = settings.startMsg || "👋 আমাদের ডিজিটাল স্টোরে স্বাগতম! নিচের অপশনগুলো থেকে বেছে নিন:";
+
+    await ctx.reply(welcome, Markup.inlineKeyboard([
+      [Markup.button.callback("🛍️ ক্যাটালগ ও প্রোডাক্ট", "show_products")],
+      [Markup.button.callback("💳 ওয়ালেট ব্যালেন্স", "show_wallet"), Markup.button.callback("☎ সাপোর্ট", "show_support")]
     ]));
   });
 
-  // ২. ক্যাটালগ ও প্রোডাক্ট শো করা (সরাসরি Firebase থেকে)
-  bot.action("show_catalog", async (ctx) => {
-    const prodSnap = await db.collection("products").get();
-    if (prodSnap.empty) {
-      return ctx.reply("বর্তমানে কোনো প্রোডাক্ট স্টকে নেই।");
+  // প্রোডাক্ট তালিকা প্রদর্শন (ক্যাটালগ)
+  bot.action("show_products", async (ctx) => {
+    try {
+      const snap = await getDocs(collection(db, "products"));
+      if (snap.empty) {
+        return ctx.reply("বর্তমানে কোনো প্রোডাক্ট স্টকে নেই।");
+      }
+
+      const buttons = [];
+      snap.forEach(d => {
+        const p = d.data();
+        buttons.push([Markup.button.callback(`${p.name} —${p.price} USDT`, `buy_${d.id}`)]);
+      });
+      buttons.push([Markup.button.callback("‹ মূল মেনু", "back_to_main")]);
+
+      await ctx.editMessageText("একটি ডিজিটাল প্রোডাক্ট সিলেক্ট করুন:", Markup.inlineKeyboard(buttons));
+    } catch(e) {
+      ctx.reply("ক্যাটালগ লোড করতে সমস্যা হয়েছে।");
     }
-
-    const buttons = [];
-    prodSnap.forEach(docSnap => {
-      const p = docSnap.data();
-      buttons.push([Markup.button.callback(`${p.name} — ৳${p.price || p.price} USDT`, `buy_${docSnap.id}`)]);
-    });
-
-    ctx.reply("একটি প্রোডাক্ট বেছে নিন:", Markup.inlineKeyboard(buttons));
   });
 
-  // ৩. প্রোডাক্ট ক্রয় ও অটোমেটিক স্টক ডেলিভারি
-  bot.action(/buy_(.+)/, async (ctx) => {
-    const productId = ctx.match[1];
-    
-    // অবিক্রীত ১টি স্টক কোড খোঁজা
-    const stockSnap = await db.collection("stocks")
-      .where("productId", "==", productId)
-      .where("isSold", "==", false)
-      .limit(1)
-      .get();
+  // ব্যাক বাটন
+  bot.action("back_to_main", async (ctx) => {
+    await ctx.editMessageText("👋 আমাদের ডিজিটাল স্টোরে স্বাগতম!", Markup.inlineKeyboard([
+      [Markup.button.callback("🛍️ ক্যাটালগ ও প্রোডাক্ট", "show_products")],
+      [Markup.button.callback("💳 ওয়ালেট ব্যালেন্স", "show_wallet"), Markup.button.callback("☎ সাপোর্ট", "show_support")]
+    ]));
+  });
 
-    if (stockSnap.empty) {
-      return ctx.reply("দুঃখিত! এই প্রোডাক্টটির কোনো ডিজিটাল স্টক খালি নেই।");
+  // প্রোডাক্ট ক্রয় ও অটোমেটিক ডিজিটাল কোড ডেলিভারি
+  bot.action(/buy_(.+)/, async (ctx) => {
+    const prodId = ctx.match[1];
+    
+    // স্টক কালেকশন থেকে অবিক্রীত ১টি আইটেম নেওয়া
+    const stocksSnap = await getDocs(collection(db, "stocks"));
+    let targetStockDoc = null;
+
+    stocksSnap.forEach(sDoc => {
+      const s = sDoc.data();
+      if (s.productId === prodId && !s.isSold && !targetStockDoc) {
+        targetStockDoc = sDoc;
+      }
+    });
+
+    if (!targetStockDoc) {
+      return ctx.reply("⚠️ দুঃখিত, এই প্রোডাক্টটির ডিজিটাল স্টক শেষ হয়ে গেছে!");
     }
 
-    const stockDoc = stockSnap.docs[0];
-    const stockData = stockDoc.data();
-
     // স্টকটি বিক্রিত মার্ক করা
-    await stockDoc.ref.update({
+    await updateDoc(doc(db, "stocks", targetStockDoc.id), {
       isSold: true,
       soldTo: ctx.from.id,
       soldAt: new Date()
     });
 
-    // ডিজিটাল কোড/অ্যাকাউন্ট সরাসরি টেলিগ্রামে পাঠিয়ে দেওয়া
-    ctx.reply(`✅ *ক্রয় সফল হয়েছে!*\n\n📦 প্রোডাক্ট: ${stockData.productName}\n🔑 আপনার ডেলিভারি আইটেম:\n\`${stockData.content}\``, { parse_mode: "Markdown" });
+    const stockData = targetStockDoc.data();
+    await ctx.reply(`✅ *ক্রয় সফল হয়েছে!*\n\n📦 প্রোডাক্ট: *${stockData.productName || "Digital Item"}*\n🔑 ডেলিভারি কোড / অ্যাকাউন্ট:\n\`${stockData.content}\``, { parse_mode: "Markdown" });
   });
 
-  // ৪. সাপোর্ট হ্যান্ডলার
-  bot.action("show_support", (ctx) => {
-    const help = settings.helpMsg || "সাহায্যের জন্য অ্যাডমিনের সাথে যোগাযোগ করুন।";
-    ctx.reply(help);
+  // সাপোর্ট বাটন
+  bot.action("show_support", async (ctx) => {
+    const sDoc = await getDoc(doc(db, "settings", "general"));
+    const settings = sDoc.exists() ? sDoc.data() : {};
+    const supportUser = settings.supportUsername || "@admin";
+    await ctx.reply(`যেকোনো প্রয়োজনে আমাদের সাপোর্ট টিমের সাথে যোগাযোগ করুন: ${supportUser}`);
+  });
+
+  // ওয়ালেট বাটন
+  bot.action("show_wallet", (ctx) => {
+    ctx.reply("আপনার বর্তমান ওয়ালেট ব্যালেন্স: 0.00 USDT\nটপ-আপ করতে এডমিনের সাথে যোগাযোগ করুন।");
   });
 
   bot.launch();
-  console.log("বট সফলভাবে চালু হয়েছে এবং Firebase-এর সাথে কানেক্টেড!");
+  console.log("টেলিগ্রাম বট সফলভাবে চালু হয়েছে এবং রিয়েল-টাইম রেসপন্স করছে!");
 }
 
-startBotEngine();
+startBot();
