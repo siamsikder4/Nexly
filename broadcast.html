@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Broadcast - Nexly Merchant</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #fbfbfe; -webkit-tap-highlight-color: transparent; }
+    .tab-pill-active { background-color: #7c3aed !important; color: #ffffff !important; }
+    .step-active { background-color: #7c3aed !important; color: #ffffff !important; font-weight: 600; }
+  </style>
+</head>
+<body class="text-[#1c1b22] flex min-h-screen">
+
+  <!-- মোবাইল সাইডবার ড্রয়ার ওভারলে -->
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
+
+  <!-- ১. ফুল সাইডবার (স্ক্রিনশট ৩৪ অনুযায়ী) -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:w-64 shrink-0">
+    <div class="flex items-center gap-3 px-2 py-2 mb-4">
+      <div class="w-10 h-10 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center shadow-md">
+        <i data-lucide="box" class="w-5 h-5"></i>
+      </div>
+      <div>
+        <h2 class="font-bold text-gray-900 text-sm leading-tight">GG Builder</h2>
+        <p class="text-[11px] text-gray-500 font-medium">Merchant store</p>
+      </div>
+    </div>
+
+    <!-- সাইডবার আইটেমস -->
+    <div class="flex-1 overflow-y-auto space-y-4 text-xs font-medium pr-1">
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Overview</p>
+        <div class="space-y-0.5">
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="layout-grid" class="w-4 h-4 text-gray-500"></i> Home
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="users" class="w-4 h-4 text-gray-500"></i> Customers
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="layers" class="w-4 h-4 text-gray-500"></i> Catalog
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="package" class="w-4 h-4 text-gray-500"></i> Inventory
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-gray-500"></i> Orders
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-gray-500"></i> Analytics
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Channel</p>
+        <div class="space-y-0.5">
+          <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="settings" class="w-4 h-4 text-gray-500"></i> Settings
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="flag" class="w-4 h-4 text-gray-500"></i> Languages
+          </a>
+          <a href="bot-buttons.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="menu-square" class="w-4 h-4 text-gray-500"></i> Bot buttons
+          </a>
+          <a href="broadcast.html" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-purple-50 text-[#7c3aed] font-semibold transition">
+            <i data-lucide="send" class="w-4 h-4 text-[#7c3aed]"></i> Broadcast
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Money</p>
+        <div class="space-y-0.5">
+          <a href="payment-methods.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="wallet" class="w-4 h-4 text-gray-500"></i> Payment methods
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="arrow-left-right" class="w-4 h-4 text-gray-500"></i> Transactions
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="ticket" class="w-4 h-4 text-gray-500"></i> Deposit codes
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Learn</p>
+        <div class="space-y-0.5">
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-gray-500"></i> Store guide
+          </a>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ২. মূল কন্টেন্ট এরিয়া -->
+  <div class="flex-1 flex flex-col min-w-0">
+    <header class="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="p-1.5 text-gray-600 rounded-lg hover:bg-gray-100 md:hidden">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <span class="font-semibold text-gray-800 text-sm">Nexly</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <button class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-full"><i data-lucide="bell" class="w-4 h-4"></i></button>
+        <button class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-full"><i data-lucide="moon" class="w-4 h-4"></i></button>
+        <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 text-xs font-bold flex items-center justify-center">NE</div>
+      </div>
+    </header>
+
+    <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-4xl w-full mx-auto space-y-5">
+      <!-- ব্রেডক্রাম্ব ও টাইটেল (স্ক্রিনশট ৩৫) -->
+      <div>
+        <div class="text-[11px] text-gray-400 flex items-center gap-1.5 mb-1">
+          <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Broadcast</span>
+        </div>
+        <h1 class="text-xl font-bold text-gray-900">Broadcast</h1>
+        <p class="text-xs text-gray-500">Write a message, choose who gets it, confirm, then send.</p>
+      </div>
+
+      <!-- ট্যাব পিলস (Compose, History) -->
+      <div class="flex gap-2">
+        <button onclick="switchTab('compose')" id="tab-pill-compose" class="px-3.5 py-1 text-xs rounded-full font-medium tab-pill-active transition">Compose</button>
+        <button onclick="switchTab('history')" id="tab-pill-history" class="px-3.5 py-1 text-xs rounded-full font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition">History</button>
+      </div>
+
+      <!-- ================= VIEW 1: COMPOSE ================= -->
+      <div id="view-compose" class="space-y-4">
+        <!-- স্টেপ নেভিগেশন ও অ্যাকশন বাটন -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+          <div class="inline-flex p-1 bg-gray-100 rounded-xl text-xs font-medium">
+            <span class="px-3 py-1 rounded-lg step-active">1. Write</span>
+            <span class="px-3 py-1 rounded-lg text-gray-400">2. Audience</span>
+            <span class="px-3 py-1 rounded-lg text-gray-400">3. Review</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="clearDraft()" class="px-3 py-1.5 text-xs text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition">New draft</button>
+            <button onclick="loadTemplate()" class="px-3 py-1.5 text-xs text-gray-700 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition">Load template</button>
+          </div>
+        </div>
+
+        <!-- মেসেজ কার্ড -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4 text-xs">
+          <div>
+            <h2 class="font-bold text-gray-900 text-sm">Message</h2>
+            <p class="text-gray-400 text-[11px]">Customers see the message and optional buttons — not the campaign name.</p>
+          </div>
+
+          <!-- ইনপুট ও টুলবার -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="font-medium text-gray-700">Message <span class="text-gray-400 text-[10px]">(?)</span></span>
+            </div>
+
+            <div class="border border-gray-200 rounded-xl overflow-hidden focus-within:border-purple-600 transition">
+              <!-- রিচ টেক্সট টুলবার -->
+              <div class="bg-gray-50 px-3 py-2 border-b border-gray-100 flex flex-wrap items-center gap-3 text-gray-500 select-none">
+                <button type="button" onclick="formatText('b')" class="font-bold hover:text-gray-800">B</button>
+                <button type="button" onclick="formatText('i')" class="italic hover:text-gray-800">I</button>
+                <button type="button" onclick="formatText('u')" class="underline hover:text-gray-800">U</button>
+                <button type="button" onclick="formatText('s')" class="line-through hover:text-gray-800">S</button>
+                <span class="text-gray-300">|</span>
+                <button type="button" onclick="formatText('code')" class="font-mono text-[11px] hover:text-gray-800">&lt;/&gt;</button>
+                <button type="button" onclick="formatText('a')" class="hover:text-gray-800"><i data-lucide="link" class="w-3.5 h-3.5"></i></button>
+                <button type="button" onclick="insertEmoji('🔥')" class="hover:text-gray-800"><i data-lucide="smile" class="w-3.5 h-3.5"></i></button>
+              </div>
+
+              <textarea id="broadcast-message-input" oninput="updateChatPreview()" rows="5" class="w-full p-3 outline-none text-xs leading-relaxed" placeholder="Write your broadcast announcement here..."></textarea>
+            </div>
+            
+            <div class="flex justify-between items-center text-[10px] text-gray-400 mt-1">
+              <span>Telegram HTML: b, i, u, s, code, pre, a, br, blockquote, tg-emoji</span>
+              <span id="char-count">0/4096</span>
+            </div>
+          </div>
+
+          <!-- Reply buttons -->
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Reply buttons <span class="text-gray-400 text-[10px]">(?)</span></label>
+            <select id="reply-buttons-select" onchange="updateChatPreview()" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600 bg-white cursor-pointer text-gray-700">
+              <option value="none">Choose reply buttons...</option>
+              <option value="shop">🛍️ Open Store (Catalog)</option>
+              <option value="support">☎️ Contact Support</option>
+              <option value="custom">🔗 Custom Link Button</option>
+            </select>
+          </div>
+
+          <!-- Image (optional) -->
+          <div>
+            <label class="block font-medium text-gray-700 mb-1">Image (optional) <span class="text-gray-400 text-[10px]">(?)</span></label>
+            <input type="text" id="image-url-input" oninput="updateChatPreview()" placeholder="https://example.com/banner.jpg" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600 text-gray-700">
+          </div>
+
+          <!-- CHAT PREVIEW -->
+          <div class="pt-2 border-t border-gray-100">
+            <div class="flex justify-between items-center mb-1.5">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">CHAT PREVIEW <span class="text-gray-400 font-normal">(?)</span></span>
+              <span class="text-[10px] text-gray-400">Store bot</span>
+            </div>
+
+            <!-- প্রিভিউ বাবল -->
+            <div class="bg-gray-50 border border-gray-100 rounded-2xl p-4 text-xs space-y-2">
+              <div id="preview-image-container" class="hidden">
+                <img id="preview-image" src="" alt="Banner" class="w-full max-h-48 object-cover rounded-xl mb-2">
+              </div>
+              <div id="chat-preview-text" class="text-gray-500 italic">
+                Your message preview appears here as you type.
+              </div>
+              <div id="preview-button-container" class="pt-2 hidden">
+                <button id="preview-button" class="w-full py-2 bg-white border border-gray-200 rounded-xl text-center font-medium text-gray-800 shadow-2xs"></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Continue বাটন -->
+          <div class="flex justify-end pt-2">
+            <button onclick="handleContinue()" class="bg-[#7c3aed] text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-purple-700 transition shadow-xs">
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= VIEW 2: HISTORY ================= -->
+      <div id="view-history" class="hidden space-y-4">
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs">
+          <h2 class="font-bold text-gray-900 text-sm">Past Campaigns</h2>
+          <div id="history-list" class="divide-y divide-gray-100">
+            <!-- ডাইনামিক হিস্ট্রি লোড হবে -->
+            <div class="py-3 text-gray-400 text-center">No broadcast history yet.</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ৩. অল-ইন-ওয়ান ফায়ারবেস স্ক্রিপ্ট -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBjxk1DR009Is4w20gjqdNOXRNE1GKotdQ",
+      authDomain: "nexly-5ecf5.firebaseapp.com",
+      projectId: "nexly-5ecf5",
+      storageBucket: "nexly-5ecf5.firebasestorage.app",
+      messagingSenderId: "549446516653",
+      appId: "1:549446516653:web:263db598b6b125d9d6ab24"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    lucide.createIcons();
+
+    window.toggleSidebar = function() {
+      document.getElementById('sidebar').classList.toggle('-translate-x-full');
+      document.getElementById('sidebarOverlay').classList.toggle('hidden');
+    };
+
+    window.switchTab = function(tab) {
+      if (tab === 'compose') {
+        document.getElementById('view-compose').classList.remove('hidden');
+        document.getElementById('view-history').classList.add('hidden');
+        document.getElementById('tab-pill-compose').classList.add('tab-pill-active');
+        document.getElementById('tab-pill-history').classList.remove('tab-pill-active');
+      } else {
+        document.getElementById('view-compose').classList.add('hidden');
+        document.getElementById('view-history').classList.remove('hidden');
+        document.getElementById('tab-pill-history').classList.add('tab-pill-active');
+        document.getElementById('tab-pill-compose').classList.remove('tab-pill-active');
+        loadHistory();
+      }
+    };
+
+    // লাইভ প্রিভিউ লজিক
+    window.updateChatPreview = function() {
+      const text = document.getElementById('broadcast-message-input').value;
+      const previewBox = document.getElementById('chat-preview-text');
+      const charCount = document.getElementById('char-count');
+      const imgUrl = document.getElementById('image-url-input').value.trim();
+      const imgContainer = document.getElementById('preview-image-container');
+      const imgElement = document.getElementById('preview-image');
+      const btnSelect = document.getElementById('reply-buttons-select').value;
+      const btnContainer = document.getElementById('preview-button-container');
+      const btnPreview = document.getElementById('preview-button');
+
+      charCount.innerText = `${text.length}/4096`;
+
+      if (text.trim() === '') {
+        previewBox.innerText = 'Your message preview appears here as you type.';
+        previewBox.className = 'text-gray-500 italic';
+      } else {
+        previewBox.innerText = text;
+        previewBox.className = 'text-gray-800 whitespace-pre-wrap font-sans';
+      }
+
+      if (imgUrl) {
+        imgElement.src = imgUrl;
+        imgContainer.classList.remove('hidden');
+      } else {
+        imgContainer.classList.add('hidden');
+      }
+
+      if (btnSelect !== 'none') {
+        btnContainer.classList.remove('hidden');
+        if (btnSelect === 'shop') btnPreview.innerText = '🛍️ Open Store';
+        else if (btnSelect === 'support') btnPreview.innerText = '☎️ Contact Support';
+        else btnPreview.innerText = '🔗 Learn More';
+      } else {
+        btnContainer.classList.add('hidden');
+      }
+    };
+
+    window.formatText = function(tag) {
+      const input = document.getElementById('broadcast-message-input');
+      const start = input.selectionStart;
+      const end = input.selectionEnd;
+      const selectedText = input.value.substring(start, end);
+
+      if (!selectedText) return;
+
+      const replacement = `<${tag}>${selectedText}</${tag}>`;
+      input.value = input.value.substring(0, start) + replacement + input.value.substring(end);
+      window.updateChatPreview();
+    };
+
+    window.insertEmoji = function(emoji) {
+      const input = document.getElementById('broadcast-message-input');
+      input.value += emoji;
+      window.updateChatPreview();
+    };
+
+    window.clearDraft = function() {
+      document.getElementById('broadcast-message-input').value = '';
+      document.getElementById('image-url-input').value = '';
+      document.getElementById('reply-buttons-select').value = 'none';
+      window.updateChatPreview();
+    };
+
+    window.loadTemplate = function() {
+      document.getElementById('broadcast-message-input').value = '🔥 <b>FLASH SALE!</b>\n\nGet an exclusive 20% discount on all VPN & Telegram Premium keys today only!\n\nTap the button below to browse products:';
+      document.getElementById('reply-buttons-select').value = 'shop';
+      window.updateChatPreview();
+    };
+
+    // ফায়ারবেসে ব্রডকাস্ট মেসেজ পাঠানো
+    window.handleContinue = async function() {
+      const msg = document.getElementById('broadcast-message-input').value.trim();
+      const img = document.getElementById('image-url-input').value.trim();
+      const btn = document.getElementById('reply-buttons-select').value;
+
+      if (!msg) {
+        return alert('অনুগ্রহ করে ব্রডকাস্ট মেসেজ লিখুন!');
+      }
+
+      if (!confirm('আপনি কি নিশ্চিত যে এই মেসেজটি সমস্ত বট গ্রাহকদের কাছে পাঠাতে চান?')) {
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "broadcasts"), {
+          message: msg,
+          imageUrl: img || null,
+          button: btn,
+          status: "pending",
+          createdAt: serverTimestamp()
+        });
+
+        alert('ব্রডকাস্ট সফলভাবে তৈরি করা হয়েছে! বট সক্রিয় থাকলে তা স্বয়ংক্রিয়ভাবে ব্যবহারকারীদের কাছে পাঠিয়ে দেবে।');
+        window.clearDraft();
+      } catch (err) {
+        alert('ত্রুটি: ' + err.message);
+      }
+    };
+
+    async function loadHistory() {
+      const list = document.getElementById('history-list');
+      list.innerHTML = '<div class="py-3 text-gray-400 text-center">Loading history...</div>';
+
+      try {
+        const q = query(collection(db, "broadcasts"), orderBy("createdAt", "desc"));
+        const snap = await getDocs(q);
+
+        if (snap.empty) {
+          list.innerHTML = '<div class="py-3 text-gray-400 text-center">No broadcast history yet.</div>';
+          return;
+        }
+
+        list.innerHTML = '';
+        snap.forEach(docSnap => {
+          const d = docSnap.data();
+          list.innerHTML += `
+            <div class="py-3 space-y-1">
+              <div class="flex justify-between items-center text-gray-400 text-[10px]">
+                <span>Status: <strong class="text-emerald-600 uppercase">${d.status || 'Sent'}</strong></span>
+                <span>${d.createdAt ? new Date(d.createdAt.toDate()).toLocaleDateString() : 'Recent'}</span>
+              </div>
+              <p class="text-gray-800 text-xs font-medium">${d.message.substring(0, 100)}...</p>
+            </div>
+          `;
+        });
+      } catch (e) {
+        list.innerHTML = '<div class="py-3 text-gray-400 text-center">Failed to load history.</div>';
+      }
+    }
+  </script>
+</body>
+</html>
