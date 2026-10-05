@@ -1,12 +1,24 @@
 import { Telegraf, Markup } from "telegraf";
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc, setDoc, collection, getDocs, updateDoc, serverTimestamp } from "firebase/firestore";
+import { 
+  getFirestore, 
+  doc, 
+  getDoc, 
+  setDoc, 
+  collection, 
+  getDocs, 
+  updateDoc, 
+  serverTimestamp,
+  onSnapshot,
+  query,
+  where
+} from "firebase/firestore";
 import http from "http";
 
 // Render Free Web Service পোর্ট লিসেনার
 const server = http.createServer((req, res) => {
   res.writeHead(200, { "Content-Type": "text/plain" });
-  res.end("GGSoma Style Bot Running!");
+  res.end("GGSoma Style Bot with Broadcast Running!");
 });
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`Listening on ${PORT}`));
@@ -39,7 +51,7 @@ async function startBot() {
 
   const bot = new Telegraf(botToken);
 
-  // স্ক্রিনশট ২৮: স্থায়ী নিচের রিপ্লাই কিবোর্ড (Fixed Reply Keyboard)
+  // স্থায়ী নিচের রিপ্লাই কিবোর্ড (Fixed Reply Keyboard)
   const mainPersistentKeyboard = Markup.keyboard([
     ["🛒 Products"],
     ["👤 Profile", "🎁 Invite Center"],
@@ -96,7 +108,7 @@ async function startBot() {
     }
   });
 
-  // ২. 👤 Profile বাটন (স্ক্রিনশট ২৯ ও ৩০ হুবহু ডিজাইন)
+  // ২. 👤 Profile বাটন
   bot.hears("👤 Profile", async (ctx) => {
     const user = ctx.from;
     const userSnap = await getDoc(doc(db, "customers", String(user.id)));
@@ -120,7 +132,6 @@ async function startBot() {
 🏷 <b>Reseller discount:</b> ❌
 📅 <b>Registration date:</b> 03/10/2026, 07:02`;
 
-    // স্ক্রিনশট ২৯ ও ৩০ এর ইনলাইন অ্যাকশন বাটনসমূহ
     const profileInlineButtons = Markup.inlineKeyboard([
       [Markup.button.callback("💲 Top up balance", "menu_topup")],
       [Markup.button.callback("🏅 My Status", "prof_status"), Markup.button.callback("📋 My Orders", "prof_orders")],
@@ -132,7 +143,7 @@ async function startBot() {
     await ctx.reply(profileMsg, { parse_mode: "HTML", ...profileInlineButtons });
   });
 
-  // ৩. 💲 Top up balance বাটন (স্ক্রিনশট ৩১, ৩২ ও ৩৩ হুবহু গাইডলাইন ও গেটওয়ে)
+  // ৩. 💲 Top up balance
   async function showTopupMenu(ctx) {
     const topupMsg = 
 `📥 <b>Choose your preferred payment method:</b>
@@ -177,77 +188,58 @@ async function startBot() {
     showTopupMenu(ctx);
   });
 
-  // ৪. 🎁 Invite Center বাটন
+  // অন্যান্য বাটন
   bot.hears("🎁 Invite Center", (ctx) => {
     const link = `https://t.me/${ctx.botInfo.username}?start=${ctx.from.id}`;
-    ctx.reply(
-`🎁 <b>Invite Center</b>\n\nInvite friends and earn commissions from their purchases!\n\nYour Invite Link:\n<code>${link}</code>`, 
-      { parse_mode: "HTML", ...mainPersistentKeyboard }
-    );
+    ctx.reply(`🎁 <b>Invite Center</b>\n\nInvite link:\n<code>${link}</code>`, { parse_mode: "HTML", ...mainPersistentKeyboard });
   });
 
-  // ৫. 💳 Redeem Code বাটন
   bot.hears("💳 Redeem Code", (ctx) => {
     ctx.reply("🎟 Send your Gift / Deposit code in chat to redeem balance into your wallet.", mainPersistentKeyboard);
   });
 
-  // ৬. ℹ️ Bot Policy বাটন
   bot.hears("ℹ️ Bot Policy", (ctx) => {
-    ctx.reply("📜 <b>Bot Policy:</b>\nInstant automatic delivery upon payment confirmation. All digital purchases are final and non-refundable.", { parse_mode: "HTML", ...mainPersistentKeyboard });
+    ctx.reply("📜 <b>Bot Policy:</b>\nInstant automatic delivery upon payment confirmation. All sales final.", { parse_mode: "HTML", ...mainPersistentKeyboard });
   });
 
-  // ৭. ❔ Help বাটন
   bot.hears("❔ Help", async (ctx) => {
     const sDoc = await getDoc(doc(db, "settings", "general"));
     const settings = sDoc.exists() ? sDoc.data() : {};
     ctx.reply(settings.helpMsg || `Contact Support: ${settings.supportUsername || "@admin"}`, mainPersistentKeyboard);
   });
 
-  // ৮. 📲 Reseller API বাটন
   bot.hears("📲 Reseller API", (ctx) => {
-    ctx.reply("📲 <b>Reseller API:</b>\nConnect your own store directly to our warehouse API. Contact support for developer documentation and API keys.", { parse_mode: "HTML", ...mainPersistentKeyboard });
+    ctx.reply("📲 <b>Reseller API:</b> Contact support for developer documentation and API keys.", { parse_mode: "HTML", ...mainPersistentKeyboard });
   });
 
-  // পেমেন্ট মেথড হ্যান্ডলার
+  // পেমেন্ট অ্যাকশন
   bot.action("pay_binance", (ctx) => {
     ctx.answerCbQuery();
-    ctx.reply("🔸 <b>Binance Pay ID:</b> <code>1266063</code>\nSend USDT and transaction will be credited automatically.", { parse_mode: "HTML" });
+    ctx.reply("🔸 <b>Binance Pay ID:</b> <code>1266063</code>\nSend USDT and it will be credited automatically.", { parse_mode: "HTML" });
   });
-
   bot.action("pay_trc20", (ctx) => {
     ctx.answerCbQuery();
-    ctx.reply("🪙 <b>TRC20 (USDT) Address:</b>\n<code>TXK98204918230912409ABC</code>\nNetwork: Tron (TRC20)", { parse_mode: "HTML" });
+    ctx.reply("🪙 <b>TRC20 (USDT):</b> <code>TXK98204918230912409ABC</code>", { parse_mode: "HTML" });
   });
-
   bot.action("pay_bep20", (ctx) => {
     ctx.answerCbQuery();
-    ctx.reply("🪙 <b>BEP20 (USDT) Address:</b>\n<code>0x549446516653263db598b6b125d9d6ab24</code>\nNetwork: BNB Smart Chain (BEP20)", { parse_mode: "HTML" });
+    ctx.reply("🪙 <b>BEP20 (USDT):</b> <code>0x549446516653263db598b6b125d9d6ab24</code>", { parse_mode: "HTML" });
   });
-
   bot.action("pay_polygon", (ctx) => {
     ctx.answerCbQuery();
-    ctx.reply("🪙 <b>Polygon (USDT) Address:</b>\n<code>0x549446516653263db598b6b125d9d6ab24</code>\nNetwork: Polygon", { parse_mode: "HTML" });
+    ctx.reply("🪙 <b>Polygon (USDT):</b> <code>0x549446516653263db598b6b125d9d6ab24</code>", { parse_mode: "HTML" });
   });
-
   bot.action("pay_stars", (ctx) => {
     ctx.answerCbQuery();
-    ctx.reply("⭐ Telegram Stars invoice processing...");
+    ctx.reply("⭐ Telegram Stars processing...");
   });
-
-  // প্রোফাইল সাব-অ্যাকশন
-  bot.action("prof_orders", (ctx) => { ctx.answerCbQuery(); ctx.reply("📋 You have no active or completed orders."); });
-  bot.action("prof_status", (ctx) => { ctx.answerCbQuery(); ctx.reply("🏅 Status: Standard Tier. Spend $50 to reach VIP Level."); });
-  bot.action("prof_withdraw", (ctx) => { ctx.answerCbQuery(); ctx.reply("💰 Minimum withdraw amount is $10 USDT."); });
-  bot.action("prof_statement", (ctx) => { ctx.answerCbQuery(); ctx.reply("🏦 Wallet Statement: No transactions recorded this month."); });
-  bot.action("prof_w_req", (ctx) => { ctx.answerCbQuery(); ctx.reply("📋 No pending withdrawal requests."); });
-  bot.action("prof_w_prof", (ctx) => { ctx.answerCbQuery(); ctx.reply("📑 Withdrawal profile not set."); });
 
   bot.action("back_close", (ctx) => {
     ctx.answerCbQuery();
     ctx.deleteMessage().catch(() => {});
   });
 
-  // প্রোডাক্ট কেনা ও অটো ডেলিভারি
+  // প্রোডাক্ট কেনা ও অটো স্টক ডেলিভারি
   bot.action(/buy_(.+)/, async (ctx) => {
     const prodId = ctx.match[1];
     const stocksSnap = await getDocs(collection(db, "stocks"));
@@ -286,8 +278,79 @@ async function startBot() {
     );
   });
 
+  // ==========================================
+  // রিয়েল-টাইম ব্রডকাস্ট ইঞ্জিন (REAL-TIME BROADCAST ENGINE)
+  // ==========================================
+  const qBroadcasts = query(collection(db, "broadcasts"), where("status", "==", "pending"));
+  onSnapshot(qBroadcasts, async (snapshot) => {
+    for (const bDoc of snapshot.docs) {
+      const broadcast = bDoc.data();
+      const broadcastId = bDoc.id;
+
+      console.log(`Starting Broadcast: ${broadcastId}`);
+
+      // সকল কাস্টমার লোড করা
+      const customersSnap = await getDocs(collection(db, "customers"));
+      if (customersSnap.empty) {
+        await updateDoc(doc(db, "broadcasts", broadcastId), { status: "sent", sentCount: 0 });
+        continue;
+      }
+
+      let extraOptions = { parse_mode: "HTML" };
+      if (broadcast.button && broadcast.button !== "none") {
+        if (broadcast.button === "shop") {
+          extraOptions.reply_markup = Markup.inlineKeyboard([[Markup.button.callback("🛍️ Open Store", "show_products")]]).reply_markup;
+        } else if (broadcast.button === "support") {
+          extraOptions.reply_markup = Markup.inlineKeyboard([[Markup.button.callback("☎️ Contact Support", "show_support")]]).reply_markup;
+        }
+      }
+
+      let sentCount = 0;
+      for (const cDoc of customersSnap.docs) {
+        const cust = cDoc.data();
+        const chatId = cust.telegramId || cDoc.id;
+
+        try {
+          if (broadcast.imageUrl) {
+            await bot.telegram.sendPhoto(chatId, broadcast.imageUrl, {
+              caption: broadcast.message,
+              ...extraOptions
+            });
+          } else {
+            await bot.telegram.sendMessage(chatId, broadcast.message, extraOptions);
+          }
+          sentCount++;
+        } catch (err) {
+          console.error(`Failed to send broadcast to ${chatId}:`, err.message);
+        }
+      }
+
+      // ব্রডকাস্ট শেষ হলে স্ট্যাটাস sent করে দেওয়া
+      await updateDoc(doc(db, "broadcasts", broadcastId), {
+        status: "sent",
+        sentCount: sentCount,
+        completedAt: serverTimestamp()
+      });
+      console.log(`Broadcast ${broadcastId} completed! Total delivered: ${sentCount}`);
+    }
+  });
+
+  // সরাসরি কাস্টমার মেসেজ ইঞ্জিন (Direct Customer Messages)
+  const qDirectMsg = query(collection(db, "direct_messages"), where("status", "==", "pending"));
+  onSnapshot(qDirectMsg, async (snapshot) => {
+    for (const mDoc of snapshot.docs) {
+      const msgData = mDoc.data();
+      try {
+        await bot.telegram.sendMessage(msgData.customerId, msgData.message, { parse_mode: "HTML" });
+        await updateDoc(doc(db, "direct_messages", mDoc.id), { status: "sent" });
+      } catch (err) {
+        console.error("Direct Message Error:", err.message);
+      }
+    }
+  });
+
   bot.launch();
-  console.log("GGSoma Bot Launched Successfully!");
+  console.log("GGSoma Bot with Live Broadcast Engine Started!");
 }
 
 startBot();
