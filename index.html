@@ -65,7 +65,7 @@
       <div>
         <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Channel</p>
         <div class="space-y-0.5">
-          <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50">
+          <button onclick="navigate('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="bot" class="w-4 h-4 text-gray-500"></i> Settings
           </button>
           <button class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50">
@@ -130,7 +130,7 @@
     <!-- বডি কনটেন্ট পেজগুলো -->
     <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-5xl w-full mx-auto">
       
-      <!-- ================= 1. HOME SECTION (Store pulse) ================= -->
+      <!-- ================= 1. HOME SECTION ================= -->
       <div id="section-home" class="space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Home</span>
@@ -138,7 +138,6 @@
 
         <div>
           <h2 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">Store pulse</h2>
-          <!-- ৮টি পালস কার্ড গ্রিড -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div class="bg-[#fbfafd] border-l-4 border-l-amber-500 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
               <span class="text-[10px] font-bold text-gray-500 tracking-wider uppercase block">Needs Attention</span>
@@ -146,7 +145,7 @@
             </div>
             <div class="bg-[#fbfafd] border-l-4 border-l-sky-500 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
               <span class="text-[10px] font-bold text-sky-700 tracking-wider uppercase block">Customers</span>
-              <p class="text-2xl font-bold text-gray-900 mt-1" id="pulse-cust-count">1</p>
+              <p class="text-2xl font-bold text-gray-900 mt-1">1</p>
             </div>
             <div class="bg-[#fbfafd] border-l-4 border-l-emerald-500 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
               <span class="text-[10px] font-bold text-emerald-700 tracking-wider uppercase block">Active</span>
@@ -170,7 +169,7 @@
             </div>
             <div class="bg-[#fbfafd] border-l-4 border-l-gray-900 border border-gray-100 rounded-2xl p-3.5 shadow-xs">
               <span class="text-[10px] font-bold text-gray-700 tracking-wider uppercase block">Live Products</span>
-              <p class="text-2xl font-bold text-gray-900 mt-1" id="pulse-prod-count">1</p>
+              <p class="text-2xl font-bold text-gray-900 mt-1">1</p>
             </div>
           </div>
         </div>
@@ -192,429 +191,221 @@
             <span class="px-2.5 py-1 bg-gray-100 text-gray-600 rounded-lg font-medium">Maintenance: Off</span>
             <span class="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-lg font-medium">Payments: 1 active</span>
           </div>
-          <a href="#" class="block text-xs font-semibold text-purple-600 mt-3">Open bot &gt;</a>
+          <button onclick="navigate('settings')" class="block text-xs font-semibold text-purple-600 mt-3">Open bot settings &gt;</button>
         </div>
-
-        <!-- Attention Box -->
-        <div class="bg-white border border-gray-200 border-l-4 border-l-purple-600 rounded-2xl p-4 shadow-2xs">
-          <p class="text-xs font-bold text-gray-900 mb-1">Attention</p>
-          <p class="text-xs text-gray-500">Nothing needs attention right now.</p>
-        </div>
-
-        <!-- Recent orders -->
-        <div class="bg-white border border-gray-200 border-l-4 border-l-sky-600 rounded-2xl p-4 shadow-2xs">
-          <p class="text-xs font-bold text-gray-900 mb-1">Recent orders</p>
-          <p class="text-xs text-gray-500">No orders yet.</p>
-        </div>
-
-        <!-- Transactions summary -->
-        <div class="bg-white border border-gray-200 border-l-4 border-l-amber-600 rounded-2xl p-4 shadow-2xs">
-          <div class="flex justify-between items-center mb-3">
-            <div>
-              <p class="text-xs font-bold text-gray-900">Transactions</p>
-              <p class="text-[11px] text-gray-400">Last 30 days</p>
-            </div>
-            <button class="text-xs font-semibold text-purple-600 border border-purple-200 px-3 py-1 rounded-xl">Open transactions</button>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-            <div class="bg-amber-50/50 p-2.5 rounded-xl border border-amber-100">
-              <span class="text-[10px] text-amber-700 block uppercase font-bold">Volume</span>
-              <span class="font-bold text-xs text-gray-900">0.00 USDT</span>
-            </div>
-            <div class="bg-emerald-50/50 p-2.5 rounded-xl border border-emerald-100">
-              <span class="text-[10px] text-emerald-700 block uppercase font-bold">Completed</span>
-              <span class="font-bold text-xs text-gray-900">0</span>
-            </div>
-            <div class="bg-sky-50/50 p-2.5 rounded-xl border border-sky-100">
-              <span class="text-[10px] text-sky-700 block uppercase font-bold">Pending</span>
-              <span class="font-bold text-xs text-gray-900">0</span>
-            </div>
-            <div class="bg-gray-50 p-2.5 rounded-xl border border-gray-100">
-              <span class="text-[10px] text-gray-600 block uppercase font-bold">Needs Action</span>
-              <span class="font-bold text-xs text-gray-900">0</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick actions -->
-        <div>
-          <p class="text-xs font-bold text-gray-700 mb-2">Quick actions</p>
-          <div class="flex flex-wrap gap-2">
-            <button onclick="navigate('catalog')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
-              <i data-lucide="plus" class="w-3.5 h-3.5 text-purple-600"></i> New product
-            </button>
-            <button onclick="navigate('inventory')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
-              <i data-lucide="package" class="w-3.5 h-3.5 text-purple-600"></i> Inventory
-            </button>
-            <button onclick="navigate('orders')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
-              <i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-purple-600"></i> Orders
-            </button>
-            <button onclick="navigate('payments')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
-              <i data-lucide="wallet" class="w-3.5 h-3.5 text-purple-600"></i> Payment methods
-            </button>
-          </div>
-        </div>
-
       </div>
 
-      <!-- ================= 2. CUSTOMERS SECTION (Customer pulse) ================= -->
+      <!-- ================= 2. SETTINGS SECTION (Dedicated Channel Settings) ================= -->
+      <div id="section-settings" class="hidden space-y-6">
+        <div class="text-xs text-gray-400 flex items-center gap-1.5">
+          <span>Channel</span> <span>/</span> <span class="text-gray-700 font-medium">Settings</span>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-xl font-bold text-gray-900">Bot & Store Settings</h1>
+            <p class="text-xs text-gray-500 mt-0.5">Manage your Telegram bot credentials, operational parameters, and store branding.</p>
+          </div>
+          <button onclick="alert('Settings saved successfully!')" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold shadow-sm hover:bg-purple-700 transition">
+            Save changes
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <!-- কার্ড ১: টেলিগ্রাম বট কানেকশন -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs">
+            <div class="flex items-center justify-between pb-3 border-b mb-4">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
+                  <i data-lucide="bot" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-gray-900">Telegram Bot Integration</h3>
+                  <p class="text-[11px] text-gray-400">Connect via BotFather API token</p>
+                </div>
+              </div>
+              <span class="px-2.5 py-1 text-[11px] font-bold bg-emerald-50 text-emerald-600 rounded-full flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Connected
+              </span>
+            </div>
+
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="block font-semibold text-gray-700 mb-1">Bot Token</label>
+                <div class="flex gap-2">
+                  <input type="password" value="7382910394:AAHk_EXAMPLE_KEY_TOKEN" class="flex-1 border border-gray-200 rounded-xl p-2.5 outline-none font-mono text-xs focus:border-purple-600">
+                  <button class="px-3 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-600 font-semibold text-xs">Verify</button>
+                </div>
+                <p class="text-[10px] text-gray-400 mt-1">Get this token from @BotFather on Telegram.</p>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <div>
+                  <label class="block font-semibold text-gray-700 mb-1">Bot Username</label>
+                  <input type="text" value="@MyDigitalShopBot" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+                </div>
+                <div>
+                  <label class="block font-semibold text-gray-700 mb-1">Admin Telegram ID(s)</label>
+                  <input type="text" placeholder="e.g. 8271633124 (for order alerts)" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- কার্ড ২: স্টোর আইডেন্টিটি -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs">
+            <h3 class="text-sm font-bold text-gray-900 mb-3">Store Identity & Welcome Message</h3>
+            <div class="space-y-3 text-xs">
+              <div>
+                <label class="block font-semibold text-gray-700 mb-1">Store Display Name</label>
+                <input type="text" value="GG Builder Store" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+              </div>
+              <div>
+                <label class="block font-semibold text-gray-700 mb-1">Welcome Text (/start caption)</label>
+                <textarea rows="3" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">আমাদের ডিজিটাল স্টোরে স্বাগতম! নিচের ক্যাটালগ থেকে যেকোনো সার্ভিস বেছে নিতে পারেন।</textarea>
+              </div>
+              <div>
+                <label class="block font-semibold text-gray-700 mb-1">Customer Support Handle</label>
+                <input type="text" value="@SupportAdmin" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
+              </div>
+            </div>
+          </div>
+
+          <!-- কার্ড ৩: অপারেশনাল কন্ট্রোল ও মেইন্টেন্যান্স -->
+          <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs">
+            <h3 class="text-sm font-bold text-gray-900 mb-3">Store Control & Modes</h3>
+            <div class="space-y-3 text-xs">
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                <div>
+                  <p class="font-bold text-gray-800">Maintenance Mode</p>
+                  <p class="text-[11px] text-gray-500">বটের সব অর্ডার সাময়িকভাবে বন্ধ রাখুন।</p>
+                </div>
+                <input type="checkbox" class="w-4 h-4 accent-purple-600">
+              </div>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                <div>
+                  <p class="font-bold text-gray-800">Instant Delivery Only</p>
+                  <p class="text-[11px] text-gray-500">শুধুমাত্র স্টক থাকা অবস্থায় ইউজারকে অর্ডার করতে দিন।</p>
+                </div>
+                <input type="checkbox" checked class="w-4 h-4 accent-purple-600">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= 3. CUSTOMERS SECTION ================= -->
       <div id="section-customers" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Customers</span>
         </div>
-
-        <div>
-          <h2 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">Customer pulse</h2>
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div class="bg-[#fbfafd] border-l-4 border-l-sky-500 border border-gray-100 rounded-2xl p-3 shadow-xs">
-              <span class="text-[10px] font-bold text-sky-700 uppercase block">Customers</span>
-              <p class="text-xl font-bold text-gray-900 mt-1">1</p>
-            </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-emerald-500 border border-gray-100 rounded-2xl p-3 shadow-xs">
-              <span class="text-[10px] font-bold text-emerald-700 uppercase block">Active</span>
-              <p class="text-xl font-bold text-gray-900 mt-1">1</p>
-            </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-gray-900 border border-gray-100 rounded-2xl p-3 shadow-xs">
-              <span class="text-[10px] font-bold text-gray-700 uppercase block">Idle</span>
-              <p class="text-xl font-bold text-gray-900 mt-1">0</p>
-            </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-red-500 border border-gray-100 rounded-2xl p-3 shadow-xs">
-              <span class="text-[10px] font-bold text-red-600 uppercase block">Banned</span>
-              <p class="text-xl font-bold text-gray-900 mt-1">0</p>
-            </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-emerald-600 border border-gray-100 rounded-2xl p-3 shadow-xs">
-              <span class="text-[10px] font-bold text-emerald-700 uppercase block">Total Balances</span>
-              <p class="text-sm font-bold text-gray-900 mt-1">0.00 USDT</p>
-            </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-sky-600 border border-gray-100 rounded-2xl p-3 shadow-xs">
-              <span class="text-[10px] font-bold text-sky-700 uppercase block">Avg Balance</span>
-              <p class="text-sm font-bold text-gray-900 mt-1">0.00 USDT</p>
-            </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-amber-500 border border-gray-100 rounded-2xl p-3 shadow-xs">
-              <span class="text-[10px] font-bold text-amber-700 uppercase block">Total Spend</span>
-              <p class="text-sm font-bold text-gray-900 mt-1">0.00 USDT</p>
-            </div>
-            <div class="bg-[#fbfafd] border-l-4 border-l-purple-600 border border-gray-100 rounded-2xl p-3 shadow-xs">
-              <span class="text-[10px] font-bold text-purple-700 uppercase block">Purchases</span>
-              <p class="text-xl font-bold text-gray-900 mt-1">0</p>
-            </div>
-          </div>
+        <div class="flex items-center gap-2 mb-1">
+          <h1 class="text-xl font-bold text-gray-900">Customers</h1>
+          <span class="px-2 py-0.5 text-[10px] font-bold bg-sky-50 text-sky-700 rounded-full">1 customers</span>
         </div>
-
-        <div>
-          <div class="flex items-center gap-2 mb-1">
-            <h1 class="text-xl font-bold text-gray-900">Customers</h1>
-            <span class="px-2 py-0.5 text-[10px] font-bold bg-sky-50 text-sky-700 rounded-full">1 customers</span>
-          </div>
-          <p class="text-xs text-gray-500">Store-scoped ops desk for identity, balances, spend, and activity.</p>
-        </div>
-
-        <!-- ফিল্টার বার -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs space-y-3">
-          <div>
-            <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Search</label>
-            <input type="text" placeholder="Name, @username, or Telegram ID" class="w-full border border-gray-200 rounded-xl p-2 text-xs outline-none focus:border-purple-600">
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Activity</label>
-              <select class="w-full border border-gray-200 rounded-xl p-2 text-xs outline-none"><option>All</option></select>
-            </div>
-            <div>
-              <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">Sort</label>
-              <select class="w-full border border-gray-200 rounded-xl p-2 text-xs outline-none"><option>Newest joined</option></select>
-            </div>
-          </div>
-        </div>
-
-        <!-- কাস্টমার লিস্ট কার্ড -->
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
           <div class="flex justify-between items-start mb-2">
             <div>
               <h3 class="font-bold text-sm text-gray-900">Siam Hossain</h3>
               <p class="text-xs text-gray-500">@Zvshshhvc • 8271633124</p>
             </div>
-            <!-- কাস্টমার অ্যাকশন আইকন -->
             <div class="flex gap-1">
-              <button class="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
-              <button class="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"><i data-lucide="eye" class="w-3.5 h-3.5"></i></button>
-              <button class="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"><i data-lucide="wallet" class="w-3.5 h-3.5"></i></button>
-              <button class="p-1.5 text-gray-400 hover:text-purple-600 hover:bg-purple-50 rounded-lg"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
-              <button class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg"><i data-lucide="ban" class="w-3.5 h-3.5"></i></button>
+              <button class="p-1.5 text-gray-400 hover:text-purple-600"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
+              <button class="p-1.5 text-gray-400 hover:text-purple-600"><i data-lucide="eye" class="w-3.5 h-3.5"></i></button>
             </div>
           </div>
-          <div class="text-[11px] text-gray-600 flex flex-wrap gap-x-4 gap-y-1 mb-2">
-            <span><strong class="text-emerald-600">Balance:</strong> 0.00 USDT</span>
-            <span><strong>Spend:</strong> 0.00 USDT</span>
-            <span><strong>Purchases:</strong> 0</span>
-          </div>
-          <div class="flex justify-between items-center text-[10px] text-gray-400 border-t pt-2">
-            <span>Joined: Oct 5, 2026</span>
-            <span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full font-bold">Active</span>
-          </div>
         </div>
-
       </div>
 
-      <!-- ================= 3. CATALOG SECTION ================= -->
+      <!-- ================= 4. CATALOG SECTION ================= -->
       <div id="section-catalog" class="hidden space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Your products</span>
         </div>
-
         <div class="flex justify-between items-start">
-          <div>
-            <h1 class="text-xl font-bold text-gray-900">Catalog</h1>
-            <p class="text-xs text-gray-500">Build the products that will power your merchant bot.</p>
-          </div>
-          <button onclick="openProductModal()" class="bg-[#7c3aed] text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm hover:bg-purple-700 transition">
-            New product
-          </button>
+          <h1 class="text-xl font-bold text-gray-900">Catalog</h1>
+          <button onclick="openProductModal()" class="bg-[#7c3aed] text-white px-3.5 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700">New product</button>
         </div>
-
-        <!-- সাব ট্যাব -->
-        <div class="flex gap-2 p-1 bg-gray-100 rounded-xl w-fit text-xs font-medium">
-          <button class="px-3 py-1.5 bg-[#7c3aed] text-white rounded-lg font-semibold shadow-xs">Products</button>
-          <button class="px-3 py-1.5 text-gray-600 hover:text-gray-900">Categories</button>
-          <button class="px-3 py-1.5 text-gray-600 hover:text-gray-900">Catalog appearance</button>
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
+          <table class="w-full text-left text-xs">
+            <thead class="text-[10px] font-bold text-gray-400 uppercase border-b pb-2">
+              <tr>
+                <th class="py-2">Products</th>
+                <th class="py-2">Category</th>
+                <th class="py-2">Price</th>
+                <th class="py-2">Duration</th>
+              </tr>
+            </thead>
+            <tbody id="catalog-products-table">
+              <tr>
+                <td class="py-3 font-semibold text-gray-900">NordVpn</td>
+                <td class="py-3 text-gray-600">VPN</td>
+                <td class="py-3 font-semibold">0.3 USDT</td>
+                <td class="py-3 text-gray-500">None</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-
-        <!-- স্ট্যাটাস গ্রিড -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="bg-[#fbfafd] border-l-4 border-l-sky-500 border border-gray-100 rounded-2xl p-3 shadow-xs">
-            <span class="text-[10px] font-bold text-sky-700 uppercase block">Products</span>
-            <p class="text-xl font-bold text-gray-900 mt-1" id="cat-prod-count">1</p>
-          </div>
-          <div class="bg-[#fbfafd] border-l-4 border-l-emerald-500 border border-gray-100 rounded-2xl p-3 shadow-xs">
-            <span class="text-[10px] font-bold text-emerald-700 uppercase block">Enabled</span>
-            <p class="text-xl font-bold text-gray-900 mt-1">1</p>
-          </div>
-          <div class="bg-[#fbfafd] border-l-4 border-l-gray-900 border border-gray-100 rounded-2xl p-3 shadow-xs">
-            <span class="text-[10px] font-bold text-gray-700 uppercase block">Uncategorized</span>
-            <p class="text-xl font-bold text-gray-900 mt-1">0</p>
-          </div>
-          <div class="bg-[#fbfafd] border-l-4 border-l-purple-600 border border-gray-100 rounded-2xl p-3 shadow-xs">
-            <span class="text-[10px] font-bold text-purple-700 uppercase block">Manual</span>
-            <p class="text-xl font-bold text-gray-900 mt-1">1</p>
-          </div>
-        </div>
-
-        <!-- ফিল্টার ও টেবিল -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs space-y-3">
-          <div class="flex justify-between items-center">
-            <h3 class="font-bold text-xs text-gray-900">Products</h3>
-            <span class="text-[11px] text-gray-400">1 rows</span>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
-            <input type="text" placeholder="Search..." class="border border-gray-200 rounded-xl p-2 text-xs outline-none focus:border-purple-600">
-            <select class="border border-gray-200 rounded-xl p-2 text-xs outline-none"><option>Status: All</option></select>
-            <select class="border border-gray-200 rounded-xl p-2 text-xs outline-none"><option>Fulfillment: All</option></select>
-          </div>
-
-          <!-- প্রোডাক্ট তালিকা -->
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="text-[10px] font-bold text-gray-400 uppercase border-b pb-2">
-                <tr>
-                  <th class="py-2">Products</th>
-                  <th class="py-2">Category</th>
-                  <th class="py-2">Price</th>
-                  <th class="py-2">Duration</th>
-                </tr>
-              </thead>
-              <tbody id="catalog-products-table" class="divide-y divide-gray-100">
-                <tr>
-                  <td class="py-3 flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-lg bg-sky-500 text-white flex items-center justify-center font-bold text-xs">N</div>
-                    <div>
-                      <p class="font-semibold text-gray-900">NordVpn</p>
-                      <p class="text-[10px] text-gray-400">nordvpn</p>
-                    </div>
-                  </td>
-                  <td class="py-3 font-medium text-gray-600">VPN</td>
-                  <td class="py-3 font-semibold text-gray-900">0.3 <span class="text-[10px] text-gray-400">USDT</span></td>
-                  <td class="py-3 text-gray-500">None</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
       </div>
 
-      <!-- ================= 4. ANALYTICS SECTION ================= -->
+      <!-- ================= 5. ANALYTICS SECTION ================= -->
       <div id="section-analytics" class="hidden space-y-6">
-        <div class="text-xs text-gray-400 flex items-center gap-1.5">
-          <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Analytics</span>
-        </div>
-
-        <div>
-          <h1 class="text-xl font-bold text-gray-900">Analytics</h1>
-          <p class="text-xs text-gray-500 mt-1">Live store inflows from fulfilled sales and completed deposits — pick a preset or custom range.</p>
-        </div>
-
-        <!-- টাইম রেঞ্জ বাটন -->
-        <div class="flex flex-wrap items-center gap-2">
-          <div class="flex p-1 bg-gray-100 rounded-xl text-xs font-semibold">
-            <button class="px-3 py-1 bg-[#7c3aed] text-white rounded-lg">Today</button>
-            <button class="px-3 py-1 text-gray-600 hover:text-gray-900">7 days</button>
-            <button class="px-3 py-1 text-gray-600 hover:text-gray-900">30 days</button>
-          </div>
-          <div class="flex items-center gap-2 bg-white border border-gray-200 px-3 py-1 rounded-xl text-xs">
-            <span class="text-gray-400">From</span>
-            <input type="text" value="09/29/2026" class="w-20 text-center outline-none">
-            <span class="text-gray-400">To</span>
-            <input type="text" value="10/05/2026" class="w-20 text-center outline-none">
-            <button class="text-purple-600 font-semibold pl-2 border-l">Apply</button>
-          </div>
-        </div>
-
-        <!-- মেট্রিক্স কার্ড -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div class="bg-[#fbfafd] border-l-4 border-l-emerald-500 border border-gray-100 rounded-2xl p-3 shadow-xs">
-            <span class="text-[10px] font-bold text-emerald-700 uppercase block">Sales</span>
-            <p class="text-lg font-bold text-gray-900 mt-1">0.00 <span class="text-xs font-normal text-gray-500">USDT</span></p>
-          </div>
-          <div class="bg-[#fbfafd] border-l-4 border-l-sky-500 border border-gray-100 rounded-2xl p-3 shadow-xs">
-            <span class="text-[10px] font-bold text-sky-700 uppercase block">Deposits</span>
-            <p class="text-lg font-bold text-gray-900 mt-1">0.00 <span class="text-xs font-normal text-gray-500">USDT</span></p>
-          </div>
-          <div class="bg-[#fbfafd] border-l-4 border-l-purple-600 border border-gray-100 rounded-2xl p-3 shadow-xs">
-            <span class="text-[10px] font-bold text-purple-700 uppercase block">Combined Inflow</span>
-            <p class="text-lg font-bold text-gray-900 mt-1">0.00 <span class="text-xs font-normal text-gray-500">USDT</span></p>
-          </div>
-          <div class="bg-[#fbfafd] border-l-4 border-l-teal-500 border border-gray-100 rounded-2xl p-3 shadow-xs">
-            <span class="text-[10px] font-bold text-teal-700 uppercase block">Orders</span>
-            <p class="text-lg font-bold text-gray-900 mt-1">0</p>
-          </div>
-        </div>
-
-        <!-- চার্ট কনটেইনার -->
+        <h1 class="text-xl font-bold text-gray-900">Analytics</h1>
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
-          <div class="flex justify-between items-center mb-4">
-            <div>
-              <p class="text-xs text-gray-400">Sales</p>
-              <p class="font-bold text-sm text-gray-900">0.00 USDT</p>
-            </div>
-            <span class="text-[10px] text-gray-400">Move across chart like a market ticker</span>
-          </div>
-          <!-- সিমুলেটেড লাইন চার্ট প্লেসহোল্ডার -->
-          <div class="h-32 border-b border-l flex items-end px-2 pb-1 relative">
-            <div class="w-full h-0.5 bg-emerald-500"></div>
-          </div>
-          <div class="flex justify-between text-[10px] text-gray-400 mt-2">
-            <span>Oct 5, 06:00 AM</span>
-            <span>Oct 5, 08:00 PM</span>
-          </div>
+          <p class="text-xs text-gray-500">Live store inflows from fulfilled sales and completed deposits.</p>
         </div>
-
-        <!-- অতিরিক্ত মেট্রিক্স -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-xs">
-            <div>
-              <span class="text-gray-400 block">Average order</span>
-              <span class="font-bold text-gray-900">0.00 USDT</span>
-            </div>
-            <div>
-              <span class="text-gray-400 block">Sales share</span>
-              <span class="font-bold text-gray-900">0%</span>
-            </div>
-            <div>
-              <span class="text-gray-400 block">Deposits share</span>
-              <span class="font-bold text-gray-900">0%</span>
-            </div>
-            <div>
-              <span class="text-gray-400 block">Peak bucket</span>
-              <span class="font-bold text-gray-900">No peak yet</span>
-            </div>
-          </div>
-        </div>
-
       </div>
 
-      <!-- ================= 5. ORDERS & PAYMENTS (Placeholder sections) ================= -->
+      <!-- ================= 6. ORDERS, INVENTORY, PAYMENTS ================= -->
       <div id="section-orders" class="hidden space-y-4">
-        <h1 class="text-xl font-bold text-gray-900">Orders Desk</h1>
-        <div class="bg-white p-6 rounded-2xl border text-center text-xs text-gray-500">টেলিগ্রাম বট থেকে অর্ডার আসলে এখানে লাইভ TrxID সহ অ্যাপ্রুভ করার বাটন আসবে।</div>
+        <h1 class="text-xl font-bold text-gray-900">Orders</h1>
+        <div class="bg-white p-6 rounded-2xl border text-xs text-gray-500">কোনো নতুন অর্ডার আসেনি।</div>
       </div>
 
       <div id="section-inventory" class="hidden space-y-4">
-        <h1 class="text-xl font-bold text-gray-900">Inventory & Units</h1>
-        <div class="bg-white p-6 rounded-2xl border text-center text-xs text-gray-500">ডিজিটাল অ্যাকাউন্টের স্টক হেলথ এবং ব্যাকলগ মনিটর করুন।</div>
+        <h1 class="text-xl font-bold text-gray-900">Inventory</h1>
+        <div class="bg-white p-6 rounded-2xl border text-xs text-gray-500">ইনভেন্টরি স্টক ও লাইসেন্স কি লিস্ট।</div>
       </div>
 
       <div id="section-payments" class="hidden space-y-4">
-        <h1 class="text-xl font-bold text-gray-900">Payment Methods</h1>
-        <div class="bg-white p-6 rounded-2xl border text-xs space-y-3 max-w-md">
-          <p class="font-bold text-gray-800">bKash / Nagad / Binance Pay সেটআপ</p>
-          <input placeholder="বিকাশ পার্সোনাল/মার্চেন্ট নম্বর" class="w-full border p-2 rounded-xl text-xs">
-          <input placeholder="নগদ পার্সোনাল নম্বর" class="w-full border p-2 rounded-xl text-xs">
-          <input placeholder="Binance Pay ID / USDT TRC20 Address" class="w-full border p-2 rounded-xl text-xs">
-          <button class="w-full bg-[#7c3aed] text-white py-2 rounded-xl font-semibold">সেভ করুন</button>
-        </div>
+        <h1 class="text-xl font-bold text-gray-900">Payment methods</h1>
+        <div class="bg-white p-6 rounded-2xl border text-xs text-gray-500">বিকাশ, নগদ বা USDT অ্যাড্রেস কনফিগার করুন।</div>
       </div>
 
     </main>
   </div>
 
-  <!-- ৩. NEW PRODUCT MODAL (পপআপ ফর্ম ডিজিটাল আইটেম সহ) -->
+  <!-- ৪. মোডাল ও স্ক্রিপ্ট -->
   <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl text-xs">
       <div class="flex justify-between items-center border-b pb-3">
-        <h3 class="font-bold text-gray-900 text-sm">নতুন প্রোডাক্ট তৈরি করুন</h3>
-        <button onclick="closeProductModal()" class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+        <h3 class="font-bold text-sm">নতুন প্রোডাক্ট তৈরি করুন</h3>
+        <button onclick="closeProductModal()"><i data-lucide="x" class="w-4 h-4 text-gray-400"></i></button>
       </div>
-
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block font-medium text-gray-700 mb-1">Product Name</label>
-          <input id="modalName" placeholder="যেমন: NordVpn বা Netflix 1M" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-        </div>
-        <div class="grid grid-cols-2 gap-2">
-          <div>
-            <label class="block font-medium text-gray-700 mb-1">Price (USDT / ৳)</label>
-            <input id="modalPrice" type="number" step="0.1" placeholder="0.3" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-          </div>
-          <div>
-            <label class="block font-medium text-gray-700 mb-1">Category</label>
-            <input id="modalCategory" placeholder="VPN" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600">
-          </div>
-        </div>
-        <div>
-          <label class="block font-medium text-gray-700 mb-1">Digital Items / Stock (প্রতি লাইনে ১টি)</label>
-          <textarea id="modalStock" rows="4" placeholder={"user1@mail.com:pass123\nuser2@mail.com:pass456"} class="w-full border border-gray-200 rounded-xl p-2.5 font-mono outline-none focus:border-purple-600"></textarea>
-        </div>
-      </div>
-
-      <div class="flex gap-2 pt-2">
-        <button onclick="closeProductModal()" class="flex-1 py-2 rounded-xl border border-gray-200 text-xs font-semibold text-gray-600">Cancel</button>
-        <button onclick="saveProductLocally()" class="flex-1 py-2 rounded-xl bg-[#7c3aed] text-white text-xs font-semibold hover:bg-purple-700 transition">Save Product</button>
-      </div>
+      <input id="modalName" placeholder="Product Name" class="w-full border p-2.5 rounded-xl outline-none">
+      <input id="modalPrice" type="number" placeholder="Price (USDT / ৳)" class="w-full border p-2.5 rounded-xl outline-none">
+      <textarea id="modalStock" rows="3" placeholder="Stock keys (প্রতি লাইনে ১টি)" class="w-full border p-2.5 rounded-xl font-mono outline-none"></textarea>
+      <button onclick="saveProductLocally()" class="w-full py-2.5 rounded-xl bg-[#7c3aed] text-white font-semibold">Save Product</button>
     </div>
   </div>
 
-  <!-- ৪. স্ক্রিপ্ট লজিক -->
   <script>
-    // আইকন ইনিশিয়ালাইজ
     lucide.createIcons();
 
-    // মোবাইল সাইডবার টগল
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('sidebarOverlay').classList.toggle('hidden');
     }
 
-    // ন্যাভিগেশন কন্ট্রোল
     function navigate(view) {
-      const sections = ['home', 'customers', 'catalog', 'inventory', 'orders', 'analytics', 'payments'];
-      sections.forEach(s => {
-        const el = document.getElementById(`section-${s}`);
+      const views = ['home', 'settings', 'customers', 'catalog', 'inventory', 'orders', 'analytics', 'payments'];
+      views.forEach(v => {
+        const el = document.getElementById(`section-${v}`);
         if(el) el.classList.add('hidden');
-        const navBtn = document.getElementById(`nav-${s}`);
-        if(navBtn) {
-          navBtn.classList.remove('bg-purple-50', 'text-[#7c3aed]', 'font-semibold');
-          navBtn.classList.add('text-gray-700');
+        const nav = document.getElementById(`nav-${v}`);
+        if(nav) {
+          nav.classList.remove('bg-purple-50', 'text-[#7c3aed]', 'font-semibold');
+          nav.classList.add('text-gray-700');
         }
       });
 
@@ -627,46 +418,29 @@
         activeNav.classList.remove('text-gray-700');
       }
 
-      // মোবাইলে ক্লিক করার পর সাইডবার বন্ধ করা
       if(window.innerWidth < 768) {
-        toggleSidebar();
+        const sb = document.getElementById('sidebar');
+        if(!sb.classList.contains('-translate-x-full')) toggleSidebar();
       }
     }
 
-    // মোডাল হ্যান্ডলিং
-    function openProductModal() {
-      document.getElementById('productModal').classList.remove('hidden');
-    }
-    function closeProductModal() {
-      document.getElementById('productModal').classList.add('hidden');
-    }
+    function openProductModal() { document.getElementById('productModal').classList.remove('hidden'); }
+    function closeProductModal() { document.getElementById('productModal').classList.add('hidden'); }
 
-    // প্রোডাক্ট অ্যাড করা ও টেবিলে দেখানো
     function saveProductLocally() {
       const name = document.getElementById('modalName').value;
       const price = document.getElementById('modalPrice').value;
-      const cat = document.getElementById('modalCategory').value || 'General';
-
-      if(!name || !price) return alert('Please enter product name and price');
-
-      const table = document.getElementById('catalog-products-table');
-      const row = `
+      if(!name || !price) return alert('Name and Price required');
+      document.getElementById('catalog-products-table').innerHTML += `
         <tr>
-          <td class="py-3 flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold text-xs">${name.charAt(0)}</div>
-            <div>
-              <p class="font-semibold text-gray-900">${name}</p>
-              <p class="text-[10px] text-gray-400">${name.toLowerCase().replace(/\s+/g, '')}</p>
-            </div>
-          </td>
-          <td class="py-3 font-medium text-gray-600">${cat}</td>
-          <td class="py-3 font-semibold text-gray-900">${price} <span class="text-[10px] text-gray-400">USDT</span></td>
+          <td class="py-3 font-semibold text-gray-900">${name}</td>
+          <td class="py-3 text-gray-600">Digital</td>
+          <td class="py-3 font-semibold">${price} USDT</td>
           <td class="py-3 text-gray-500">None</td>
         </tr>
       `;
-      table.innerHTML += row;
       closeProductModal();
-      alert('প্রোডাক্ট সফলভাবে যুক্ত হয়েছে!');
+      alert('Product Added!');
     }
   </script>
 </body>
