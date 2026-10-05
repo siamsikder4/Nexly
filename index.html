@@ -13,10 +13,12 @@
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #faf9fd; -webkit-tap-highlight-color: transparent; }
     .nav-active { background-color: #f3e8ff !important; color: #7c3aed !important; font-weight: 600; }
+    .subtab-active { border-bottom: 2px solid #7c3aed; color: #7c3aed !important; font-weight: 600; }
   </style>
 </head>
 <body class="text-[#1c1b22] flex min-h-screen">
 
+  <!-- মোবাইল সাইডবার ড্রয়ার ওভারলে -->
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
 
   <!-- ১. ফুল সাইডবার মেনু -->
@@ -68,9 +70,9 @@
           <a href="bot-buttons.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="menu-square" class="w-4 h-4 text-gray-500"></i> Bot buttons
           </a>
-          <button onclick="navigate('broadcast')" id="btn-broadcast" class="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-left text-gray-700 hover:bg-gray-50 transition">
+          <a href="broadcast.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
             <i data-lucide="send" class="w-4 h-4 text-gray-500"></i> Broadcast
-          </button>
+          </a>
         </div>
       </div>
 
@@ -116,9 +118,9 @@
       </div>
     </header>
 
-    <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-5xl w-full mx-auto">
+    <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-5xl w-full mx-auto space-y-5">
       
-      <!-- ================= 1. HOME ================= -->
+      <!-- ================= VIEW: HOME ================= -->
       <section id="view-home" class="space-y-6">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Home</span>
@@ -145,7 +147,7 @@
             </div>
             <div class="bg-white border-l-4 border-l-amber-400 border border-gray-200/70 rounded-2xl p-3.5 shadow-2xs">
               <span class="text-[10px] font-bold text-amber-700 uppercase block">Total Spend</span>
-              <p class="text-lg font-bold text-gray-900 mt-1">0.00 <span class="text-xs font-normal text-gray-500">USDT</span></p>
+              <p class="text-lg font-bold text-gray-900 mt-1"><span id="dash-total-spend">0.00</span> <span class="text-xs font-normal text-gray-500">USDT</span></p>
             </div>
             <div class="bg-white border-l-4 border-l-purple-600 border border-gray-200/70 rounded-2xl p-3.5 shadow-2xs">
               <span class="text-[10px] font-bold text-purple-700 uppercase block">Purchases</span>
@@ -153,7 +155,7 @@
             </div>
             <div class="bg-white border-l-4 border-l-teal-500 border border-gray-200/70 rounded-2xl p-3.5 shadow-2xs">
               <span class="text-[10px] font-bold text-teal-700 uppercase block">Deposits to review</span>
-              <p class="text-2xl font-bold text-gray-900 mt-1" id="dash-deposits-review">0</p>
+              <p class="text-2xl font-bold text-gray-900 mt-1">0</p>
             </div>
             <div class="bg-white border-l-4 border-l-gray-900 border border-gray-200/70 rounded-2xl p-3.5 shadow-2xs">
               <span class="text-[10px] font-bold text-gray-700 uppercase block">Live Products</span>
@@ -171,91 +173,210 @@
           </div>
           <a href="settings.html" class="block text-xs font-semibold text-purple-600 mt-3">Open bot settings &gt;</a>
         </div>
-
-        <div>
-          <p class="text-xs font-bold text-gray-700 mb-2">Quick actions</p>
-          <div class="flex flex-wrap gap-2">
-            <button onclick="navigate('catalog')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
-              <i data-lucide="plus" class="w-3.5 h-3.5 text-purple-600"></i> New product
-            </button>
-            <button onclick="navigate('inventory')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
-              <i data-lucide="package" class="w-3.5 h-3.5 text-purple-600"></i> Inventory
-            </button>
-            <button onclick="navigate('orders')" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600">
-              <i data-lucide="shopping-cart" class="w-3.5 h-3.5 text-purple-600"></i> Orders
-            </button>
-            <a href="bot-buttons.html" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600 text-gray-700">
-              <i data-lucide="menu-square" class="w-3.5 h-3.5 text-purple-600"></i> Bot buttons
-            </a>
-            <a href="payment-methods.html" class="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-xl text-xs font-medium hover:border-purple-600 text-gray-700">
-              <i data-lucide="wallet" class="w-3.5 h-3.5 text-purple-600"></i> Payment methods
-            </a>
-          </div>
-        </div>
       </section>
 
-      <!-- ================= 2. CUSTOMERS ================= -->
-      <section id="view-customers" class="hidden space-y-6">
+      <!-- ================= VIEW: CUSTOMERS (স্ক্রিনশট ৩৬ হুবহু) ================= -->
+      <section id="view-customers" class="hidden space-y-5">
         <div class="text-xs text-gray-400 flex items-center gap-1.5">
           <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Customers</span>
         </div>
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 class="text-xl font-bold text-gray-900">Customers</h1>
-            <p class="text-xs text-gray-500">Store-scoped ops desk for identity, balances, spend, and activity.</p>
+
+        <!-- Customer pulse (স্ক্রিনশট ৩৬) -->
+        <div>
+          <h2 class="text-xs font-bold text-gray-800 mb-2">Customer pulse</h2>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+            <div class="bg-[#f0f9ff] border-l-4 border-l-sky-500 rounded-2xl p-3 shadow-2xs">
+              <span class="text-[10px] font-semibold text-sky-700 uppercase flex items-center gap-1"><i data-lucide="users" class="w-3 h-3"></i> CUSTOMERS</span>
+              <p class="text-xl font-bold text-gray-900 mt-1" id="cp-customers">0</p>
+            </div>
+            <div class="bg-[#f0fdf4] border-l-4 border-l-emerald-500 rounded-2xl p-3 shadow-2xs">
+              <span class="text-[10px] font-semibold text-emerald-700 uppercase flex items-center gap-1"><i data-lucide="user-check" class="w-3 h-3"></i> ACTIVE</span>
+              <p class="text-xl font-bold text-gray-900 mt-1" id="cp-active">0</p>
+            </div>
+            <div class="bg-white border-l-4 border-l-gray-900 border border-gray-100 rounded-2xl p-3 shadow-2xs">
+              <span class="text-[10px] font-semibold text-gray-600 uppercase flex items-center gap-1"><i data-lucide="activity" class="w-3 h-3"></i> IDLE</span>
+              <p class="text-xl font-bold text-gray-900 mt-1">0</p>
+            </div>
+            <div class="bg-[#fef2f2] border-l-4 border-l-red-500 rounded-2xl p-3 shadow-2xs">
+              <span class="text-[10px] font-semibold text-red-600 uppercase flex items-center gap-1"><i data-lucide="ban" class="w-3 h-3"></i> BANNED</span>
+              <p class="text-xl font-bold text-red-600 mt-1" id="cp-banned">0</p>
+            </div>
+            <div class="bg-[#f0fdf4] border-l-4 border-l-emerald-600 rounded-2xl p-3 shadow-2xs">
+              <span class="text-[10px] font-semibold text-emerald-700 uppercase flex items-center gap-1"><i data-lucide="wallet" class="w-3 h-3"></i> TOTAL BALANCES</span>
+              <p class="text-base font-bold text-gray-900 mt-1"><span id="cp-total-balance">0.00</span> <span class="text-xs font-normal text-gray-500">USDT</span></p>
+            </div>
+            <div class="bg-[#f0f9ff] border-l-4 border-l-sky-600 rounded-2xl p-3 shadow-2xs">
+              <span class="text-[10px] font-semibold text-sky-700 uppercase flex items-center gap-1"><i data-lucide="coins" class="w-3 h-3"></i> AVG BALANCE</span>
+              <p class="text-base font-bold text-gray-900 mt-1"><span id="cp-avg-balance">0.00</span> <span class="text-xs font-normal text-gray-500">USDT</span></p>
+            </div>
+            <div class="bg-[#fffbeb] border-l-4 border-l-amber-500 rounded-2xl p-3 shadow-2xs">
+              <span class="text-[10px] font-semibold text-amber-700 uppercase flex items-center gap-1"><i data-lucide="trending-up" class="w-3 h-3"></i> TOTAL SPEND</span>
+              <p class="text-base font-bold text-gray-900 mt-1"><span id="cp-total-spend">0.00</span> <span class="text-xs font-normal text-gray-500">USDT</span></p>
+            </div>
+            <div class="bg-[#faf5ff] border-l-4 border-l-purple-600 rounded-2xl p-3 shadow-2xs">
+              <span class="text-[10px] font-semibold text-purple-700 uppercase flex items-center gap-1"><i data-lucide="shopping-bag" class="w-3 h-3"></i> PURCHASES</span>
+              <p class="text-xl font-bold text-gray-900 mt-1" id="cp-purchases">0</p>
+            </div>
           </div>
-          <span class="px-2.5 py-1 text-xs font-bold bg-sky-50 text-sky-700 rounded-full" id="customers-badge">0 customers</span>
         </div>
 
-        <div id="customers-list-container" class="space-y-3">
-          <!-- লাইভ কাস্টমার লোড হবে -->
+        <div class="flex items-center justify-between">
+          <div>
+            <h1 class="text-lg font-bold text-gray-900">Customers <span class="text-xs font-semibold px-2 py-0.5 bg-sky-50 text-sky-700 rounded-full" id="customers-badge">0 customers</span></h1>
+            <p class="text-xs text-gray-500">Store-scoped ops desk for identity, balances, spend, and activity.</p>
+          </div>
+        </div>
+
+        <!-- ফিল্টার কার্ড (স্ক্রিনশট ৩৬) -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs space-y-3 text-xs">
+          <div>
+            <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SEARCH</label>
+            <input type="text" id="cust-search-input" oninput="filterCustomerList()" placeholder="Name, @username, or Telegram ID" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600 text-xs">
+          </div>
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">ACTIVITY</label>
+              <select id="cust-filter-activity" onchange="filterCustomerList()" class="w-full border border-gray-200 rounded-xl p-2 outline-none focus:border-purple-600 bg-white text-gray-700">
+                <option value="all">All</option>
+                <option value="active">Active</option>
+                <option value="banned">Banned</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">SORT</label>
+              <select id="cust-sort" onchange="filterCustomerList()" class="w-full border border-gray-200 rounded-xl p-2 outline-none focus:border-purple-600 bg-white text-gray-700">
+                <option value="newest">Newest joined</option>
+                <option value="balance">Highest balance</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- কাস্টমার লিস্ট কার্ড কনটেইনার (স্ক্রিনশট ৩৬) -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs space-y-3">
+          <div class="flex justify-between items-center text-xs text-gray-400 font-semibold border-b pb-2">
+            <span>Customer</span>
+            <span id="results-count">0 results</span>
+          </div>
+          
+          <div id="customers-list-container" class="space-y-3">
+            <!-- কাস্টমার কার্ড রেন্ডার হবে -->
+          </div>
+
+          <div class="flex justify-between items-center text-xs text-gray-400 pt-2 border-t">
+            <span>Page 1 of 1</span>
+            <div class="flex gap-2">
+              <button class="px-2.5 py-1 border rounded-lg bg-gray-50 text-gray-400 cursor-not-allowed">Previous</button>
+              <button class="px-2.5 py-1 border rounded-lg bg-gray-50 text-gray-400 cursor-not-allowed">Next</button>
+            </div>
+          </div>
         </div>
       </section>
 
-      <!-- ================= 3. CATALOG ================= -->
-      <section id="view-catalog" class="hidden space-y-6">
-        <div class="text-xs text-gray-400 flex items-center gap-1.5">
-          <span>Dashboard</span> <span>/</span> <span class="text-gray-700 font-medium">Catalog</span>
+      <!-- ================= VIEW: CUSTOMER DETAILS (স্ক্রিনশট ৩৯ হুবহু) ================= -->
+      <section id="view-customer-details" class="hidden space-y-5 text-xs">
+        <div>
+          <button onclick="navigate('customers')" class="text-xs text-purple-600 font-medium hover:underline flex items-center gap-1 mb-2">
+            ‹ Back to customers
+          </button>
         </div>
+
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
+          <div class="flex justify-between items-start">
+            <div>
+              <div class="flex items-center gap-2">
+                <h1 class="text-lg font-bold text-gray-900" id="det-name">Siam Hossain</h1>
+                <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-600 rounded-full" id="det-status-badge">Active</span>
+              </div>
+              <p class="text-gray-500 font-medium mt-0.5" id="det-username">@Zvshshhvc</p>
+              <div class="flex items-center gap-1 text-gray-400 text-[11px] mt-1 font-mono">
+                <span id="det-id">8271633124</span>
+                <button onclick="copyDetailId()" class="hover:text-purple-600"><i data-lucide="copy" class="w-3 h-3"></i></button>
+              </div>
+              <p class="text-[11px] text-gray-400 mt-2">
+                Joined: <span id="det-joined">Oct 5, 2026, 3:27 PM</span> • Last seen: <span id="det-lastseen">Oct 5, 2026, 8:00 PM</span>
+              </p>
+            </div>
+          </div>
+
+          <!-- অ্যাকশন বাটনসমূহ (স্ক্রিনশট ৩৯) -->
+          <div class="flex flex-wrap gap-2 pt-2">
+            <button onclick="openSendMessageModalCurrent()" class="flex items-center gap-1.5 px-3.5 py-2 border border-gray-200 rounded-xl font-semibold text-gray-700 hover:bg-gray-50 transition">
+              <i data-lucide="send" class="w-3.5 h-3.5 text-purple-600"></i> Send message
+            </button>
+            <button onclick="openAdjustBalanceModalCurrent()" class="flex items-center gap-1.5 px-3.5 py-2 bg-[#7c3aed] text-white rounded-xl font-semibold hover:bg-purple-700 transition shadow-xs">
+              <i data-lucide="wallet" class="w-3.5 h-3.5"></i> Adjust balance
+            </button>
+          </div>
+
+          <!-- মেট্রিক কার্ড গ্রিড (স্ক্রিনশট ৩৯) -->
+          <div class="grid grid-cols-2 gap-2.5 pt-2">
+            <div class="bg-[#f0fdf4] border border-emerald-100 rounded-2xl p-3.5 text-center">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">BALANCE</span>
+              <p class="text-base font-bold text-emerald-600 mt-1"><span id="det-card-balance">0.00</span> USDT</p>
+            </div>
+            <div class="bg-[#fffbeb] border border-amber-100 rounded-2xl p-3.5 text-center">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">SPEND</span>
+              <p class="text-base font-bold text-amber-600 mt-1"><span id="det-card-spend">0.00</span> USDT</p>
+            </div>
+            <div class="bg-gray-50 border border-gray-100 rounded-2xl p-3.5 text-center">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">PURCHASES</span>
+              <p class="text-base font-bold text-gray-800 mt-1" id="det-card-purchases">0</p>
+            </div>
+            <div class="bg-[#f0fdf4] border border-emerald-100 rounded-2xl p-3.5 text-center">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">DEPOSITS</span>
+              <p class="text-base font-bold text-emerald-600 mt-1">0.00 USDT</p>
+            </div>
+            <div class="col-span-2 bg-[#faf5ff] border border-purple-100 rounded-2xl p-3.5 text-center">
+              <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">REFUNDS</span>
+              <p class="text-base font-bold text-purple-600 mt-1">0.00 USDT</p>
+            </div>
+          </div>
+
+          <!-- সাব-ট্যাব (Transactions, Orders) -->
+          <div class="pt-4 border-t border-gray-100 space-y-3">
+            <div class="border-b flex gap-6 text-xs font-medium">
+              <button class="pb-2 subtab-active">Transactions</button>
+              <button class="pb-2 text-gray-400">Orders</button>
+            </div>
+            <div>
+              <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1">SEARCH</label>
+              <input type="text" placeholder="Reference, product, or order" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600 text-xs">
+            </div>
+            <div class="text-center py-6 text-gray-400 italic">No transactions found for this customer.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= VIEW: CATALOG ================= -->
+      <section id="view-catalog" class="hidden space-y-6">
         <div class="flex justify-between items-center">
           <div>
             <h1 class="text-xl font-bold text-gray-900">Catalog</h1>
             <p class="text-xs text-gray-500">Build products that will power your telegram bot store.</p>
           </div>
-          <button onclick="openProductModal()" class="bg-[#7c3aed] text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm hover:bg-purple-700 transition">
-            + New product
-          </button>
+          <button onclick="openProductModal()" class="bg-[#7c3aed] text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-sm hover:bg-purple-700 transition">+ New product</button>
         </div>
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
-          <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-              <thead class="text-[10px] font-bold text-gray-400 uppercase border-b pb-2">
-                <tr>
-                  <th class="py-2.5">Product</th>
-                  <th class="py-2.5">Category</th>
-                  <th class="py-2.5">Price</th>
-                  <th class="py-2.5">Stock Status</th>
-                  <th class="py-2.5 text-right">Action</th>
-                </tr>
-              </thead>
-              <tbody id="catalog-table-body" class="divide-y divide-gray-100">
-                <!-- লাইভ প্রোডাক্ট ডাটাবেস থেকে লোড হবে -->
-              </tbody>
-            </table>
-          </div>
+        <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="text-[10px] font-bold text-gray-400 uppercase border-b pb-2">
+              <tr>
+                <th class="py-2.5">Product</th>
+                <th class="py-2.5">Category</th>
+                <th class="py-2.5">Price</th>
+                <th class="py-2.5">Stock Status</th>
+                <th class="py-2.5 text-right">Action</th>
+              </tr>
+            </thead>
+            <tbody id="catalog-table-body" class="divide-y divide-gray-100"></tbody>
+          </table>
         </div>
       </section>
 
-      <!-- ================= 4. INVENTORY ================= -->
+      <!-- ================= VIEW: INVENTORY ================= -->
       <section id="view-inventory" class="hidden space-y-6">
-        <div class="text-xs text-gray-400 flex items-center gap-1.5">
-          <span>Overview</span> <span>/</span> <span class="text-gray-700 font-medium">Inventory</span>
-        </div>
         <div class="flex justify-between items-center">
-          <div>
-            <h1 class="text-xl font-bold text-gray-900">Inventory Units</h1>
-            <p class="text-xs text-gray-500">Manage digital accounts, serial keys, and credentials.</p>
-          </div>
+          <h1 class="text-xl font-bold text-gray-900">Inventory Units</h1>
           <button onclick="navigate('catalog')" class="bg-[#7c3aed] text-white px-3 py-1.5 rounded-xl text-xs font-semibold">+ Add Units</button>
         </div>
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
@@ -263,17 +384,12 @@
             <span>Available Stock Items</span>
             <span class="text-purple-600 font-bold" id="inventory-stock-badge">0 Units In Queue</span>
           </div>
-          <div id="inventory-items-container" class="space-y-2 font-mono text-xs text-gray-700">
-            <!-- ডিজিটাল আইটেম লোড হবে -->
-          </div>
+          <div id="inventory-items-container" class="space-y-2 font-mono text-xs text-gray-700"></div>
         </div>
       </section>
 
-      <!-- ================= 5. ORDERS ================= -->
+      <!-- ================= VIEW: ORDERS ================= -->
       <section id="view-orders" class="hidden space-y-6">
-        <div class="text-xs text-gray-400 flex items-center gap-1.5">
-          <span>Overview</span> <span>/</span> <span class="text-gray-700 font-medium">Orders</span>
-        </div>
         <h1 class="text-xl font-bold text-gray-900">Orders Lifecycle</h1>
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs overflow-x-auto">
           <table class="w-full text-left text-xs">
@@ -292,7 +408,7 @@
         </div>
       </section>
 
-      <!-- ================= 6. ANALYTICS ================= -->
+      <!-- ================= VIEW: ANALYTICS ================= -->
       <section id="view-analytics" class="hidden space-y-6">
         <h1 class="text-xl font-bold text-gray-900">Analytics</h1>
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -315,31 +431,18 @@
         </div>
       </section>
 
-      <!-- ================= 7. LANGUAGES ================= -->
+      <!-- ================= VIEW: LANGUAGES ================= -->
       <section id="view-languages" class="hidden space-y-6">
         <h1 class="text-xl font-bold text-gray-900">Store Languages</h1>
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs">
           <label class="flex items-center gap-3 p-3 border rounded-xl cursor-pointer hover:bg-gray-50">
             <input type="radio" name="lang" checked class="accent-purple-600">
-            <div>
-              <p class="font-bold text-gray-900">English (Default)</p>
-            </div>
+            <div><p class="font-bold text-gray-900">English (Default)</p></div>
           </label>
         </div>
       </section>
 
-      <!-- ================= 8. BROADCAST ================= -->
-      <section id="view-broadcast" class="hidden space-y-6">
-        <h1 class="text-xl font-bold text-gray-900">Broadcast Notification</h1>
-        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-3 text-xs max-w-lg">
-          <textarea id="bc-msg" rows="4" placeholder="Write broadcast message..." class="w-full border rounded-xl p-3 outline-none focus:border-purple-600"></textarea>
-          <button onclick="sendBroadcastAction()" class="bg-[#7c3aed] text-white px-4 py-2.5 rounded-xl font-semibold hover:bg-purple-700 transition">
-            🚀 Send Broadcast to All Users
-          </button>
-        </div>
-      </section>
-
-      <!-- ================= 9. TRANSACTIONS ================= -->
+      <!-- ================= VIEW: TRANSACTIONS ================= -->
       <section id="view-transactions" class="hidden space-y-6">
         <h1 class="text-xl font-bold text-gray-900">All Transactions</h1>
         <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs overflow-x-auto text-xs">
@@ -358,7 +461,7 @@
         </div>
       </section>
 
-      <!-- ================= 10. DEPOSIT CODES ================= -->
+      <!-- ================= VIEW: DEPOSIT CODES ================= -->
       <section id="view-depositcodes" class="hidden space-y-6">
         <div class="flex justify-between items-center">
           <h1 class="text-xl font-bold text-gray-900">Gift & Redeem Codes</h1>
@@ -369,19 +472,106 @@
         </div>
       </section>
 
-      <!-- ================= 11. LEARN ================= -->
+      <!-- ================= VIEW: LEARN ================= -->
       <section id="view-learn" class="hidden space-y-6">
         <h1 class="text-xl font-bold text-gray-900">GG Builder Documentation</h1>
         <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-2 text-xs text-gray-600">
-          <p>1. Add products and stock from Catalog.</p>
-          <p>2. Users chatting with the Telegram Bot will instantly be saved in Customers.</p>
+          <p>1. Catalog থেকে প্রোডাক্ট ও স্টক যোগ করুন।</p>
+          <p>2. Telegram Bot ব্যবহারকারীরা সরাসরি Customers পেজে সিঙ্ক হবে।</p>
         </div>
       </section>
 
     </main>
   </div>
 
-  <!-- প্রোডাক্ট তৈরির মোডাল -->
+  <!-- ================= MODAL 1: SEND MESSAGE (স্ক্রিনশট ৩৭ হুবহু) ================= -->
+  <div id="modalSendMessage" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl text-xs">
+      <div class="flex justify-between items-start">
+        <div>
+          <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">CUSTOMER MESSAGE</span>
+          <h3 class="text-base font-bold text-gray-900">Send message</h3>
+          <p class="text-xs text-gray-600 font-medium" id="modal-msg-cust-name">Siam Hossain</p>
+        </div>
+        <button onclick="closeModal('modalSendMessage')" class="p-1 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700 mb-1">Message</label>
+        <div class="border border-gray-200 rounded-xl overflow-hidden focus-within:border-purple-600 transition">
+          <div class="bg-gray-50 px-2.5 py-1.5 border-b flex gap-2 text-gray-500">
+            <span class="cursor-pointer">😊</span>
+            <span class="cursor-pointer">👁</span>
+          </div>
+          <textarea id="modal-msg-input" oninput="updateMsgPreview()" rows="5" class="w-full p-2.5 outline-none text-xs" placeholder="Write message to customer..."></textarea>
+        </div>
+        <span class="text-[10px] text-gray-400" id="modal-msg-chars">0/3500</span>
+      </div>
+
+      <div class="space-y-1">
+        <span class="text-[10px] font-bold text-gray-400 uppercase block">TELEGRAM PREVIEW</span>
+        <div class="bg-[#182533] text-white p-3 rounded-xl text-xs shadow-xs" id="modal-msg-preview">
+          Message body will appear here
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modalSendMessage')" class="px-3 py-1.5 border border-gray-200 text-gray-600 rounded-xl font-medium">Cancel</button>
+        <button onclick="sendDirectMessageAction()" class="flex items-center gap-1.5 bg-[#8b5cf6] text-white px-4 py-1.5 rounded-xl font-semibold hover:bg-purple-700 transition shadow-xs">
+          <i data-lucide="send" class="w-3.5 h-3.5"></i> Send
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: WALLET CORRECTION / ADJUST BALANCE (স্ক্রিনশট ৩৮ হুবহু) ================= -->
+  <div id="modalAdjustBalance" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-sm w-full p-5 space-y-4 shadow-xl text-xs">
+      <div class="flex justify-between items-start">
+        <div>
+          <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">WALLET CORRECTION</span>
+          <h3 class="text-base font-bold text-gray-900">Adjust balance</h3>
+          <p class="text-xs text-gray-600 font-medium" id="modal-adj-cust-name">Siam Hossain</p>
+        </div>
+        <button onclick="closeModal('modalAdjustBalance')" class="p-1 text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-4 h-4"></i></button>
+      </div>
+
+      <p class="text-xs text-gray-500">Current: <strong class="text-gray-800" id="modal-adj-current">0.00 USDT</strong></p>
+
+      <div>
+        <label class="block font-medium text-gray-700 mb-1">Direction</label>
+        <div class="grid grid-cols-2 gap-2 p-1 bg-gray-50 rounded-xl text-center">
+          <button type="button" onclick="setAdjustDirection('Credit')" id="btn-dir-credit" class="py-1.5 rounded-lg bg-[#e8f5e9] text-emerald-700 font-bold border border-emerald-300">Credit</button>
+          <button type="button" onclick="setAdjustDirection('Debit')" id="btn-dir-debit" class="py-1.5 rounded-lg text-gray-600 font-medium">Debit</button>
+        </div>
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700 mb-1">Amount (USDT)</label>
+        <input type="number" step="0.01" id="modal-adj-amount" oninput="updateAdjustPreview()" value="0.00" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600 text-xs">
+      </div>
+
+      <div>
+        <label class="block font-medium text-gray-700 mb-1">Reason</label>
+        <textarea id="modal-adj-reason" rows="2" placeholder="Why this correction is needed" class="w-full border border-gray-200 rounded-xl p-2.5 outline-none focus:border-purple-600 text-xs"></textarea>
+        <span class="text-[10px] text-gray-400">0/500</span>
+      </div>
+
+      <div class="space-y-1">
+        <span class="text-[10px] font-bold text-gray-400 uppercase block">BALANCE PREVIEW</span>
+        <p class="text-xs font-semibold text-gray-800" id="modal-adj-preview">0.00 USDT ➔ —</p>
+      </div>
+
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeModal('modalAdjustBalance')" class="px-3 py-1.5 border border-gray-200 text-gray-600 rounded-xl font-medium">Cancel</button>
+        <button onclick="submitBalanceAdjustment()" id="modal-adj-submit-btn" class="bg-[#8b5cf6] text-white px-4 py-1.5 rounded-xl font-semibold hover:bg-purple-700 transition shadow-xs">
+          Credit balance
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: প্রোডাক্ট তৈরির মোডাল -->
   <div id="productModal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl text-xs">
       <div class="flex justify-between items-center border-b pb-2">
@@ -440,6 +630,10 @@
 
     lucide.createIcons();
 
+    window.allCustomersCache = [];
+    window.selectedCustomer = null;
+    window.currentAdjustDirection = 'Credit';
+
     window.toggleSidebar = function() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('sidebarOverlay').classList.toggle('hidden');
@@ -447,8 +641,8 @@
 
     window.navigate = function(viewName) {
       const views = [
-        'home', 'customers', 'catalog', 'inventory', 'orders', 'analytics',
-        'languages', 'broadcast', 'transactions', 'depositcodes', 'learn'
+        'home', 'customers', 'customer-details', 'catalog', 'inventory', 'orders', 'analytics',
+        'languages', 'transactions', 'depositcodes', 'learn'
       ];
       views.forEach(v => {
         const sec = document.getElementById(`view-${v}`);
@@ -467,20 +661,282 @@
       }
     };
 
+    window.closeModal = (id) => document.getElementById(id).classList.add('hidden');
     window.openProductModal = () => document.getElementById('productModal').classList.remove('hidden');
     window.closeProductModal = () => document.getElementById('productModal').classList.add('hidden');
 
-    // ১. প্রোডাক্ট ও ডিজিটাল স্টক সেভ
+    // ১. রিয়েল-টাইম কাস্টমার লোড ও সিঙ্ক (স্ক্রিনশট ৩৬)
+    onSnapshot(collection(db, "customers"), (snapshot) => {
+      window.allCustomersCache = [];
+      let totalCust = 0;
+      let activeCount = 0;
+      let bannedCount = 0;
+      let totalBal = 0;
+      let totalSpend = 0;
+      let totalPurchases = 0;
+
+      snapshot.forEach(d => {
+        totalCust++;
+        const c = { id: d.id, ...d.data() };
+        window.allCustomersCache.push(c);
+
+        const bal = parseFloat(c.balance || 0);
+        const sp = parseFloat(c.totalSpend || 0);
+        const pur = parseInt(c.purchases || 0);
+
+        totalBal += bal;
+        totalSpend += sp;
+        totalPurchases += pur;
+
+        if (c.status === 'banned') bannedCount++;
+        else activeCount++;
+      });
+
+      // Customer pulse মেট্রিক্স আপডেট (স্ক্রিনশট ৩৬)
+      document.getElementById('cp-customers').innerText = totalCust;
+      document.getElementById('cp-active').innerText = activeCount;
+      document.getElementById('cp-banned').innerText = bannedCount;
+      document.getElementById('cp-total-balance').innerText = totalBal.toFixed(2);
+      document.getElementById('cp-avg-balance').innerText = (totalCust > 0 ? (totalBal / totalCust) : 0).toFixed(2);
+      document.getElementById('cp-total-spend').innerText = totalSpend.toFixed(2);
+      document.getElementById('cp-purchases').innerText = totalPurchases;
+
+      // হোম ড্যাশবোর্ড আপডেট
+      document.getElementById('dash-cust-count').innerText = totalCust;
+      document.getElementById('dash-active-count').innerText = activeCount;
+      document.getElementById('dash-total-balance').innerText = totalBal.toFixed(2);
+      document.getElementById('dash-total-spend').innerText = totalSpend.toFixed(2);
+      document.getElementById('dash-purchases-count').innerText = totalPurchases;
+      document.getElementById('customers-badge').innerText = `${totalCust} customers`;
+
+      filterCustomerList();
+      lucide.createIcons();
+    });
+
+    // কাস্টমার ফিল্টারিং ও রেন্ডারিং (স্ক্রিনশট ৩৬ হুবহু)
+    window.filterCustomerList = function() {
+      const query = document.getElementById('cust-search-input').value.toLowerCase().trim();
+      const activity = document.getElementById('cust-filter-activity').value;
+      const sort = document.getElementById('cust-sort').value;
+      const container = document.getElementById('customers-list-container');
+      container.innerHTML = '';
+
+      let filtered = window.allCustomersCache.filter(c => {
+        const name = (c.name || '').toLowerCase();
+        const username = (c.username || '').toLowerCase();
+        const id = (c.telegramId || c.id || '').toLowerCase();
+
+        const matchQuery = name.includes(query) || username.includes(query) || id.includes(query);
+        const matchActivity = (activity === 'all') || (activity === 'banned' && c.status === 'banned') || (activity === 'active' && c.status !== 'banned');
+        return matchQuery && matchActivity;
+      });
+
+      if (sort === 'balance') {
+        filtered.sort((a, b) => (b.balance || 0) - (a.balance || 0));
+      }
+
+      document.getElementById('results-count').innerText = `${filtered.length} results`;
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="text-center py-6 text-gray-400">No customers found.</div>`;
+        return;
+      }
+
+      filtered.forEach(c => {
+        const isBanned = (c.status === 'banned');
+        const cardHtml = `
+          <div class="border border-gray-200 rounded-2xl p-4 hover:border-purple-300 transition shadow-2xs">
+            <div class="flex justify-between items-start mb-2">
+              <div>
+                <h3 class="font-bold text-sm text-gray-900">${c.name || 'Telegram User'}</h3>
+                <p class="text-xs text-gray-500 font-medium">@${c.username || 'unknown'}</p>
+                <p class="text-[11px] text-gray-400 font-mono mt-0.5">${c.telegramId || c.id}</p>
+              </div>
+
+              <!-- অ্যাকশন বাটনস (স্ক্রিনশট ৩৬ হুবহু) -->
+              <div class="flex items-center gap-1">
+                <button onclick="navigator.clipboard.writeText('${c.telegramId || c.id}'); alert('Copied ID!');" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="Copy ID">
+                  <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="viewCustomerDetails('${c.id}')" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="View details">
+                  <i data-lucide="eye" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="openAdjustBalanceModal('${c.id}')" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="Adjust balance">
+                  <i data-lucide="wallet" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="openSendMessageModal('${c.id}')" class="p-1.5 text-gray-400 hover:text-purple-600 rounded-lg hover:bg-purple-50" title="Send message">
+                  <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                </button>
+                <button onclick="toggleBanCustomer('${c.id}', ${isBanned})" class="p-1.5 ${isBanned ? 'text-red-600 bg-red-50' : 'text-gray-400 hover:text-red-600'} rounded-lg hover:bg-red-50" title="Toggle Ban">
+                  <i data-lucide="ban" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="text-[11px] text-gray-600 flex flex-wrap gap-4 pt-2.5 border-t border-gray-100 mt-2">
+              <span class="text-emerald-600 font-semibold">Balance: ${parseFloat(c.balance || 0).toFixed(2)} USDT</span>
+              <span class="text-amber-600 font-semibold">Spend: ${parseFloat(c.totalSpend || 0).toFixed(2)} USDT</span>
+              <span>Purchases: ${c.purchases || 0}</span>
+              <span class="text-gray-400">Joined: Oct 5, 2026</span>
+              <span class="px-2 py-0.5 ${isBanned ? 'bg-red-50 text-red-600' : 'bg-emerald-50 text-emerald-600'} rounded-full font-bold text-[10px] ml-auto">${isBanned ? 'Banned' : 'Active'}</span>
+            </div>
+          </div>
+        `;
+        container.innerHTML += cardHtml;
+      });
+      lucide.createIcons();
+    };
+
+    // কাস্টমার ডিটেইলস ভিউ ওপেন করা (স্ক্রিনশট ৩৯)
+    window.viewCustomerDetails = function(id) {
+      const c = window.allCustomersCache.find(u => u.id === id);
+      if (!c) return;
+      window.selectedCustomer = c;
+
+      document.getElementById('det-name').innerText = c.name || 'Telegram User';
+      document.getElementById('det-username').innerText = `@${c.username || 'unknown'}`;
+      document.getElementById('det-id').innerText = c.telegramId || c.id;
+      document.getElementById('det-status-badge').innerText = (c.status === 'banned') ? 'Banned' : 'Active';
+      document.getElementById('det-status-badge').className = (c.status === 'banned') ? 'px-2 py-0.5 text-[10px] font-bold bg-red-50 text-red-600 rounded-full' : 'px-2 py-0.5 text-[10px] font-bold bg-emerald-50 text-emerald-600 rounded-full';
+      
+      document.getElementById('det-card-balance').innerText = parseFloat(c.balance || 0).toFixed(2);
+      document.getElementById('det-card-spend').innerText = parseFloat(c.totalSpend || 0).toFixed(2);
+      document.getElementById('det-card-purchases').innerText = c.purchases || 0;
+
+      window.navigate('customer-details');
+    };
+
+    window.copyDetailId = () => {
+      if(window.selectedCustomer) {
+        navigator.clipboard.writeText(window.selectedCustomer.telegramId || window.selectedCustomer.id);
+        alert('User ID Copied!');
+      }
+    };
+
+    // Send Message Modal কন্ট্রোল (স্ক্রিনশট ৩৭)
+    window.openSendMessageModal = function(id) {
+      const c = window.allCustomersCache.find(u => u.id === id);
+      if(!c) return;
+      window.selectedCustomer = c;
+      document.getElementById('modal-msg-cust-name').innerText = c.name || 'Telegram User';
+      document.getElementById('modal-msg-input').value = '';
+      document.getElementById('modal-msg-preview').innerText = 'Message body will appear here';
+      document.getElementById('modal-msg-chars').innerText = '0/3500';
+      document.getElementById('modalSendMessage').classList.remove('hidden');
+    };
+    window.openSendMessageModalCurrent = () => {
+      if(window.selectedCustomer) window.openSendMessageModal(window.selectedCustomer.id);
+    };
+
+    window.updateMsgPreview = function() {
+      const val = document.getElementById('modal-msg-input').value;
+      document.getElementById('modal-msg-chars').innerText = `${val.length}/3500`;
+      document.getElementById('modal-msg-preview').innerText = val.trim() || 'Message body will appear here';
+    };
+
+    window.sendDirectMessageAction = async function() {
+      const text = document.getElementById('modal-msg-input').value.trim();
+      if(!text) return alert('অনুগ্রহ করে মেসেজ লিখুন!');
+      try {
+        await addDoc(collection(db, "direct_messages"), {
+          customerId: window.selectedCustomer.telegramId || window.selectedCustomer.id,
+          message: text,
+          sentAt: serverTimestamp(),
+          status: 'pending'
+        });
+        alert(`মেসেজ সফলভাবে ${window.selectedCustomer.name}-এর টেলিগ্রামে পাঠানো হয়েছে!`);
+        window.closeModal('modalSendMessage');
+      } catch(err) {
+        alert(err.message);
+      }
+    };
+
+    // Adjust Balance Modal কন্ট্রোল (স্ক্রিনশট ৩৮)
+    window.openAdjustBalanceModal = function(id) {
+      const c = window.allCustomersCache.find(u => u.id === id);
+      if(!c) return;
+      window.selectedCustomer = c;
+      document.getElementById('modal-adj-cust-name').innerText = c.name || 'Telegram User';
+      document.getElementById('modal-adj-current').innerText = `${parseFloat(c.balance || 0).toFixed(2)} USDT`;
+      document.getElementById('modal-adj-amount').value = '0.00';
+      document.getElementById('modal-adj-reason').value = '';
+      window.setAdjustDirection('Credit');
+      document.getElementById('modalAdjustBalance').classList.remove('hidden');
+    };
+    window.openAdjustBalanceModalCurrent = () => {
+      if(window.selectedCustomer) window.openAdjustBalanceModal(window.selectedCustomer.id);
+    };
+
+    window.setAdjustDirection = function(dir) {
+      window.currentAdjustDirection = dir;
+      const bCred = document.getElementById('btn-dir-credit');
+      const bDeb = document.getElementById('btn-dir-debit');
+      const sBtn = document.getElementById('modal-adj-submit-btn');
+
+      if (dir === 'Credit') {
+        bCred.className = 'py-1.5 rounded-lg bg-[#e8f5e9] text-emerald-700 font-bold border border-emerald-300';
+        bDeb.className = 'py-1.5 rounded-lg text-gray-600 font-medium';
+        sBtn.innerText = 'Credit balance';
+      } else {
+        bDeb.className = 'py-1.5 rounded-lg bg-[#fef2f2] text-red-600 font-bold border border-red-300';
+        bCred.className = 'py-1.5 rounded-lg text-gray-600 font-medium';
+        sBtn.innerText = 'Debit balance';
+      }
+      updateAdjustPreview();
+    };
+
+    window.updateAdjustPreview = function() {
+      if(!window.selectedCustomer) return;
+      const cur = parseFloat(window.selectedCustomer.balance || 0);
+      const amt = parseFloat(document.getElementById('modal-adj-amount').value) || 0;
+      let newBal = (window.currentAdjustDirection === 'Credit') ? (cur + amt) : Math.max(0, cur - amt);
+
+      document.getElementById('modal-adj-preview').innerText = `${cur.toFixed(2)} USDT ➔ ${newBal.toFixed(2)} USDT`;
+    };
+
+    window.submitBalanceAdjustment = async function() {
+      const amt = parseFloat(document.getElementById('modal-adj-amount').value);
+      const reason = document.getElementById('modal-adj-reason').value.trim();
+      if(isNaN(amt) || amt <= 0) return alert('সঠিক অ্যামাউন্ট দিন!');
+
+      try {
+        const cur = parseFloat(window.selectedCustomer.balance || 0);
+        let newBal = (window.currentAdjustDirection === 'Credit') ? (cur + amt) : Math.max(0, cur - amt);
+
+        await updateDoc(doc(db, "customers", window.selectedCustomer.id), {
+          balance: newBal
+        });
+
+        alert(`ব্যালেন্স সফলভাবে আপডেট হয়েছে! নতুন ব্যালেন্স: ${newBal.toFixed(2)} USDT`);
+        window.closeModal('modalAdjustBalance');
+      } catch(err) {
+        alert(err.message);
+      }
+    };
+
+    window.toggleBanCustomer = async function(id, isBanned) {
+      const action = isBanned ? 'Unban' : 'Ban';
+      if(!confirm(`Are you sure you want to ${action} this customer?`)) return;
+      try {
+        await updateDoc(doc(db, "customers", id), {
+          status: isBanned ? 'active' : 'banned'
+        });
+      } catch(err) {
+        alert(err.message);
+      }
+    };
+
+    // ২. প্রোডাক্ট ক্যাটালগ
     window.saveNewProduct = async function() {
       const name = document.getElementById('m-name').value.trim();
       const price = parseFloat(document.getElementById('m-price').value);
       const cat = document.getElementById('m-cat').value.trim() || 'General';
       const rawStock = document.getElementById('m-stock').value.trim();
 
-      if(!name || isNaN(price)) return alert('Please provide valid product name and price.');
+      if(!name || isNaN(price)) return alert('Name and Price required.');
 
       try {
-        const productRef = await addDoc(collection(db, "products"), {
+        const pRef = await addDoc(collection(db, "products"), {
           name: name,
           price: price,
           category: cat,
@@ -490,7 +946,7 @@
         const stockItems = rawStock.split('\n').map(s => s.trim()).filter(Boolean);
         for(const item of stockItems) {
           await addDoc(collection(db, "stocks"), {
-            productId: productRef.id,
+            productId: pRef.id,
             productName: name,
             content: item,
             isSold: false,
@@ -498,24 +954,16 @@
           });
         }
 
-        alert('Product and stock items added successfully!');
-        document.getElementById('m-name').value = '';
-        document.getElementById('m-price').value = '';
-        document.getElementById('m-cat').value = '';
-        document.getElementById('m-stock').value = '';
+        alert('Product added successfully!');
         window.closeProductModal();
-      } catch (err) {
-        alert('Error: ' + err.message);
-      }
+      } catch (err) { alert(err.message); }
     };
 
-    // ২. রিয়েল-টাইম প্রোডাক্ট লোড
     const qProd = query(collection(db, "products"), orderBy("createdAt", "desc"));
     onSnapshot(qProd, (snapshot) => {
       const tbody = document.getElementById('catalog-table-body');
       tbody.innerHTML = '';
       let count = 0;
-
       snapshot.forEach(docSnap => {
         count++;
         const p = docSnap.data();
@@ -546,12 +994,10 @@
       if(confirm('Delete product?')) await deleteDoc(doc(db, "products", id));
     };
 
-    // ৩. রিয়েল-টাইম স্টক লোড
     onSnapshot(collection(db, "stocks"), (snapshot) => {
       let unsold = 0;
       const container = document.getElementById('inventory-items-container');
       container.innerHTML = '';
-
       snapshot.forEach(d => {
         const item = d.data();
         if(!item.isSold) {
@@ -567,78 +1013,27 @@
       document.getElementById('inventory-stock-badge').innerText = `${unsold} Units In Queue`;
     });
 
-    // ৪. রিয়েল-টাইম কাস্টমার লোড (CUSTOMERS ও DASHBOARD PULSE)
-    onSnapshot(collection(db, "customers"), (snapshot) => {
-      const container = document.getElementById('customers-list-container');
-      container.innerHTML = '';
-      let totalCust = 0;
-      let totalBal = 0;
-      let totalPurchases = 0;
-
-      snapshot.forEach(d => {
-        totalCust++;
-        const c = d.data();
-        totalBal += parseFloat(c.balance || 0);
-        totalPurchases += parseInt(c.purchases || 0);
-
-        container.innerHTML += `
-          <div class="bg-white border border-gray-200 rounded-2xl p-4 shadow-2xs">
-            <div class="flex justify-between items-start mb-2">
-              <div>
-                <h3 class="font-bold text-sm text-gray-900">${c.name || 'Telegram User'}</h3>
-                <p class="text-xs text-gray-500">@${c.username || 'unknown'} • ID: ${c.telegramId || d.id}</p>
-              </div>
-              <div class="flex gap-1">
-                <button onclick="navigator.clipboard.writeText('${c.telegramId}'); alert('Copied ID');" class="p-1.5 text-gray-400 hover:text-purple-600"><i data-lucide="copy" class="w-3.5 h-3.5"></i></button>
-              </div>
-            </div>
-            <div class="text-xs text-gray-600 flex gap-4 pt-2 border-t mt-3">
-              <span><strong>Balance:</strong> ${parseFloat(c.balance || 0).toFixed(2)} USDT</span>
-              <span><strong>Purchases:</strong> ${c.purchases || 0}</span>
-              <span class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded font-bold text-[10px]">Active</span>
-            </div>
-          </div>
-        `;
-      });
-
-      // ড্যাশবোর্ড কার্ড আপডেট
-      document.getElementById('dash-cust-count').innerText = totalCust;
-      document.getElementById('dash-active-count').innerText = totalCust;
-      document.getElementById('customers-badge').innerText = `${totalCust} customers`;
-      document.getElementById('dash-total-balance').innerText = totalBal.toFixed(2);
-      document.getElementById('dash-purchases-count').innerText = totalPurchases;
-      lucide.createIcons();
-    });
-
-    // ৫. রিয়েল-টাইম অর্ডার লোড
     onSnapshot(collection(db, "orders"), (snapshot) => {
       const tbody = document.getElementById('orders-table-body');
       tbody.innerHTML = '';
       let pendingCount = 0;
-
       snapshot.forEach(d => {
         const ord = d.data();
         const id = d.id;
         if(ord.status === 'pending') pendingCount++;
-
         tbody.innerHTML += `
           <tr class="border-b">
             <td class="py-3 font-mono font-bold">#${id.substring(0, 6)}</td>
             <td class="py-3">${ord.username ? '@'+ord.username : ord.telegramId}</td>
             <td class="py-3 font-medium">${ord.productName}</td>
             <td class="py-3 font-mono text-gray-500">${ord.trxId || 'N/A'}</td>
-            <td class="py-3">
-              <span class="px-2 py-0.5 rounded font-bold text-[10px] ${ord.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}">
-                ${ord.status}
-              </span>
-            </td>
+            <td class="py-3"><span class="px-2 py-0.5 rounded font-bold text-[10px] ${ord.status === 'completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'}">${ord.status}</span></td>
             <td class="py-3 text-right">
               ${ord.status === 'pending' ? `<button onclick="approveOrder('${id}')" class="bg-[#7c3aed] text-white px-2.5 py-1 rounded-lg text-xs font-semibold">Approve</button>` : 'Delivered'}
             </td>
           </tr>
         `;
       });
-
       document.getElementById('dash-attention-count').innerText = pendingCount;
       document.getElementById('analytics-orders-count').innerText = snapshot.size;
     });
@@ -646,14 +1041,6 @@
     window.approveOrder = async (id) => {
       await updateDoc(doc(db, "orders", id), { status: "completed" });
       alert("Order Approved!");
-    };
-
-    window.sendBroadcastAction = async function() {
-      const msg = document.getElementById('bc-msg').value.trim();
-      if(!msg) return alert('Message is empty');
-      await addDoc(collection(db, "broadcasts"), { message: msg, sentAt: serverTimestamp() });
-      alert('Broadcast message saved!');
-      document.getElementById('bc-msg').value = '';
     };
 
     window.generateDepositCode = async function() {
