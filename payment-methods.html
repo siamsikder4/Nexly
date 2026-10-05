@@ -11,108 +11,169 @@
   <!-- Inter Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Inter', sans-serif; background-color: #ffffff; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Inter', sans-serif; background-color: #faf9fd; -webkit-tap-highlight-color: transparent; }
     .tab-pill-active { background-color: #7c3aed !important; color: #ffffff !important; }
     .tab-btn-active { background-color: #7c3aed !important; color: #ffffff !important; font-weight: 600; }
   </style>
 </head>
-<body class="text-[#1c1b22] flex flex-col min-h-screen">
+<body class="text-[#1c1b22] flex min-h-screen">
 
-  <!-- মোবাইল সাইডবার ওভারলে -->
+  <!-- মোবাইল সাইডবার ড্রয়ার ওভারলে -->
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden"></div>
 
-  <!-- সাইডবার (নেভিগেশনের জন্য) -->
-  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static shrink-0">
+  <!-- ১. ফুল সাইডবার (সবগুলো ১৩টি অপশন হুবহু) -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 bg-white border-r border-gray-100 flex flex-col p-4 transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:w-64 shrink-0">
     <div class="flex items-center gap-3 px-2 py-2 mb-4">
-      <div class="w-9 h-9 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center font-bold shadow-sm">
+      <div class="w-10 h-10 bg-[#7c3aed] text-white rounded-xl flex items-center justify-center shadow-md">
         <i data-lucide="box" class="w-5 h-5"></i>
       </div>
       <div>
-        <h2 class="font-bold text-gray-900 text-sm">GG Builder</h2>
-        <p class="text-[11px] text-gray-500">Merchant store</p>
+        <h2 class="font-bold text-gray-900 text-sm leading-tight">GG Builder</h2>
+        <p class="text-[11px] text-gray-500 font-medium">Merchant store</p>
       </div>
     </div>
-    <nav class="space-y-1 text-xs font-medium flex-1">
-      <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
-        <i data-lucide="layout-grid" class="w-4 h-4 text-gray-400"></i> Home
-      </a>
-      <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50">
-        <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i> Settings
-      </a>
-      <a href="payment-methods.html" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-purple-50 text-[#7c3aed] font-semibold">
-        <i data-lucide="wallet" class="w-4 h-4 text-[#7c3aed]"></i> Payment methods
-      </a>
-    </nav>
+
+    <!-- সাইডবার আইটেমস লিস্ট -->
+    <div class="flex-1 overflow-y-auto space-y-4 text-xs font-medium pr-1">
+      
+      <!-- OVERVIEW -->
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Overview</p>
+        <div class="space-y-0.5">
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="layout-grid" class="w-4 h-4 text-gray-500"></i> Home
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="users" class="w-4 h-4 text-gray-500"></i> Customers
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="layers" class="w-4 h-4 text-gray-500"></i> Catalog
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="package" class="w-4 h-4 text-gray-500"></i> Inventory
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="clipboard-list" class="w-4 h-4 text-gray-500"></i> Orders
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="trending-up" class="w-4 h-4 text-gray-500"></i> Analytics
+          </a>
+        </div>
+      </div>
+
+      <!-- CHANNEL -->
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Channel</p>
+        <div class="space-y-0.5">
+          <a href="settings.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="settings" class="w-4 h-4 text-gray-500"></i> Settings
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="flag" class="w-4 h-4 text-gray-500"></i> Languages
+          </a>
+          <a href="bot-buttons.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="menu-square" class="w-4 h-4 text-gray-500"></i> Bot buttons
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="send" class="w-4 h-4 text-gray-500"></i> Broadcast
+          </a>
+        </div>
+      </div>
+
+      <!-- MONEY -->
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Money</p>
+        <div class="space-y-0.5">
+          <a href="payment-methods.html" class="flex items-center gap-3 px-3 py-2 rounded-xl bg-purple-50 text-[#7c3aed] font-semibold transition">
+            <i data-lucide="wallet" class="w-4 h-4 text-[#7c3aed]"></i> Payment methods
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="arrow-left-right" class="w-4 h-4 text-gray-500"></i> Transactions
+          </a>
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="ticket" class="w-4 h-4 text-gray-500"></i> Deposit codes
+          </a>
+        </div>
+      </div>
+
+      <!-- LEARN -->
+      <div>
+        <p class="text-[10px] font-bold text-gray-400 tracking-wider px-3 mb-1 uppercase">Learn</p>
+        <div class="space-y-0.5">
+          <a href="index.html" class="flex items-center gap-3 px-3 py-2 rounded-xl text-gray-700 hover:bg-gray-50 transition">
+            <i data-lucide="graduation-cap" class="w-4 h-4 text-gray-500"></i> Docs & Academy
+          </a>
+        </div>
+      </div>
+
+    </div>
   </aside>
 
-  <!-- মেইন রেসপন্সিভ কনটেন্ট এরিয়া -->
+  <!-- ২. মূল কনটেন্ট এরিয়া -->
   <div class="flex-1 flex flex-col min-w-0">
-    <!-- মোবাইল হেডার টপবার -->
-    <header class="h-12 bg-white border-b border-gray-100 flex items-center justify-between px-3 sm:px-6 sticky top-0 z-20">
-      <div class="flex items-center gap-2">
-        <button onclick="toggleSidebar()" class="p-1 text-gray-600 rounded-lg hover:bg-gray-100 md:hidden">
-          <i data-lucide="menu" class="w-4 h-4"></i>
+    <!-- টপবার -->
+    <header class="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4 sm:px-6 sticky top-0 z-20">
+      <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="p-1.5 text-gray-600 rounded-lg hover:bg-gray-100 md:hidden">
+          <i data-lucide="menu" class="w-5 h-5"></i>
         </button>
-        <span class="font-semibold text-gray-800 text-xs sm:text-sm">Nexly</span>
+        <span class="font-semibold text-gray-800 text-sm">Nexly</span>
       </div>
-      <div class="flex items-center gap-2">
-        <button class="p-1 text-gray-400 hover:bg-gray-50 rounded-full"><i data-lucide="bell" class="w-3.5 h-3.5"></i></button>
-        <button class="p-1 text-gray-400 hover:bg-gray-50 rounded-full"><i data-lucide="moon" class="w-3.5 h-3.5"></i></button>
-        <div class="w-6 h-6 rounded-full bg-purple-100 text-[#7c3aed] text-[10px] font-bold flex items-center justify-center">NE</div>
+      <div class="flex items-center gap-3">
+        <button class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-full"><i data-lucide="bell" class="w-4 h-4"></i></button>
+        <button class="p-1.5 text-gray-500 hover:bg-gray-100 rounded-full"><i data-lucide="moon" class="w-4 h-4"></i></button>
+        <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 text-xs font-bold flex items-center justify-center">NE</div>
       </div>
     </header>
 
-    <!-- বডি ফ্রেম -->
-    <main class="flex-1 p-3 sm:p-6 max-w-4xl w-full mx-auto">
+    <!-- বডি কনটেন্ট -->
+    <main class="flex-1 p-4 sm:p-6 overflow-y-auto max-w-4xl w-full mx-auto space-y-4">
 
       <!-- ================= SCREEN 1: METHODS LIST ================= -->
       <section id="view-methods-list" class="space-y-4">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
-            <h1 class="text-base sm:text-lg font-bold text-gray-900 leading-tight">Payment methods</h1>
-            <p class="text-[11px] text-gray-500 mt-0.5">Connect wallets so customers can top up in your store bot.</p>
+            <h1 class="text-lg font-bold text-gray-900 leading-tight">Payment methods</h1>
+            <p class="text-xs text-gray-500 mt-0.5">Connect wallets so customers can top up in your store bot.</p>
           </div>
           <div class="flex items-center gap-2 self-start sm:self-auto">
-            <button onclick="switchView('view-choose-method')" class="flex items-center gap-1 bg-[#7c3aed] text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-xs hover:bg-purple-700 transition">
-              <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add payment method
+            <button onclick="switchView('view-choose-method')" class="flex items-center gap-1.5 bg-[#7c3aed] text-white px-3.5 py-2 rounded-xl text-xs font-semibold shadow-xs hover:bg-purple-700 transition">
+              <i data-lucide="plus" class="w-4 h-4"></i> Add payment method
             </button>
-            <button onclick="alert('Redirecting to Transactions...')" class="border border-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-gray-50">
+            <a href="index.html" class="border border-gray-200 text-gray-700 px-3.5 py-2 rounded-xl text-xs font-medium hover:bg-gray-50 block">
               View transactions
-            </button>
+            </a>
           </div>
         </div>
 
         <!-- সাব ট্যাব পিলস -->
-        <div class="flex gap-1.5 pt-2">
-          <button onclick="switchMethodTab('all')" id="tab-pill-all" class="px-3 py-1 text-xs rounded-full font-medium tab-pill-active transition">Methods</button>
-          <button onclick="switchView('view-binance-config')" id="tab-pill-binance" class="px-3 py-1 text-xs rounded-full font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition">Binance Pay</button>
+        <div class="flex gap-2 pt-2">
+          <button onclick="switchMethodTab('all')" id="tab-pill-all" class="px-3.5 py-1.5 text-xs rounded-full font-medium tab-pill-active transition">Methods</button>
+          <button onclick="switchView('view-binance-config')" id="tab-pill-binance" class="px-3.5 py-1.5 text-xs rounded-full font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition">Binance Pay</button>
         </div>
 
-        <!-- মেথড টেবিল / লিস্ট -->
-        <div class="bg-white border border-gray-100 rounded-xl overflow-hidden mt-3 shadow-2xs">
-          <!-- টেবিল হেডার -->
-          <div class="grid grid-cols-12 px-3 py-2 bg-gray-50/70 border-b border-gray-100 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
+        <!-- মেথড টেবিল -->
+        <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden mt-3 shadow-2xs">
+          <div class="grid grid-cols-12 px-4 py-2.5 bg-gray-50/70 border-b border-gray-100 text-[10px] font-bold text-gray-400 uppercase tracking-wider">
             <div class="col-span-5 sm:col-span-4">Method</div>
             <div class="col-span-3 sm:col-span-3">Identity</div>
             <div class="col-span-2 sm:col-span-3 text-right sm:text-left">Limits</div>
             <div class="col-span-2 text-right">Status</div>
           </div>
 
-          <!-- মেথড রোসমূহ -->
           <div id="methods-container" class="divide-y divide-gray-100 text-xs">
-            <!-- ডিফল্ট Binance Pay রো -->
-            <div onclick="switchView('view-binance-config')" class="grid grid-cols-12 px-3 py-3 items-center hover:bg-gray-50/50 cursor-pointer transition">
-              <div class="col-span-5 sm:col-span-4 flex items-center gap-2">
-                <div class="w-6 h-6 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-[10px]">
+            <div onclick="switchView('view-binance-config')" class="grid grid-cols-12 px-4 py-3.5 items-center hover:bg-gray-50/60 cursor-pointer transition">
+              <div class="col-span-5 sm:col-span-4 flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-xs">
                   <i data-lucide="circle-dollar-sign" class="w-4 h-4"></i>
                 </div>
                 <span class="font-semibold text-gray-800">Binance Pay</span>
               </div>
-              <div class="col-span-3 sm:col-span-3 font-mono text-gray-500 text-[11px] truncate">1266...063</div>
-              <div class="col-span-2 sm:col-span-3 text-right sm:text-left text-gray-600 text-[11px]">0.1 – 10000 <span class="text-gray-400">USDT</span></div>
+              <div class="col-span-3 sm:col-span-3 font-mono text-gray-500 text-xs truncate">1266...063</div>
+              <div class="col-span-2 sm:col-span-3 text-right sm:text-left text-gray-600 text-xs">0.1 – 10000 <span class="text-gray-400">USDT</span></div>
               <div class="col-span-2 text-right">
-                <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600">
-                  Receiving <i data-lucide="chevron-right" class="w-3 h-3 text-gray-300"></i>
+                <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">
+                  Receiving <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300"></i>
                 </span>
               </div>
             </div>
@@ -124,28 +185,27 @@
       <section id="view-binance-config" class="hidden space-y-4">
         <div class="flex items-center justify-between">
           <div>
-            <h1 class="text-base sm:text-lg font-bold text-gray-900 leading-tight">Payment methods</h1>
-            <p class="text-[11px] text-gray-500 mt-0.5">Connect wallets so customers can top up in your store bot.</p>
+            <h1 class="text-lg font-bold text-gray-900 leading-tight">Payment methods</h1>
+            <p class="text-xs text-gray-500 mt-0.5">Connect wallets so customers can top up in your store bot.</p>
           </div>
-          <button onclick="alert('Transactions View')" class="border border-gray-200 text-gray-700 px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-gray-50">
+          <a href="index.html" class="border border-gray-200 text-gray-700 px-3.5 py-2 rounded-xl text-xs font-medium hover:bg-gray-50 block">
             View transactions
-          </button>
+          </a>
         </div>
 
-        <div class="flex gap-1.5 pt-1">
-          <button onclick="switchView('view-methods-list')" class="px-3 py-1 text-xs rounded-full font-medium bg-gray-100 text-gray-600">Methods</button>
-          <button class="px-3 py-1 text-xs rounded-full font-medium tab-pill-active">Binance Pay</button>
+        <div class="flex gap-2 pt-1">
+          <button onclick="switchView('view-methods-list')" class="px-3.5 py-1.5 text-xs rounded-full font-medium bg-gray-100 text-gray-600">Methods</button>
+          <button class="px-3.5 py-1.5 text-xs rounded-full font-medium tab-pill-active">Binance Pay</button>
         </div>
 
-        <!-- কার্ড: USDC conversion -->
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-4">
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4">
           <div>
             <p class="text-[10px] font-bold text-purple-700 uppercase tracking-wider">Binance Pay</p>
             <h2 class="text-sm font-bold text-gray-900 mt-0.5">USDC conversion</h2>
-            <p class="text-[11px] text-gray-500">Customers may pay in USDC. Credits are posted to the wallet in USDT using this rate.</p>
+            <p class="text-xs text-gray-500">Customers may pay in USDC. Credits are posted to the wallet in USDT using this rate.</p>
           </div>
 
-          <div class="space-y-1.5">
+          <div class="space-y-1.5 max-w-md">
             <label class="block text-xs font-medium text-gray-700">USDC → USDT rate</label>
             <p class="text-[10px] text-gray-400">How much USDT to credit for each 1 USDC received</p>
             <input id="binance-rate-input" type="number" step="0.01" value="1.1" oninput="calculateUsdcPreview()" class="w-full border border-gray-200 rounded-xl p-2.5 text-xs font-mono outline-none focus:border-purple-600">
@@ -161,8 +221,7 @@
 
           <p class="text-[10px] text-gray-400 italic">Rate changes apply to new deposits only. Completed deposits keep their snapshot.</p>
 
-          <!-- লাইভ প্রিভিউ বক্স -->
-          <div class="bg-gray-50 border border-gray-100 rounded-xl p-3">
+          <div class="bg-gray-50 border border-gray-100 rounded-xl p-3 max-w-md">
             <span class="text-[10px] font-bold text-gray-400 uppercase tracking-wider block" id="preview-calc-title">PREVIEW (1 USDC = 1.1 USDT credited)</span>
             <p class="text-sm font-bold text-gray-900 mt-0.5" id="preview-calc-body">100 USDC → 110 USDT</p>
           </div>
@@ -170,9 +229,9 @@
           <div class="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-gray-100">
             <div class="flex gap-2">
               <button onclick="saveBinanceRate()" class="bg-[#7c3aed] text-white px-4 py-2 rounded-xl text-xs font-semibold hover:bg-purple-700 transition">Save rate</button>
-              <button onclick="alert('Pay ID: 1266063\nAPI Credentials verified.')" class="border border-gray-200 text-gray-700 px-3 py-2 rounded-xl text-xs font-medium hover:bg-gray-50">Pay ID & API credentials</button>
+              <button onclick="alert('Pay ID: 1266063\nAPI Credentials verified.')" class="border border-gray-200 text-gray-700 px-3.5 py-2 rounded-xl text-xs font-medium hover:bg-gray-50">Pay ID & API credentials</button>
             </div>
-            <button onclick="alert('Viewing transactions for Binance Pay...')" class="border border-gray-200 text-gray-500 px-3 py-2 rounded-xl text-xs font-medium hover:bg-gray-50">View transactions</button>
+            <a href="index.html" class="border border-gray-200 text-gray-500 px-3.5 py-2 rounded-xl text-xs font-medium hover:bg-gray-50 block">View transactions</a>
           </div>
         </div>
       </section>
@@ -183,15 +242,14 @@
           <button onclick="switchView('view-methods-list')" class="text-xs text-purple-600 font-medium hover:underline flex items-center gap-1 mb-2">
             ‹ Back to payment methods
           </button>
-          <h1 class="text-base sm:text-lg font-bold text-gray-900">Choose a payment method</h1>
-          <p class="text-[11px] text-gray-500">Available platform methods that are not receiving on this store yet.</p>
+          <h1 class="text-lg font-bold text-gray-900">Choose a payment method</h1>
+          <p class="text-xs text-gray-500">Available platform methods that are not receiving on this store yet.</p>
         </div>
 
-        <div class="space-y-2 mt-4">
-          <!-- Stars Option -->
-          <div onclick="selectMethodToAdd('Stars')" class="bg-white border border-gray-200 hover:border-purple-300 rounded-2xl p-3.5 flex items-center justify-between cursor-pointer transition shadow-2xs">
+        <div class="space-y-2 mt-4 max-w-lg">
+          <div onclick="alert('Telegram Stars সক্রিয় করতে বটের মধ্যে Stars পেমেন্ট চার্জ সেট করুন।')" class="bg-white border border-gray-200 hover:border-purple-300 rounded-2xl p-4 flex items-center justify-between cursor-pointer transition shadow-2xs">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center font-bold text-xs">
+              <div class="w-9 h-9 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center font-bold text-sm">
                 ★
               </div>
               <div>
@@ -202,10 +260,9 @@
             <i data-lucide="chevron-right" class="w-4 h-4 text-gray-300"></i>
           </div>
 
-          <!-- Cryptomus Option -->
-          <div onclick="switchView('view-cryptomus-config')" class="bg-white border border-gray-200 hover:border-purple-300 rounded-2xl p-3.5 flex items-center justify-between cursor-pointer transition shadow-2xs">
+          <div onclick="switchView('view-cryptomus-config')" class="bg-white border border-gray-200 hover:border-purple-300 rounded-2xl p-4 flex items-center justify-between cursor-pointer transition shadow-2xs">
             <div class="flex items-center gap-3">
-              <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-xs">
+              <div class="w-9 h-9 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold text-sm">
                 <i data-lucide="wallet-cards" class="w-4 h-4"></i>
               </div>
               <div>
@@ -221,16 +278,13 @@
       <!-- ================= SCREEN 4: CRYPTOMUS CONFIGURATION ================= -->
       <section id="view-cryptomus-config" class="hidden space-y-4">
         <div>
-          <div class="text-[11px] text-gray-400 flex items-center gap-1 mb-1">
-            <span>Dashboard</span> <span>/</span> <span class="text-gray-700">Payment methods</span>
-          </div>
           <button onclick="switchView('view-choose-method')" class="text-xs text-purple-600 font-medium hover:underline flex items-center gap-1 mb-2">
             ‹ Back to payment methods
           </button>
           
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-2.5">
-              <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+              <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
                 <i data-lucide="wallet-cards" class="w-4 h-4"></i>
               </div>
               <div>
@@ -242,11 +296,10 @@
           </div>
         </div>
 
-        <div class="bg-white border border-gray-200 rounded-2xl p-4 sm:p-5 shadow-2xs space-y-4">
-          <!-- Connection -->
+        <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-2xs space-y-4 max-w-xl">
           <div>
             <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Connection</p>
-            <p class="text-[10px] text-gray-500 mb-2">Open <a href="https://cryptomus.com" target="_blank" class="text-purple-600 underline">Cryptomus</a>, copy your merchant credentials, then paste them below. The API key is never shown again.</p>
+            <p class="text-[10px] text-gray-500 mb-2">Open <a href="https://cryptomus.com" target="_blank" class="text-purple-600 underline">Cryptomus</a>, copy your merchant credentials, then paste them below.</p>
             <div class="space-y-3">
               <div>
                 <label class="block text-xs font-semibold text-gray-700 mb-1">Merchant UUID *</label>
@@ -259,25 +312,19 @@
             </div>
           </div>
 
-          <!-- Commercial rules -->
           <div class="pt-3 border-t border-gray-100 space-y-3">
-            <div>
-              <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Commercial rules</p>
-              <p class="text-[10px] text-gray-500">How deposits are accepted, and who pays the gateway fee.</p>
-            </div>
-
+            <p class="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Commercial rules</p>
             <div class="grid grid-cols-2 gap-2">
               <div>
-                <label class="block text-[11px] font-medium text-gray-700 mb-1">Minimum Deposit</label>
+                <label class="block text-[11px] font-medium text-gray-700 mb-1">Minimum</label>
                 <input id="crypto-min" type="number" placeholder="1" class="w-full border border-gray-200 rounded-xl p-2 text-xs outline-none focus:border-purple-600">
               </div>
               <div>
-                <label class="block text-[11px] font-medium text-gray-700 mb-1">Maximum Deposit</label>
+                <label class="block text-[11px] font-medium text-gray-700 mb-1">Maximum</label>
                 <input id="crypto-max" type="number" placeholder="5000" class="w-full border border-gray-200 rounded-xl p-2 text-xs outline-none focus:border-purple-600">
               </div>
             </div>
 
-            <!-- Invoice Lifetime Selector -->
             <div>
               <label class="block text-[11px] font-medium text-gray-700 mb-1.5">Invoice lifetime</label>
               <div class="grid grid-cols-4 gap-1 p-1 bg-gray-50 rounded-xl text-center text-xs">
@@ -288,7 +335,6 @@
               </div>
             </div>
 
-            <!-- Fee Payer Selector -->
             <div>
               <label class="block text-[11px] font-medium text-gray-700 mb-1.5">Who pays the gateway fee?</label>
               <div class="grid grid-cols-4 gap-1 p-1 bg-gray-50 rounded-xl text-center text-xs">
@@ -304,7 +350,7 @@
           <div class="pt-3 border-t border-gray-100 flex items-center justify-between">
             <a href="https://cryptomus.com" target="_blank" class="text-xs text-purple-600 hover:underline">Need credentials?</a>
             <div class="flex gap-2">
-              <button onclick="switchView('view-choose-method')" class="px-3 py-1.5 border border-gray-200 text-gray-600 rounded-xl text-xs font-semibold">Cancel</button>
+              <button onclick="switchView('view-choose-method')" class="px-3.5 py-1.5 border border-gray-200 text-gray-600 rounded-xl text-xs font-semibold">Cancel</button>
               <button onclick="activateCryptomus()" class="px-4 py-1.5 bg-[#7c3aed] text-white rounded-xl text-xs font-semibold hover:bg-purple-700 transition">Activate</button>
             </div>
           </div>
@@ -317,13 +363,11 @@
   <script>
     lucide.createIcons();
 
-    // মোবাইল সাইডবার টগল
     function toggleSidebar() {
       document.getElementById('sidebar').classList.toggle('-translate-x-full');
       document.getElementById('sidebarOverlay').classList.toggle('hidden');
     }
 
-    // ৪টি স্ক্রিনের মধ্যে ফুল নেভিগেশন
     function switchView(viewId) {
       const views = ['view-methods-list', 'view-binance-config', 'view-choose-method', 'view-cryptomus-config'];
       views.forEach(id => {
@@ -343,7 +387,6 @@
       }
     }
 
-    // স্ক্রিনশট ১৬: USDC কনভার্সন রেট ক্যালকুলেশন
     function calculateUsdcPreview() {
       const rateVal = parseFloat(document.getElementById('binance-rate-input').value) || 1;
       document.getElementById('preview-calc-title').innerText = `PREVIEW (1 USDC = ${rateVal} USDT credited)`;
@@ -353,12 +396,10 @@
 
     function saveBinanceRate() {
       const rateVal = document.getElementById('binance-rate-input').value;
-      localStorage.setItem('binance_rate', rateVal);
-      alert(`USDC Rate ${rateVal} USDT সংরক্ষিত হয়েছে!`);
+      alert(`USDC Rate ${rateVal} USDT সংরক্ষণ করা হয়েছে!`);
       switchView('view-methods-list');
     }
 
-    // স্ক্রিনশট ১৮: ইনভয়েস লাইফটাইম বাটন সিলেক্টর
     function setLifetime(btn, val) {
       btn.parentElement.querySelectorAll('button').forEach(b => {
         b.className = 'py-1.5 rounded-lg text-gray-600 font-medium';
@@ -366,7 +407,6 @@
       btn.className = 'py-1.5 rounded-lg tab-btn-active';
     }
 
-    // ফি সিলেক্টর ও টেক্সট আপডেট
     function setFee(btn, val) {
       btn.parentElement.querySelectorAll('button').forEach(b => {
         b.className = 'py-1.5 rounded-lg text-gray-600 font-medium';
@@ -376,7 +416,7 @@
       if (val === 'Customer pays') {
         hint.innerText = 'Customer 100% • Merchant 0% • Wallet credit stays the invoice USD amount.';
       } else if (val === 'Merchant absorbs') {
-        hint.innerText = 'Customer 0% • Merchant 100% • Merchant pays the entire gateway processing fee.';
+        hint.innerText = 'Customer 0% • Merchant 100% • Merchant pays the entire gateway fee.';
       } else if (val === 'Split') {
         hint.innerText = 'Customer 50% • Merchant 50% • Gateway fees are shared equally.';
       } else {
@@ -384,7 +424,6 @@
       }
     }
 
-    // Cryptomus একটিভ করে সরাসরি টেবিলে যোগ করা
     function activateCryptomus() {
       const uuid = document.getElementById('crypto-uuid').value.trim();
       const apikey = document.getElementById('crypto-apikey').value.trim();
@@ -392,38 +431,31 @@
       const max = document.getElementById('crypto-max').value || '5000';
 
       if (!uuid || !apikey) {
-        return alert('অনুগ্রহ করে Merchant UUID এবং API Key দিন!');
+        return alert('অনুগ্রহ করে Merchant UUID এবং API Key পূরণ করুন!');
       }
 
-      // টেবিলে যুক্ত করা
       const container = document.getElementById('methods-container');
       const newRow = `
-        <div class="grid grid-cols-12 px-3 py-3 items-center hover:bg-gray-50/50 cursor-pointer transition">
-          <div class="col-span-5 sm:col-span-4 flex items-center gap-2">
-            <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-[10px]">
-              <i data-lucide="wallet-cards" class="w-3.5 h-3.5"></i>
+        <div class="grid grid-cols-12 px-4 py-3.5 items-center hover:bg-gray-50/60 cursor-pointer transition">
+          <div class="col-span-5 sm:col-span-4 flex items-center gap-2.5">
+            <div class="w-7 h-7 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs">
+              <i data-lucide="wallet-cards" class="w-4 h-4"></i>
             </div>
             <span class="font-semibold text-gray-800">Cryptomus</span>
           </div>
-          <div class="col-span-3 sm:col-span-3 font-mono text-gray-500 text-[11px] truncate">${uuid.substring(0, 6)}...</div>
-          <div class="col-span-2 sm:col-span-3 text-right sm:text-left text-gray-600 text-[11px]">${min} – ${max} <span class="text-gray-400">USD</span></div>
+          <div class="col-span-3 sm:col-span-3 font-mono text-gray-500 text-xs truncate">${uuid.substring(0, 6)}...</div>
+          <div class="col-span-2 sm:col-span-3 text-right sm:text-left text-gray-600 text-xs">${min} – ${max} <span class="text-gray-400">USD</span></div>
           <div class="col-span-2 text-right">
-            <span class="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-600">
-              Receiving <i data-lucide="chevron-right" class="w-3 h-3 text-gray-300"></i>
+            <span class="inline-flex items-center gap-1 text-xs font-semibold text-emerald-600">
+              Receiving <i data-lucide="chevron-right" class="w-3.5 h-3.5 text-gray-300"></i>
             </span>
           </div>
         </div>
       `;
       container.innerHTML += newRow;
       lucide.createIcons();
-      alert('Cryptomus Gateway সক্রিয় করা হয়েছে এবং গ্রাহকরা এখন এটি দিয়ে টপআপ করতে পারবে!');
+      alert('Cryptomus Gateway সফলভাবে যুক্ত হয়েছে!');
       switchView('view-methods-list');
-    }
-
-    function selectMethodToAdd(method) {
-      if(method === 'Stars') {
-        alert('Telegram Stars সক্রিয় করতে বটের ভেতরে Stars পেমেন্ট চার্জ সেট করুন।');
-      }
     }
   </script>
 </body>
